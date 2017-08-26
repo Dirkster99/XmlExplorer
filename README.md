@@ -10,3 +10,6 @@ advanced theming and configuration features (re-usability patterns).
 
 The project is currently in Alpha state (do NOT expext a fully developed
 application), but the available refactoring is very interesting.
+
+A tool for editing Xml is XmlNotepad 
+https://github.com/Microsoft/XmlNotepad
