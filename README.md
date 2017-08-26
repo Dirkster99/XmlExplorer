@@ -1,5 +1,7 @@
 # XmlExplorer
 
+![Screenshot](https://github.com/Dirkster99/XmlExplorer/blob/master/00_Docu/screenshot.png?raw=true)
+
 The XmlExplorer is a clone from a CodePlex project back in 2009:
 https://xmlexplorer.codeplex.com/
 
