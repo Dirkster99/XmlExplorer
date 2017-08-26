@@ -1,0 +1,60 @@
+﻿<Window x:Class="XmlExplorerDemo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="650" Width="525"
+        FontSize="16"
+        >
+    <Grid
+        xmlns:conv="clr-namespace:XmlExplorerDemo.Converters"
+        xmlns:views="clr-namespace:XmlExplorerDemo.Views"
+        >
+        <Grid.Resources>
+            <conv:InvertedBooleanToVisibilityConverter x:Key="invertedBooleanToVisibilityConverter" />
+            <conv:XPathNavigatorItemsConverter x:Key="xPathNavigatorItemsConverter" />
+            <views:XPathNodeTypeDataTemplateSelector x:Key="xPathNodeTypeDataTemplateSelector" />
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <Button
+            Grid.Row="0"
+            Content="Load XML File"
+            Command="{Binding LoadXMLFileCommand}"
+                />
+
+        <TreeView
+            Grid.Row="1"
+            VirtualizingStackPanel.IsVirtualizing="True"
+            VirtualizingStackPanel.VirtualizationMode="Recycling"
+            
+            ItemsSource="{Binding XmlTree.Document, Converter={StaticResource xPathNavigatorItemsConverter}}"
+            
+            ItemTemplateSelector="{StaticResource xPathNodeTypeDataTemplateSelector}"
+            Visibility="{Binding ElementName=TreeView, Path=IsLoading, Converter={StaticResource invertedBooleanToVisibilityConverter}}"
+            >
+        </TreeView>
+
+        <GridSplitter Grid.Row="2" Height="10"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      />
+
+        <ListBox
+            Grid.Row="3"
+            ItemsSource="{Binding XmlTree.Errors}"
+            >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Description}" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</Window>
