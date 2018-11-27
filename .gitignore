@@ -1,4 +1,7 @@
-./.vs
+
+# Visual Studio 2015 cache/options directory
+.vs/
+
 00_Release/
 01_Nuget/
 debug/
