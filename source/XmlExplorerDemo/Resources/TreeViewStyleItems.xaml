@@ -61,9 +61,6 @@
         <Setter Property="Foreground" Value="Gray" />
     </Style>
 
-
-
-
     <HierarchicalDataTemplate x:Key="elementXPathNavigatorTemplate"
                             ItemsSource="{Binding Children}"
                             ItemTemplateSelector="{StaticResource xPathNodeTypeDataTemplateSelector}">
@@ -100,6 +97,11 @@
 					Visibility="{Binding XPathNavigator.HasChildren, Converter={StaticResource invertedBooleanToVisibilityConverter}}" />
             <TextBlock Style="{StaticResource xmlDelimiterStyle}" Text="&gt;" />
         </StackPanel>
+        <HierarchicalDataTemplate.ItemContainerStyle>
+            <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+            </Style>
+        </HierarchicalDataTemplate.ItemContainerStyle>
     </HierarchicalDataTemplate>
 
     <DataTemplate x:Key="textXPathNavigatorTemplate">

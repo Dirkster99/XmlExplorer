@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="MainWindow" Height="650" Width="525"
+        Title="MainWindow" Height="650" Width="825"
         FontSize="16"
         >
     <Grid
@@ -13,34 +13,57 @@
         >
         <Grid.Resources>
             <conv:InvertedBooleanToVisibilityConverter x:Key="invertedBooleanToVisibilityConverter" />
-            <conv:XPathNavigatorItemsConverter x:Key="xPathNavigatorItemsConverter" />
+            <!--conv:XPathNavigatorItemsConverter x:Key="xPathNavigatorItemsConverter" /-->
             <views:XPathNodeTypeDataTemplateSelector x:Key="xPathNodeTypeDataTemplateSelector" />
         </Grid.Resources>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="2*" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+
+        <Menu Grid.Row="0">
+            <MenuItem Header="File">
+                <MenuItem Header="Load Xml File"
+                          Command="{Binding LoadXMLFileCommand}" />
+                <MenuItem Header="Save As..."
+                          Command="{Binding SaveAsXmlFileCommand}" />
+                <Separator/>
+                <MenuItem Header="Exit"/>
+            </MenuItem>
+
+            <MenuItem Header="View">
+                <MenuItem Header="Collapse all nodes"
+                          Command="{Binding CollapseAllNodesCommand}" />
+                
+                <MenuItem Header="Expand all nodes"
+                          Command="{Binding ExpandAllNodesCommand}"
+                          />
+            </MenuItem>
+        </Menu>
+
+        <Grid Grid.Column="0" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TreeView
+                Grid.Column="2" Grid.Row="1"
+                VirtualizingStackPanel.IsVirtualizing="True"
+                VirtualizingStackPanel.VirtualizationMode="Recycling"
+            
+                ItemsSource="{Binding XmlTree.XPathRoot}"
+                ItemTemplateSelector="{StaticResource xPathNodeTypeDataTemplateSelector}"
+                Visibility="{Binding ElementName=TreeView, Path=IsLoading, Converter={StaticResource invertedBooleanToVisibilityConverter}}"
+            />
+
+        </Grid>
         
-        <Button
-            Grid.Row="0"
-            Content="Load XML File"
-            Command="{Binding LoadXMLFileCommand}"
-                />
-
-        <TreeView
-            Grid.Row="1"
-            VirtualizingStackPanel.IsVirtualizing="True"
-            VirtualizingStackPanel.VirtualizationMode="Recycling"
-            
-            ItemsSource="{Binding XmlTree.Document, Converter={StaticResource xPathNavigatorItemsConverter}}"
-            
-            ItemTemplateSelector="{StaticResource xPathNodeTypeDataTemplateSelector}"
-            Visibility="{Binding ElementName=TreeView, Path=IsLoading, Converter={StaticResource invertedBooleanToVisibilityConverter}}"
-            >
-        </TreeView>
-
         <GridSplitter Grid.Row="2" Height="10"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Stretch"

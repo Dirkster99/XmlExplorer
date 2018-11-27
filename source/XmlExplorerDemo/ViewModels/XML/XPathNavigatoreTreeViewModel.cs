@@ -16,45 +16,45 @@
     using System.Xml.Schema;
     using System.Xml.XPath;
 
-    internal class XPathNavigatorTreeView : Base.BaseViewModel
+    /// <summary>
+    /// Implements a treeview model that represents an Xml tree for binding to a WPF TreeView.
+    /// </summary>
+    internal class XPathNavigatorTreeViewModel : Base.BaseViewModel
     {
         #region fields
         private DateTime LoadingStarted;
-        private FileInfo _fileInfo;
         private bool _IsLoading = false;
         private object _Document;
+        private readonly ObservableCollection<XPathNavigatorView> _XPathRoot;
         #endregion fields
 
         #region constructors
-        public XPathNavigatorTreeView()
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        public XPathNavigatorTreeViewModel()
         {
             Errors = new ObservableCollection<Error>();
+            _XPathRoot = new ObservableCollection<XPathNavigatorView>();
         }
         #endregion constructors
 
         #region properties
-        public XmlNamespaceManager XmlNamespaceManager { get; set; }
+        public XmlNamespaceManager XmlNamespaceManager { get; private set; }
 
         public ObservableCollection<NamespaceDefinition> NamespaceDefinitions { get; private set; }
         public int DefaultNamespaceCount { get; private set; }
 
-        public ObservableCollection<Error> Errors { get; set; }
+        public ObservableCollection<Error> Errors { get; private set; }
 
         /// <summary>
         /// Gets whether the document, if any, specifies schema information and can, therefore, be validated.
         /// </summary>
         public bool CanValidate { get; private set; }
 
-        public FileInfo FileInfo
-        {
-            get { return _fileInfo; }
-            set
-            {
-                _fileInfo = value;
-                base.NotifyPropertyChanged(() => FileInfo);
-            }
-        }
-
+        /// <summary>
+        /// Gets the model of the Xml document tree nodes.
+        /// </summary>
         public object Document
         {
             get
@@ -62,7 +62,7 @@
                 return _Document;
             }
 
-            set
+            private set
             {
                 if (_Document != value)
                 {
@@ -74,16 +74,14 @@
                 }
             }
         }
-////
-////        public bool IsLoading
-////        {
-////            get { return (bool)GetValue(IsLoadingProperty); }
-////            set { SetValue(IsLoadingProperty, value); }
-////        }
-////
-////        // Using a DependencyProperty as the backing store for IsLoading.  This enables animation, styling, binding, etc...
-////        public static readonly DependencyProperty IsLoadingProperty =
-////            DependencyProperty.Register("IsLoading", typeof(bool), typeof(XPathNavigatorTreeView), new UIPropertyMetadata(false));
+
+        public IEnumerable<XPathNavigatorView> XPathRoot
+        {
+            get
+            {
+                return _XPathRoot;
+            }
+        }
 
         public TimeSpan LoadTime { get; set; }
 
@@ -99,6 +97,8 @@
                 }
             }
         }
+
+        public string FileName { get; private set; }
         #endregion properties
 
         #region methods
@@ -107,6 +107,7 @@
                   EventHandler OnFinished,
                   EventHandler<EventArgs<Exception>> OnException)
         {
+            this.FileName = filePathName;
             BeginOpen(new FileInfo(filePathName), OnFinished, OnException );
         }
 
@@ -120,6 +121,11 @@
             this.LoadingStarted = DateTime.Now;
 
             this.IsLoading = true;
+
+            Application.Current.Dispatcher.Invoke((Action)delegate
+            {
+                    _XPathRoot.Clear();
+            });
 
             ThreadStart start = delegate ()
             {
@@ -146,11 +152,37 @@
                         new Action<XPathNavigator>(SetDocument),
                         DispatcherPriority.Normal, navigator);
 
+                    this.ConvertDocument(Document, _XPathRoot);
+
                     if (OnFinished != null)
                         OnFinished(this, EventArgs.Empty);
                 }
             };
             new Thread(start).Start();
+        }
+
+        private void ConvertDocument(object document,
+                                     ObservableCollection<XPathNavigatorView> treeRoot)
+        {
+            XPathNavigator navigator;
+
+            navigator = document as XPathNavigator;
+
+            if (navigator == null)
+                return;
+
+            if (navigator == null)
+                return;
+
+            var root = new XPathNavigatorView(navigator);
+
+            Application.Current.Dispatcher.Invoke((Action)delegate
+            {
+                foreach (var item in root.Children)
+                    treeRoot.Add(item);
+            });
+
+            return;
         }
 
         public void SetDocument(XPathNavigator navigator)
@@ -180,39 +212,22 @@
 
             return document.CreateNavigator();
         }
-/***
+
         /// <summary>
-        /// Prompts the user to save a copy of the tree's XML file.
+        /// Saves a copy of the tree's XML file.
         /// </summary>
-        public void SaveAs(bool formatting)
+        public void Save(bool formatting, string fileName)
         {
-            System.Windows.Forms.SaveFileDialog dialog = new System.Windows.Forms.SaveFileDialog();
+            var fileInfo = new FileInfo(fileName);
 
-            dialog.Filter = "XML Files (*.xml)|*.xml|All Files (*.*)|*.*";
-
-            if (this.FileInfo != null)
-                dialog.FileName = System.IO.Path.GetFileName(this.FileInfo.FullName);
-
-            if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
-                return;
-
-            this.FileInfo = new FileInfo(dialog.FileName);
-
-            this.Save(formatting);
-        }
-
-        public void Save(bool formatting)
-        {
-            if (this.FileInfo == null)
-            {
-                this.SaveAs(formatting);
-                return;
-            }
-
-            using (FileStream stream = new FileStream(this.FileInfo.FullName, FileMode.Create, FileAccess.Write, FileShare.None))
+            using (FileStream stream = new FileStream(fileInfo.FullName,
+                                                      FileMode.Create, FileAccess.Write,
+                                                      FileShare.None))
             {
                 this.Save(stream, formatting);
             }
+
+            FileName = fileName;
         }
 
         public void Save(Stream stream, bool formatting)
@@ -226,14 +241,14 @@
 
             using (XmlWriter writer = XmlTextWriter.Create(stream, settings))
             {
-                XPathNavigator navigator = this.DataContext as XPathNavigator;
+                XPathNavigator navigator = this.Document as XPathNavigator;
                 if (navigator != null)
                 {
                     navigator.WriteSubtree(writer);
                 }
                 else
                 {
-                    XPathNodeIterator iterator = this.DataContext as XPathNodeIterator;
+                    XPathNodeIterator iterator = this.Document as XPathNodeIterator;
                     if (iterator != null)
                     {
                         foreach (XPathNavigator node in iterator)
@@ -258,7 +273,7 @@
                 writer.Flush();
             }
         }
-***/
+
         private void LoadNamespaceDefinitions(XPathNavigator navigator)
         {
             if (navigator == null)
@@ -602,6 +617,7 @@
                     // add the schema
                     schemas.Add(null, value);
                 }
+
                 foreach (var schemaAttribute in navigator.Select(
                     string.Format("//@{0}:schemaLocation", xsiPrefix),
                     this.XmlNamespaceManager))
@@ -672,11 +688,10 @@
             if (!File.Exists(schemaFileName))
             {
                 // try prepending the current file's path
-                if (this.FileInfo != null)
-                {
-                    schemaFileName = Path.Combine(this.FileInfo.DirectoryName, schemaFileName);
-                }
+                if (this.FileName != null)
+                    schemaFileName = Path.Combine(Path.GetDirectoryName(FileName), schemaFileName);
             }
+
             return schemaFileName;
         }
 
@@ -711,10 +726,10 @@
 
         private void AddError(Error error)
         {
-            if (this.FileInfo == null)
+            if (this.FileName == null)
                 error.File = "Untitled";
             else
-                error.File = this.FileInfo.FullName;
+                error.File = this.FileName;
 
             error.DefaultOrder = this.Errors.Count;
 

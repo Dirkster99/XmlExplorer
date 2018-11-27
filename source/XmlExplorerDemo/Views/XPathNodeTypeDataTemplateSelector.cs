@@ -7,7 +7,8 @@
 
     public class XPathNodeTypeDataTemplateSelector : DataTemplateSelector
     {
-        public override System.Windows.DataTemplate SelectTemplate(object item, System.Windows.DependencyObject container)
+        public override System.Windows.DataTemplate SelectTemplate(object item,
+                                                                   DependencyObject container)
         {
             XPathNavigatorView view = item as XPathNavigatorView;
 
@@ -20,7 +21,7 @@
                     switch (navigator.NodeType)
                     {
                         case XPathNodeType.Root:
-                            return App.Current.FindResource("xmlDeclarationXmlNodeTemplate") as DataTemplate;
+                            return App.Current.FindResource("elementXPathNavigatorTemplate") as DataTemplate; //xmlDeclarationXmlNodeTemplate
 
                         case XPathNodeType.ProcessingInstruction:
                             return App.Current.FindResource("processingInstructionXPathNavigatorTemplate") as DataTemplate;

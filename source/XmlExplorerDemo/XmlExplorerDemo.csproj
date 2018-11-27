@@ -64,7 +64,7 @@
     <Compile Include="ViewModels\Base\BaseViewModel.cs" />
     <Compile Include="ViewModels\Base\RelayCommand.cs" />
     <Compile Include="ViewModels\XML\NamespaceDefinition.cs" />
-    <Compile Include="ViewModels\XML\XPathNavigatoreTreeView.cs" />
+    <Compile Include="ViewModels\XML\XPathNavigatoreTreeViewModel.cs" />
     <Compile Include="Views\XPathNodeTypeDataTemplateSelector.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -29,17 +29,16 @@
         }
 
         private bool _isExpanded;
-
         public bool IsExpanded
         {
             get { return _isExpanded; }
 
             set
             {
-                if (!_isExpanded.Equals(value))
+                if (_isExpanded != value)
                 {
                     _isExpanded = value;
-                    base.OnPropertyChanged("IsExpanded");
+                    NotifyPropertyChanged(() => IsExpanded);
                 }
             }
         }
