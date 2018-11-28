@@ -14,7 +14,7 @@
         {
             XPathNavigator navigator;
 
-            XPathNavigatorView view = value as XPathNavigatorView;
+            XPathNavigatorViewModel view = value as XPathNavigatorViewModel;
 
             if (view != null)
                 navigator = view.XPathNavigator;

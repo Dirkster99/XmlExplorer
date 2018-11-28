@@ -2,12 +2,13 @@
 {
     using System.Collections.Generic;
     using System.Xml.XPath;
+    using XmlExplorerLib.interfaces;
 
-    internal class XPathNavigatorView : Base.BaseViewModel
+    internal class XPathNavigatorViewModel : Base.BaseViewModel, IXPathNavigator
     {
-        private IEnumerable<XPathNavigatorView> _children;
+        private IEnumerable<IXPathNavigator> _children;
 
-        public XPathNavigatorView(XPathNavigator navigator)
+        public XPathNavigatorViewModel(XPathNavigator navigator)
         {
             this.XPathNavigator = navigator;
         }
@@ -61,17 +62,17 @@
             }
         }
 
-        public IEnumerable<XPathNavigatorView> Children
+        public IEnumerable<IXPathNavigator> Children
         {
             get
             {
                 if (_children == null)
                 {
-                    List<XPathNavigatorView> childNavigatorViews = new List<XPathNavigatorView>();
+                    List<IXPathNavigator> childNavigatorViews = new List<IXPathNavigator>();
 
                     foreach (XPathNavigator childNavigator in this.XPathNavigator.SelectChildren(XPathNodeType.All))
                     {
-                        childNavigatorViews.Add(new XPathNavigatorView(childNavigator));
+                        childNavigatorViews.Add(new XPathNavigatorViewModel(childNavigator));
                     }
 
                     _children = childNavigatorViews.ToArray();

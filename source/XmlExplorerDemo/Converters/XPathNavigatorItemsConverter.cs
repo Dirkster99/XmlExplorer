@@ -12,16 +12,16 @@
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            List<XPathNavigatorView> childNavigatorViews;
+            List<XPathNavigatorViewModel> childNavigatorViews;
 
             XPathNodeIterator iterator = value as XPathNodeIterator;
             if (iterator != null)
             {
-                childNavigatorViews = new List<XPathNavigatorView>();
+                childNavigatorViews = new List<XPathNavigatorViewModel>();
 
                 foreach (XPathNavigator childNavigator in iterator)
                 {
-                    childNavigatorViews.Add(new XPathNavigatorView(childNavigator));
+                    childNavigatorViews.Add(new XPathNavigatorViewModel(childNavigator));
                 }
 
                 return childNavigatorViews;
@@ -29,7 +29,7 @@
 
             XPathNavigator navigator;
 
-            XPathNavigatorView view = value as XPathNavigatorView;
+            XPathNavigatorViewModel view = value as XPathNavigatorViewModel;
 
             if (view != null)
                 navigator = view.XPathNavigator;
@@ -39,11 +39,11 @@
             if (navigator == null)
                 return null;
 
-            childNavigatorViews = new List<XPathNavigatorView>();
+            childNavigatorViews = new List<XPathNavigatorViewModel>();
 
             foreach (XPathNavigator childNavigator in navigator.SelectChildren(XPathNodeType.All))
             {
-                childNavigatorViews.Add(new XPathNavigatorView(childNavigator));
+                childNavigatorViews.Add(new XPathNavigatorViewModel(childNavigator));
             }
 
             return childNavigatorViews;

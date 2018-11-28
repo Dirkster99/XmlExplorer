@@ -4,19 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BA1C7851-45F1-41D5-B9FC-486D89424B20}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
-    <RootNamespace>XmlExplorerDemo</RootNamespace>
-    <AssemblyName>XmlExplorerDemo</AssemblyName>
+    <ProjectGuid>{E363FC08-6AB1-4D43-B708-EDA7F467BB2E}</ProjectGuid>
+    <OutputType>library</OutputType>
+    <RootNamespace>XmlExplorerLib</RootNamespace>
+    <AssemblyName>XmlExplorerLib</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFrameworkProfile />
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -26,7 +24,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -41,6 +38,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -49,39 +47,15 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Compile Include="Behaviors\DialogCloser.cs" />
-    <Compile Include="Converters\InvertedBooleanToVisibilityConverter.cs" />
-    <Compile Include="Converters\XPathNavigatorAttributesConverter.cs" />
-    <Compile Include="Converters\XPathNavigatorItemsConverter.cs" />
-    <Compile Include="Models\Error.cs" />
-    <Compile Include="Models\Events\EventArgs.cs" />
-    <Compile Include="ViewModels\AppViewModel.cs" />
-    <Compile Include="ViewModels\Base\BaseViewModel.cs" />
-    <Compile Include="ViewModels\Base\RelayCommand.cs" />
-    <Compile Include="ViewModels\XML\NamespaceDefinition.cs" />
-    <Compile Include="ViewModels\XML\XPathNavigatoreTreeViewModel.cs" />
-    <Compile Include="ViewModels\XPathNavigatorViewModel .cs" />
-    <Compile Include="Views\XPathNodeTypeDataTemplateSelector.cs" />
-    <Page Include="MainWindow.xaml">
+    <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
+    <Compile Include="Interfaces\IXPathNavigator.cs" />
+    <Compile Include="Templates\XPathNodeTypeDataTemplateSelector.cs" />
+    <Compile Include="XmlExplorerView.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="Resources\TreeViewStyleItems.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -101,22 +75,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Content Include="00_DataSamples\XmlDataSampleDemo.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\XmlExplorerLib\XmlExplorerLib.csproj">
-      <Project>{e363fc08-6ab1-4d43-b708-eda7f467bb2e}</Project>
-      <Name>XmlExplorerLib</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
