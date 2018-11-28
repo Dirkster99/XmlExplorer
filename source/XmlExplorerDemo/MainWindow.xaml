@@ -67,7 +67,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <ctrl:XPathTreeView Grid.Column="0"
+            <ctrl:XPathTreeView Grid.Column="0" Margin="3"
                 VirtualizingStackPanel.IsVirtualizing="True"
                 VirtualizingStackPanel.VirtualizationMode="Recycling"
             
@@ -83,7 +83,7 @@
                       />
 
         <ListBox
-            Grid.Row="3"
+            Grid.Row="3" Margin="3"
             ItemsSource="{Binding XmlTree.Errors}"
             >
             <ListBox.ItemTemplate>
