@@ -11,8 +11,6 @@
         public MainWindow()
         {
             InitializeComponent();
-
-            this.DataContext = new AppViewModel();
         }
     }
 }

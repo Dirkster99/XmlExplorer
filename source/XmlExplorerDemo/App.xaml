@@ -1,12 +1,10 @@
 ﻿<Application x:Class="XmlExplorerDemo.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:XmlExplorerDemo"
-             StartupUri="MainWindow.xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/XmlExplorerDemo;component/Resources/TreeViewStyleItems.xaml" />
+                <ResourceDictionary Source="/XmlExplorerDemo;component/Resources/TreeViewStyleItems.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <Style TargetType="{x:Type Rectangle}" />

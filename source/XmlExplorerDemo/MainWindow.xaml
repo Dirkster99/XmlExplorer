@@ -3,10 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:behav="clr-namespace:XmlExplorerDemo.Behaviors"
         mc:Ignorable="d"
         Title="MainWindow" Height="650" Width="825"
         FontSize="16"
+
+        behav:DialogCloser.DialogResult="{Binding DialogCloseResult}" 
         >
+    <Window.InputBindings>
+        <KeyBinding Key="F4" Modifiers="Alt" Command="{Binding ApplicationExitCommand}"/>
+    </Window.InputBindings>
     <Grid
         xmlns:conv="clr-namespace:XmlExplorerDemo.Converters"
         xmlns:views="clr-namespace:XmlExplorerDemo.Views"
@@ -34,13 +40,14 @@
                 <MenuItem Header="Save As..."
                           Command="{Binding SaveAsXmlFileCommand}" />
                 <Separator/>
-                <MenuItem Header="Exit"/>
+                <MenuItem Header="Exit"
+                          Command="{Binding ApplicationExitCommand}"/>
             </MenuItem>
 
             <MenuItem Header="View">
                 <MenuItem Header="Collapse all nodes"
                           Command="{Binding CollapseAllNodesCommand}" />
-                
+
                 <MenuItem Header="Expand all nodes"
                           Command="{Binding ExpandAllNodesCommand}"
                           />
@@ -63,7 +70,7 @@
             />
 
         </Grid>
-        
+
         <GridSplitter Grid.Row="2" Height="10"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Stretch"

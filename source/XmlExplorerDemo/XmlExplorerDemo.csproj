@@ -53,6 +53,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Behaviors\DialogCloser.cs" />
     <Compile Include="Converters\InvertedBooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\XPathNavigatorAttributesConverter.cs" />
     <Compile Include="Converters\XPathNavigatorItemsConverter.cs" />
