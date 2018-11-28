@@ -15,28 +15,28 @@
             if (view != null)
             {
                 XPathNavigator navigator = view.XPathNavigator;
-
-                if (navigator != null)
+                var presenter = container as FrameworkElement;
+                if (navigator != null && presenter != null)
                 {
                     switch (navigator.NodeType)
                     {
                         case XPathNodeType.Root:
-                            return App.Current.FindResource("elementXPathNavigatorTemplate") as DataTemplate; //xmlDeclarationXmlNodeTemplate
+                            return presenter.FindResource("elementXPathNavigatorTemplate") as DataTemplate; //xmlDeclarationXmlNodeTemplate
 
                         case XPathNodeType.ProcessingInstruction:
-                            return App.Current.FindResource("processingInstructionXPathNavigatorTemplate") as DataTemplate;
+                            return presenter.FindResource("processingInstructionXPathNavigatorTemplate") as DataTemplate;
 
                         case XPathNodeType.Comment:
-                            return App.Current.FindResource("commentXPathNavigatorTemplate") as DataTemplate;
+                            return presenter.FindResource("commentXPathNavigatorTemplate") as DataTemplate;
 
                         case XPathNodeType.Element:
-                            return App.Current.FindResource("elementXPathNavigatorTemplate") as DataTemplate;
+                            return presenter.FindResource("elementXPathNavigatorTemplate") as DataTemplate;
 
                         case XPathNodeType.Text:
-                            return App.Current.FindResource("textXPathNavigatorTemplate") as DataTemplate;
+                            return presenter.FindResource("textXPathNavigatorTemplate") as DataTemplate;
 
                         case XPathNodeType.Attribute:
-                            return App.Current.FindResource("attributeXPathNavigatorTemplate") as DataTemplate;
+                            return presenter.FindResource("attributeXPathNavigatorTemplate") as DataTemplate;
                     }
                 }
             }
