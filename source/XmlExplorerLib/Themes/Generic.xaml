@@ -3,6 +3,6 @@
     >
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/XmlExplorerLib;component/Controls/TreeViewStyleItems.xaml" />
-        <ResourceDictionary Source="/XmlExplorerLib;component/Controls/XmlExplorerView.xaml" />
+        <ResourceDictionary Source="/XmlExplorerLib;component/Controls/XPathTreeView.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

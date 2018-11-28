@@ -6,12 +6,12 @@
     /// <summary>
     ///
     /// </summary>
-    public class XmlExplorerView : TreeView
+    public class XPathTreeView : TreeView
     {
-        static XmlExplorerView()
+        static XPathTreeView()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(XmlExplorerView),
-                               new FrameworkPropertyMetadata(typeof(XmlExplorerView)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(XPathTreeView),
+                               new FrameworkPropertyMetadata(typeof(XPathTreeView)));
         }
 
         /// <summary>

@@ -48,12 +48,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\XPathTreeViewItem.xaml.cs" />
-    <Page Include="Controls\XmlExplorerView.xaml">
+    <Page Include="Controls\XPathTreeView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="Controls\XmlExplorerView.xaml.cs">
-      <DependentUpon>XmlExplorerView.xaml</DependentUpon>
+    <Compile Include="Controls\XPathTreeView.xaml.cs">
+      <DependentUpon>XPathTreeView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Themes\Generic.xaml">

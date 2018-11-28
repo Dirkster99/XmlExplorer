@@ -61,7 +61,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <ctrl:XmlExplorerView Grid.Column="0"
+            <ctrl:XPathTreeView Grid.Column="0"
                 VirtualizingStackPanel.IsVirtualizing="True"
                 VirtualizingStackPanel.VirtualizationMode="Recycling"
             
