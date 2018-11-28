@@ -65,7 +65,9 @@
 
                         var dlg = new OpenFileDialog();
                         dlg.FileName = file;
-                        dlg.Filter = "Extensible Markup Language (*.xml)|*.xml|All files (*.*)|*.*";
+                        dlg.Filter = "Extensible Markup Language (*.xml)|*.xml"
+                                   + "Extensible Application Markup Language (*.xaml)|*.xaml"
+                                   + "|All files (*.*)|*.*";
                         dlg.Multiselect = false;
 
                         try
