@@ -1,3 +1,4 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/n3byoyit7jvwxewn?svg=true)](https://ci.appveyor.com/project/Dirkster99/xmlexplorer)
 # XmlExplorer
 
 ![Screenshot](https://github.com/Dirkster99/XmlExplorer/blob/master/00_Docu/screenshot.png?raw=true)
