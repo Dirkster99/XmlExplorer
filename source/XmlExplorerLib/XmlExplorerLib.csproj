@@ -47,7 +47,15 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="XPathTreeViewItem.cs" />
+    <Compile Include="Controls\XPathTreeViewItem.xaml.cs" />
+    <Page Include="Controls\XmlExplorerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="Controls\XmlExplorerView.xaml.cs">
+      <DependentUpon>XmlExplorerView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -57,10 +65,7 @@
     <Compile Include="Converters\XPathNavigatorItemsConverter.cs" />
     <Compile Include="Interfaces\IXPathNavigator.cs" />
     <Compile Include="Templates\XPathNodeTypeDataTemplateSelector.cs" />
-    <Compile Include="XmlExplorerView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="Themes\TreeViewStyleItems.xaml">
+    <Page Include="Controls\TreeViewStyleItems.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

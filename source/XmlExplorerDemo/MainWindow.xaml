@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:behav="clr-namespace:XmlExplorerDemo.Behaviors"
         
-        xmlns:ctrl="clr-namespace:XmlExplorerLib;assembly=XmlExplorerLib"
+        xmlns:ctrl="clr-namespace:XmlExplorerLib.Controls;assembly=XmlExplorerLib"
         xmlns:conv="clr-namespace:XmlExplorerLib.Converters;assembly=XmlExplorerLib"
         xmlns:views="clr-namespace:XmlExplorerLib.Templates;assembly=XmlExplorerLib"
 

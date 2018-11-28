@@ -1,4 +1,4 @@
-﻿namespace XmlExplorerLib
+﻿namespace XmlExplorerLib.Controls
 {
     using System.Windows;
     using System.Windows.Controls;

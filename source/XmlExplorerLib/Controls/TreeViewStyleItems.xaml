@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:views="clr-namespace:XmlExplorerLib.Templates"
                     xmlns:conv="clr-namespace:XmlExplorerLib.Converters"
+                    xmlns:ctrl="clr-namespace:XmlExplorerLib.Controls"
                     >
  
     <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter" />
@@ -104,7 +105,8 @@
         </Setter>
     </Style>
 
-    <Style x:Key="{x:Type TreeViewItem}" TargetType="{x:Type TreeViewItem}">
+    <Style x:Key="{x:Type ctrl:XPathTreeViewItem}"
+           TargetType="{x:Type ctrl:XPathTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
         <!--Setter Property="local:TreeViewItemBehavior.IsBroughtIntoViewWhenSelected" Value="True" /-->
         <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
         <Setter Property="IsSelected" Value="{Binding Path=IsSelected, Mode=TwoWay}" />
@@ -120,7 +122,7 @@
         <Setter Property="FocusVisualStyle" Value="{StaticResource TreeViewItemFocusVisual}"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                <ControlTemplate TargetType="{x:Type ctrl:XPathTreeViewItem}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition MinWidth="19" Width="Auto"/>
@@ -260,11 +262,6 @@
 					Visibility="{Binding XPathNavigator.HasChildren, Converter={StaticResource invertedBooleanToVisibilityConverter}}" />
             <TextBlock Style="{StaticResource xmlDelimiterStyle}" Text="&gt;" />
         </StackPanel>
-        <HierarchicalDataTemplate.ItemContainerStyle>
-            <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
-                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
-            </Style>
-        </HierarchicalDataTemplate.ItemContainerStyle>
     </HierarchicalDataTemplate>
 
     <DataTemplate x:Key="textXPathNavigatorTemplate">
