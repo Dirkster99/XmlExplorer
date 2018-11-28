@@ -17,6 +17,9 @@
         >
     <Window.InputBindings>
         <KeyBinding Key="F4" Modifiers="Alt" Command="{Binding ApplicationExitCommand}"/>
+        <KeyBinding Key="Plus" Modifiers="Ctrl" Command="{Binding ExpandAllNodesCommand}"/>
+        <KeyBinding Key="Minus" Modifiers="Ctrl" Command="{Binding CollapseAllNodesCommand}"/>
+        <KeyBinding Key="O" Modifiers="Ctrl" Command="{Binding LoadXMLFileCommand}"/>
     </Window.InputBindings>
     <Grid>
         <Grid.Resources>
@@ -37,21 +40,24 @@
 
         <Menu Grid.Row="0">
             <MenuItem Header="File">
-                <MenuItem Header="Load Xml File"
+                <MenuItem Header="Load Xml File" InputGestureText="Ctrl + O"
                           Command="{Binding LoadXMLFileCommand}" />
                 <MenuItem Header="Save As..."
                           Command="{Binding SaveAsXmlFileCommand}" />
                 <Separator/>
-                <MenuItem Header="Exit"
+                <MenuItem Header="Exit" InputGestureText="Alt + F4"
                           Command="{Binding ApplicationExitCommand}"/>
             </MenuItem>
 
             <MenuItem Header="View">
                 <MenuItem Header="Collapse all nodes"
-                          Command="{Binding CollapseAllNodesCommand}" />
+                          Command="{Binding CollapseAllNodesCommand}"
+                          InputGestureText="Ctrl + -"
+                          />
 
                 <MenuItem Header="Expand all nodes"
                           Command="{Binding ExpandAllNodesCommand}"
+                          InputGestureText="Ctrl + +"
                           />
             </MenuItem>
         </Menu>
