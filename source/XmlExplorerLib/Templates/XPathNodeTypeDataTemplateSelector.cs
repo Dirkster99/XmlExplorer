@@ -1,16 +1,16 @@
-﻿namespace XmlExplorerDemo.Views
+﻿namespace XmlExplorerLib.Templates
 {
-    using XmlExplorerDemo.ViewModels;
     using System.Windows;
     using System.Windows.Controls;
     using System.Xml.XPath;
+    using XmlExplorerLib.interfaces;
 
     public class XPathNodeTypeDataTemplateSelector : DataTemplateSelector
     {
         public override System.Windows.DataTemplate SelectTemplate(object item,
                                                                    DependencyObject container)
         {
-            XPathNavigatorView view = item as XPathNavigatorView;
+            IXPathNavigator view = item as IXPathNavigator;
 
             if (view != null)
             {

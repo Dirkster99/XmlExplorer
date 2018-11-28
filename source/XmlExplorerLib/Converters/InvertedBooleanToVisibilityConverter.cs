@@ -1,4 +1,4 @@
-﻿namespace XmlExplorerDemo.Converters
+﻿namespace XmlExplorerLib.Converters
 {
     using System;
     using System.Windows;

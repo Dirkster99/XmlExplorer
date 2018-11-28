@@ -4,8 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:behav="clr-namespace:XmlExplorerDemo.Behaviors"
+        
+        xmlns:ctrl="clr-namespace:XmlExplorerLib.Controls;assembly=XmlExplorerLib"
+        xmlns:conv="clr-namespace:XmlExplorerLib.Converters;assembly=XmlExplorerLib"
+        xmlns:views="clr-namespace:XmlExplorerLib.Templates;assembly=XmlExplorerLib"
+
         mc:Ignorable="d"
-        Title="MainWindow" Height="650" Width="825"
+        Title="MainWindow" Height="650" Width="925"
         FontSize="16"
 
         behav:DialogCloser.DialogResult="{Binding DialogCloseResult}" 
@@ -13,10 +18,7 @@
     <Window.InputBindings>
         <KeyBinding Key="F4" Modifiers="Alt" Command="{Binding ApplicationExitCommand}"/>
     </Window.InputBindings>
-    <Grid
-        xmlns:conv="clr-namespace:XmlExplorerDemo.Converters"
-        xmlns:views="clr-namespace:XmlExplorerDemo.Views"
-        >
+    <Grid>
         <Grid.Resources>
             <conv:InvertedBooleanToVisibilityConverter x:Key="invertedBooleanToVisibilityConverter" />
             <!--conv:XPathNavigatorItemsConverter x:Key="xPathNavigatorItemsConverter" /-->
@@ -59,8 +61,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <TreeView
-                Grid.Column="2" Grid.Row="1"
+            <ctrl:XmlExplorerView Grid.Column="0"
                 VirtualizingStackPanel.IsVirtualizing="True"
                 VirtualizingStackPanel.VirtualizationMode="Recycling"
             
@@ -68,7 +69,6 @@
                 ItemTemplateSelector="{StaticResource xPathNodeTypeDataTemplateSelector}"
                 Visibility="{Binding ElementName=TreeView, Path=IsLoading, Converter={StaticResource invertedBooleanToVisibilityConverter}}"
             />
-
         </Grid>
 
         <GridSplitter Grid.Row="2" Height="10"

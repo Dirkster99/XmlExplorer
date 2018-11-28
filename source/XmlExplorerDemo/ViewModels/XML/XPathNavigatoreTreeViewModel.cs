@@ -15,6 +15,7 @@
     using System.Xml;
     using System.Xml.Schema;
     using System.Xml.XPath;
+    using XmlExplorerLib.interfaces;
 
     /// <summary>
     /// Implements a treeview model that represents an Xml tree for binding to a WPF TreeView.
@@ -25,7 +26,7 @@
         private DateTime LoadingStarted;
         private bool _IsLoading = false;
         private object _Document;
-        private readonly ObservableCollection<XPathNavigatorView> _XPathRoot;
+        private readonly ObservableCollection<IXPathNavigator> _XPathRoot;
         #endregion fields
 
         #region constructors
@@ -35,7 +36,7 @@
         public XPathNavigatorTreeViewModel()
         {
             Errors = new ObservableCollection<Error>();
-            _XPathRoot = new ObservableCollection<XPathNavigatorView>();
+            _XPathRoot = new ObservableCollection<IXPathNavigator>();
         }
         #endregion constructors
 
@@ -75,7 +76,7 @@
             }
         }
 
-        public IEnumerable<XPathNavigatorView> XPathRoot
+        public IEnumerable<IXPathNavigator> XPathRoot
         {
             get
             {
@@ -162,7 +163,7 @@
         }
 
         private void ConvertDocument(object document,
-                                     ObservableCollection<XPathNavigatorView> treeRoot)
+                                     ObservableCollection<IXPathNavigator> treeRoot)
         {
             XPathNavigator navigator;
 
@@ -174,7 +175,7 @@
             if (navigator == null)
                 return;
 
-            var root = new XPathNavigatorView(navigator);
+            var root = new XPathNavigatorViewModel(navigator);
 
             Application.Current.Dispatcher.Invoke((Action)delegate
             {
