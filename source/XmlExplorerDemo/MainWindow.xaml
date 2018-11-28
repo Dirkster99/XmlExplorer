@@ -5,6 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:behav="clr-namespace:XmlExplorerDemo.Behaviors"
         xmlns:ctrl="clr-namespace:XmlExplorerLib;assembly=XmlExplorerLib"
+        xmlns:conv="clr-namespace:XmlExplorerLib.Converters;assembly=XmlExplorerLib"
+        xmlns:views="clr-namespace:XmlExplorerDemo.Views"
+
         mc:Ignorable="d"
         Title="MainWindow" Height="650" Width="825"
         FontSize="16"
@@ -14,10 +17,7 @@
     <Window.InputBindings>
         <KeyBinding Key="F4" Modifiers="Alt" Command="{Binding ApplicationExitCommand}"/>
     </Window.InputBindings>
-    <Grid
-        xmlns:conv="clr-namespace:XmlExplorerDemo.Converters"
-        xmlns:views="clr-namespace:XmlExplorerDemo.Views"
-        >
+    <Grid>
         <Grid.Resources>
             <conv:InvertedBooleanToVisibilityConverter x:Key="invertedBooleanToVisibilityConverter" />
             <!--conv:XPathNavigatorItemsConverter x:Key="xPathNavigatorItemsConverter" /-->

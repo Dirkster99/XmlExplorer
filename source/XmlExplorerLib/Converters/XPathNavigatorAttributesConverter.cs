@@ -1,10 +1,10 @@
-﻿namespace XmlExplorerDemo.Converters
+﻿namespace XmlExplorerLib.Converters
 {
-    using XmlExplorerDemo.ViewModels;
     using System;
     using System.Collections.Generic;
     using System.Windows.Data;
     using System.Xml.XPath;
+    using XmlExplorerLib.interfaces;
 
     public class XPathNavigatorAttributesConverter : IValueConverter
     {
@@ -14,7 +14,7 @@
         {
             XPathNavigator navigator;
 
-            XPathNavigatorViewModel view = value as XPathNavigatorViewModel;
+            IXPathNavigator view = value as IXPathNavigator;
 
             if (view != null)
                 navigator = view.XPathNavigator;

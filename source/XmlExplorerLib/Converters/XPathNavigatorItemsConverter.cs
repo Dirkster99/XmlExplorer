@@ -1,5 +1,6 @@
-﻿namespace XmlExplorerDemo.Converters
+﻿namespace XmlExplorerLib.Converters
 {
+/***
     using XmlExplorerDemo.ViewModels;
     using System;
     using System.Collections.Generic;
@@ -55,4 +56,5 @@
         }
         #endregion
     }
+***/
 }

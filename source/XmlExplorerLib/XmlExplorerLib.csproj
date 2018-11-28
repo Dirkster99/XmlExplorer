@@ -51,6 +51,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="Converters\InvertedBooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\XPathNavigatorAttributesConverter.cs" />
+    <Compile Include="Converters\XPathNavigatorItemsConverter.cs" />
     <Compile Include="Interfaces\IXPathNavigator.cs" />
     <Compile Include="Templates\XPathNodeTypeDataTemplateSelector.cs" />
     <Compile Include="XmlExplorerView.cs">
