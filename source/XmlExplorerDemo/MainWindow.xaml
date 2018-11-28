@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:behav="clr-namespace:XmlExplorerDemo.Behaviors"
+        
         xmlns:ctrl="clr-namespace:XmlExplorerLib;assembly=XmlExplorerLib"
         xmlns:conv="clr-namespace:XmlExplorerLib.Converters;assembly=XmlExplorerLib"
         xmlns:views="clr-namespace:XmlExplorerLib.Templates;assembly=XmlExplorerLib"
@@ -58,20 +59,9 @@
         <Grid Grid.Column="0" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <TreeView
-                Grid.Column="0" Grid.Row="1"
-                VirtualizingStackPanel.IsVirtualizing="True"
-                VirtualizingStackPanel.VirtualizationMode="Recycling"
-            
-                ItemsSource="{Binding XmlTree.XPathRoot}"
-                ItemTemplateSelector="{StaticResource xPathNodeTypeDataTemplateSelector}"
-                Visibility="{Binding ElementName=TreeView, Path=IsLoading, Converter={StaticResource invertedBooleanToVisibilityConverter}}"
-            />
-
-            <ctrl:XmlExplorerView Grid.Column="1"
+            <ctrl:XmlExplorerView Grid.Column="0"
                 VirtualizingStackPanel.IsVirtualizing="True"
                 VirtualizingStackPanel.VirtualizationMode="Recycling"
             

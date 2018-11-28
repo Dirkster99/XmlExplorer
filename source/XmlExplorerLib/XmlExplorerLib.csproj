@@ -59,6 +59,10 @@
     <Compile Include="XmlExplorerView.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Themes\TreeViewStyleItems.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

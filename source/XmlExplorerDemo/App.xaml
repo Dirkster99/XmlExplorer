@@ -4,7 +4,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/XmlExplorerDemo;component/Resources/TreeViewStyleItems.xaml" />
+                <ResourceDictionary Source="/XmlExplorerLib;component/Themes/TreeViewStyleItems.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <Style TargetType="{x:Type Rectangle}" />
