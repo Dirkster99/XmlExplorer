@@ -62,7 +62,6 @@
     <Compile Include="ViewModels\XML\NamespaceDefinition.cs" />
     <Compile Include="ViewModels\XML\XPathNavigatoreTreeViewModel.cs" />
     <Compile Include="ViewModels\XPathNavigatorViewModel .cs" />
-    <Compile Include="Views\XPathNodeTypeDataTemplateSelector.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

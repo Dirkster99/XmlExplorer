@@ -6,10 +6,10 @@
         xmlns:behav="clr-namespace:XmlExplorerDemo.Behaviors"
         xmlns:ctrl="clr-namespace:XmlExplorerLib;assembly=XmlExplorerLib"
         xmlns:conv="clr-namespace:XmlExplorerLib.Converters;assembly=XmlExplorerLib"
-        xmlns:views="clr-namespace:XmlExplorerDemo.Views"
+        xmlns:views="clr-namespace:XmlExplorerLib.Templates;assembly=XmlExplorerLib"
 
         mc:Ignorable="d"
-        Title="MainWindow" Height="650" Width="825"
+        Title="MainWindow" Height="650" Width="925"
         FontSize="16"
 
         behav:DialogCloser.DialogResult="{Binding DialogCloseResult}" 
