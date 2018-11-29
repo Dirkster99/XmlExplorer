@@ -6,11 +6,6 @@
                     xmlns:reskeys="clr-namespace:XmlExplorerLib.Themes"
                     >
  
-    <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter" />
-    <views:XPathNodeTypeDataTemplateSelector x:Key="xPathNodeTypeDataTemplateSelector"/>
-    <conv:InvertedBooleanToVisibilityConverter x:Key="invertedBooleanToVisibilityConverter"/>
-    <conv:XPathNavigatorAttributesConverter x:Key="xPathNavigatorAttributesConverter"/>
-
     <!--xmlDelimiterStyle - XmlDelimiterStyleKey-->
     <Style x:Key="{x:Static reskeys:ResourceKeys.XmlDelimiterStyleKey}" TargetType="TextBlock">
         <Setter Property="Foreground" Value="Blue" />
@@ -40,11 +35,11 @@
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="xmlAttributeValueStyle" TargetType="TextBlock" BasedOn="{StaticResource {x:Static reskeys:ResourceKeys.XmlDelimiterStyleKey}}">
+    <Style x:Key="{x:Static reskeys:ResourceKeys.XmlAttributeValueStyleKey}" TargetType="TextBlock" BasedOn="{StaticResource {x:Static reskeys:ResourceKeys.XmlDelimiterStyleKey}}">
         <Setter Property="Foreground" Value="Blue" />
     </Style>
 
-    <Style x:Key="xmlAttributeNameStyle" TargetType="TextBlock" BasedOn="{StaticResource {x:Static reskeys:ResourceKeys.XmlDelimiterStyleKey}}">
+    <Style x:Key="{x:Static reskeys:ResourceKeys.XmlAttributeNameStyleKey}" TargetType="TextBlock" BasedOn="{StaticResource {x:Static reskeys:ResourceKeys.XmlDelimiterStyleKey}}">
         <Setter Property="Foreground" Value="Red" />
     </Style>
 
@@ -53,29 +48,36 @@
         <Setter Property="Foreground" Value="DarkRed" />
     </Style>
 
-    <Style x:Key="xmlTextStyle" TargetType="TextBlock" BasedOn="{StaticResource {x:Static reskeys:ResourceKeys.XmlDelimiterStyleKey}}">
+    <Style x:Key="{x:Static reskeys:ResourceKeys.XmlTextStyleKey}" TargetType="TextBlock" BasedOn="{StaticResource {x:Static reskeys:ResourceKeys.XmlDelimiterStyleKey}}">
         <Setter Property="Foreground" Value="DarkRed" />
     </Style>
 
-    <Style x:Key="xmlCommentStyle" TargetType="TextBlock" BasedOn="{StaticResource {x:Static reskeys:ResourceKeys.XmlDelimiterStyleKey}}">
+    <Style x:Key="{x:Static reskeys:ResourceKeys.XmlCommentStyleKey}" TargetType="TextBlock" BasedOn="{StaticResource {x:Static reskeys:ResourceKeys.XmlDelimiterStyleKey}}">
         <Setter Property="Foreground" Value="Green" />
     </Style>
 
-    <Style x:Key="xmlProcessingInstructionStyle" TargetType="TextBlock" BasedOn="{StaticResource {x:Static reskeys:ResourceKeys.XmlDelimiterStyleKey}}">
+    <Style x:Key="{x:Static reskeys:ResourceKeys.XmlProcessingInstructionStyleKey}" TargetType="TextBlock" BasedOn="{StaticResource {x:Static reskeys:ResourceKeys.XmlDelimiterStyleKey}}">
         <Setter Property="Foreground" Value="Gray" />
     </Style>
 
     <HierarchicalDataTemplate x:Key="elementXPathNavigatorTemplate"
-                            ItemsSource="{Binding Children}"
-                            ItemTemplateSelector="{StaticResource xPathNodeTypeDataTemplateSelector}">
+                            ItemsSource="{Binding Children}">
+        <HierarchicalDataTemplate.Resources>
+            <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter" />
+            <conv:InvertedBooleanToVisibilityConverter x:Key="invertedBooleanToVisibilityConverter"/>
+            <conv:XPathNavigatorAttributesConverter x:Key="xPathNavigatorAttributesConverter"/>
+        </HierarchicalDataTemplate.Resources>
+        <HierarchicalDataTemplate.ItemTemplateSelector>
+                <views:XPathNodeTypeDataTemplateSelector />
+        </HierarchicalDataTemplate.ItemTemplateSelector>
         <StackPanel Orientation="Horizontal">
             <TextBlock Style="{DynamicResource {x:Static reskeys:ResourceKeys.XmlDelimiterStyleKey}}" Text="&lt;" />
             <TextBlock Style="{DynamicResource {x:Static reskeys:ResourceKeys.XmlNameStyleKey}}" Text="{Binding Name}" />
             <TextBlock Text=" " />
-            <TextBlock Style="{StaticResource xmlAttributeNameStyle}" Text="xmlns:" Visibility="{Binding HasNamespace, Converter={StaticResource booleanToVisibilityConverter}}" />
-            <TextBlock Style="{StaticResource xmlAttributeNameStyle}" Text="{Binding XPathNavigator.Prefix}" Visibility="{Binding HasNamespace, Converter={StaticResource booleanToVisibilityConverter}}" />
+            <TextBlock Style="{DynamicResource {x:Static reskeys:ResourceKeys.XmlAttributeNameStyleKey}}" Text="xmlns:" Visibility="{Binding HasNamespace, Converter={StaticResource booleanToVisibilityConverter}}" />
+            <TextBlock Style="{DynamicResource {x:Static reskeys:ResourceKeys.XmlAttributeNameStyleKey}}" Text="{Binding XPathNavigator.Prefix}" Visibility="{Binding HasNamespace, Converter={StaticResource booleanToVisibilityConverter}}" />
             <TextBlock Style="{DynamicResource {x:Static reskeys:ResourceKeys.XmlDelimiterStyleKey}}" Visibility="{Binding HasNamespace, Converter={StaticResource booleanToVisibilityConverter}}">="</TextBlock>
-            <TextBlock Style="{StaticResource xmlAttributeValueStyle}" Text="{Binding XPathNavigator.NamespaceURI}" Visibility="{Binding HasNamespace, Converter={StaticResource booleanToVisibilityConverter}}"/>
+            <TextBlock Style="{StaticResource {x:Static reskeys:ResourceKeys.XmlAttributeValueStyleKey}}" Text="{Binding XPathNavigator.NamespaceURI}" Visibility="{Binding HasNamespace, Converter={StaticResource booleanToVisibilityConverter}}"/>
             <TextBlock Style="{DynamicResource {x:Static reskeys:ResourceKeys.XmlDelimiterStyleKey}}" Text="&quot; " Visibility="{Binding HasNamespace, Converter={StaticResource booleanToVisibilityConverter}}" />
             <ItemsControl ItemsSource="{Binding Converter={StaticResource xPathNavigatorAttributesConverter}}"
 						  KeyboardNavigation.IsTabStop="False">
@@ -87,9 +89,9 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" KeyboardNavigation.IsTabStop="False" >
-                            <TextBlock Style="{StaticResource xmlAttributeNameStyle}" Text="{Binding Name}" />
+                            <TextBlock Style="{DynamicResource {x:Static reskeys:ResourceKeys.XmlAttributeNameStyleKey}}" Text="{Binding Name}" />
                             <TextBlock Style="{DynamicResource {x:Static reskeys:ResourceKeys.XmlDelimiterStyleKey}}">="</TextBlock>
-                            <TextBlock Style="{StaticResource xmlAttributeValueStyle}" Text="{Binding Value}" />
+                            <TextBlock Style="{StaticResource {x:Static reskeys:ResourceKeys.XmlAttributeValueStyleKey}}" Text="{Binding Value}" />
                             <TextBlock Style="{DynamicResource {x:Static reskeys:ResourceKeys.XmlDelimiterStyleKey}}" Text="&quot; " />
                         </StackPanel>
                     </DataTemplate>
@@ -104,17 +106,17 @@
     </HierarchicalDataTemplate>
 
     <DataTemplate x:Key="textXPathNavigatorTemplate">
-        <TextBlock Style="{StaticResource xmlTextStyle}" Text="{Binding Value}" />
+        <TextBlock Style="{StaticResource {x:Static reskeys:ResourceKeys.XmlTextStyleKey}}" Text="{Binding Value}" />
     </DataTemplate>
 
     <DataTemplate x:Key="attributeXPathNavigatorTemplate">
-        <TextBlock Style="{StaticResource xmlAttributeValueStyle}" Text="{Binding Value}" />
+        <TextBlock Style="{StaticResource {x:Static reskeys:ResourceKeys.XmlAttributeValueStyleKey}}" Text="{Binding Value}" />
     </DataTemplate>
 
     <DataTemplate x:Key="commentXPathNavigatorTemplate">
-        <TextBlock Style="{StaticResource xmlCommentStyle}">
+        <TextBlock Style="{StaticResource {x:Static reskeys:ResourceKeys.XmlCommentStyleKey}}">
 			<![CDATA[<!--]]>
-			<TextBlock Style="{StaticResource xmlCommentStyle}" Text="{Binding Value}" />
+			<TextBlock Style="{StaticResource {x:Static reskeys:ResourceKeys.XmlCommentStyleKey}}" Text="{Binding Value}" />
 			<![CDATA[-->]]>
 		</TextBlock>
     </DataTemplate>
@@ -123,7 +125,7 @@
         <TextBlock Style="{DynamicResource {x:Static reskeys:ResourceKeys.XmlDelimiterStyleKey}}">
 			&lt;?
 			<TextBlock Style="{DynamicResource {x:Static reskeys:ResourceKeys.XmlNameStyleKey}}" Text="{Binding Name}" />
-			<TextBlock Style="{StaticResource xmlProcessingInstructionStyle}" Text="{Binding Value}" />
+			<TextBlock Style="{StaticResource {x:Static reskeys:ResourceKeys.XmlProcessingInstructionStyleKey}}" Text="{Binding Value}" />
 			?&gt;
 		</TextBlock>
     </DataTemplate>
@@ -132,7 +134,7 @@
         <TextBlock Style="{DynamicResource {x:Static reskeys:ResourceKeys.XmlDelimiterStyleKey}}">
 			&lt;?
 			<TextBlock Style="{DynamicResource {x:Static reskeys:ResourceKeys.XmlNameStyleKey}}" Text="{Binding Name}" />
-			<TextBlock Style="{StaticResource xmlProcessingInstructionStyle}" Text="{Binding Value}" />
+			<TextBlock Style="{StaticResource {x:Static reskeys:ResourceKeys.XmlProcessingInstructionStyleKey}}" Text="{Binding Value}" />
 			?&gt;
 		</TextBlock>
     </DataTemplate>

@@ -6,8 +6,6 @@
         xmlns:behav="clr-namespace:XmlExplorerDemo.Behaviors"
         
         xmlns:ctrl="clr-namespace:XmlExplorerLib.Controls;assembly=XmlExplorerLib"
-        xmlns:conv="clr-namespace:XmlExplorerLib.Converters;assembly=XmlExplorerLib"
-        xmlns:views="clr-namespace:XmlExplorerLib.Templates;assembly=XmlExplorerLib"
 
         mc:Ignorable="d"
         Title="MainWindow" Height="650" Width="925"
@@ -22,12 +20,6 @@
         <KeyBinding Key="O" Modifiers="Ctrl" Command="{Binding LoadXMLFileCommand}"/>
     </Window.InputBindings>
     <Grid>
-        <Grid.Resources>
-            <conv:InvertedBooleanToVisibilityConverter x:Key="invertedBooleanToVisibilityConverter" />
-            <!--conv:XPathNavigatorItemsConverter x:Key="xPathNavigatorItemsConverter" /-->
-            <views:XPathNodeTypeDataTemplateSelector x:Key="xPathNodeTypeDataTemplateSelector" />
-        </Grid.Resources>
-
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
@@ -68,16 +60,11 @@
             </Grid.ColumnDefinitions>
 
             <ctrl:XPathTreeView Grid.Column="0" Margin="3"
-                VirtualizingStackPanel.IsVirtualizing="True"
-                VirtualizingStackPanel.VirtualizationMode="Recycling"
-            
                 ItemsSource="{Binding XmlTree.XPathRoot}"
-                ItemTemplateSelector="{StaticResource xPathNodeTypeDataTemplateSelector}"
-                Visibility="{Binding ElementName=TreeView, Path=IsLoading, Converter={StaticResource invertedBooleanToVisibilityConverter}}"
             />
         </Grid>
 
-        <GridSplitter Grid.Row="2" Height="10"
+        <GridSplitter Grid.Row="2" Height="6" Background="Transparent"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Stretch"
                       />
