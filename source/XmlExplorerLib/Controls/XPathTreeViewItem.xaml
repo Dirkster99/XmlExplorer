@@ -5,8 +5,6 @@
                     xmlns:reskeys="clr-namespace:XmlExplorerLib.Themes"
                     >
 
-    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.GlyphBrushKey}" Color="#444" />
-
     <Style x:Key="{x:Static reskeys:ResourceKeys.ExpandCollapseToggleStyleKey}" TargetType="ToggleButton">
         <Setter Property="Focusable" Value="False"/>
         <Setter Property="Template">
@@ -19,13 +17,17 @@
                               HorizontalAlignment="Left"
                               VerticalAlignment="Center"
                               Margin="1,1,1,1"
-                              Fill="{StaticResource {x:Static reskeys:ResourceKeys.GlyphBrushKey}}"
+                              Fill="{DynamicResource {x:Static reskeys:ResourceKeys.GlyphBrushKey}}"
                               Data="M 4 0 L 8 4 L 4 8 Z"/>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
                             <Setter Property="Data" TargetName="ExpandPath"
                                     Value="M 0 4 L 8 4 L 4 8 Z"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="ExpandPath" Property="Fill"
+                                    Value="{DynamicResource {x:Static reskeys:ResourceKeys.GlyphDisabledBrushKey}}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -141,12 +143,12 @@
                         <Trigger Property="IsSelected" Value="true">
                             <Setter TargetName="Bd"
                                 Property="Background"
-                                Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                                Value="{DynamicResource {x:Static reskeys:ResourceKeys.ItemSelectedBackgroundBrushKey}}"/>
                             <Setter TargetName="EndTag"
                                 Property="Background"
-                                Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                                Value="{DynamicResource {x:Static reskeys:ResourceKeys.ItemSelectedBackgroundBrushKey}}"/>
                             <Setter Property="Foreground"
-                                Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+                                Value="{DynamicResource {x:Static reskeys:ResourceKeys.ItemSelectedForegroundBrushKey}}"/>
                         </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>

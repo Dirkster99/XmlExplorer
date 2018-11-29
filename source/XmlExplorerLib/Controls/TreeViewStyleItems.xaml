@@ -8,13 +8,13 @@
  
     <!--xmlDelimiterStyle - XmlDelimiterStyleKey-->
     <Style x:Key="{x:Static reskeys:ResourceKeys.XmlDelimiterStyleKey}" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="Blue" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.XmlDelimiterForegroundBrushKey}}" />
         <Style.Triggers>
             <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type TreeViewItem}},Path=IsSelected}" Value="True">
                 <Setter Property="Foreground"
-                                Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+                        Value="{DynamicResource {x:Static reskeys:ResourceKeys.ItemSelectedForegroundBrushKey}}"/>
                 <Setter Property="Background"
-                                Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                        Value="{DynamicResource {x:Static reskeys:ResourceKeys.ItemSelectedBackgroundBrushKey}}"/>
             </DataTrigger>
 
             <MultiDataTrigger>
@@ -23,14 +23,14 @@
                     <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type TreeViewItem}},Path=IsSelectionActive}" Value="false"/>
                 </MultiDataTrigger.Conditions>
                 <Setter Property="Background"
-                                Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                                Value="{DynamicResource {x:Static reskeys:ResourceKeys.ItemSelectedNotFocusedBackgroundBrushKey}}"/>
                 <Setter Property="Foreground"
-                                Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                                Value="{DynamicResource {x:Static reskeys:ResourceKeys.ItemSelectedNotFocusedForegroundBrushKey}}"/>
             </MultiDataTrigger>
 
             <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type TreeViewItem}},Path=IsEnabled}" Value="False">
                 <Setter Property="Foreground"
-                                Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                Value="{DynamicResource {x:Static reskeys:ResourceKeys.XmlItemDisabledForegroundBrushKey}}"/>
             </DataTrigger>
         </Style.Triggers>
     </Style>

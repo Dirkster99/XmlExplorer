@@ -8,8 +8,52 @@
     /// </summary>
     public static class ResourceKeys
     {
+        #region Accent Keys
+        /// <summary>
+        /// Accent Color Key - This Color key is used to accent elements in the UI
+        /// (e.g.: Color of Activated Normal Window Frame, ResizeGrip, Focus or MouseOver input elements)
+        /// </summary>
+        public static readonly ComponentResourceKey ControlAccentColorKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlAccentColorKey");
+
+        /// <summary>
+        /// Accent Brush Key - This Brush key is used to accent elements in the UI
+        /// (e.g.: Color of Activated Normal Window Frame, ResizeGrip, Focus or MouseOver input elements)
+        /// </summary>
+        public static readonly ComponentResourceKey ControlAccentBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlAccentBrushKey");
+        #endregion Accent Keys      
+
+        #region SelectedItems Brushkeys
+        /// <summary>
+        /// Selected Background Brush Key
+        /// This Brush key is used to accent the background color of selected elements in the UI.
+        /// </summary>
+        public static readonly ComponentResourceKey ItemSelectedBackgroundBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "ItemSelectedBackgroundBrushKey");
+
+        /// <summary>
+        /// Selected Foreground Brush Key
+        /// This Brush key is used to define foreground color of selected elements in the UI.
+        /// </summary>
+        public static readonly ComponentResourceKey ItemSelectedForegroundBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "ItemSelectedForegroundBrushKey");
+
+        /// <summary>
+        /// Gets the Background Brush key to color the background of the selected item
+        /// when it is not focused.
+        /// </summary>
+        public static readonly ComponentResourceKey ItemSelectedNotFocusedForegroundBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "ItemSelectedNotFocusedForegroundBrushKey");
+
+        /// <summary>
+        /// Gets the Background Brush key to color the background of the selected item
+        /// when it is not focused.
+        /// </summary>
+        public static readonly ComponentResourceKey ItemSelectedNotFocusedBackgroundBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "ItemSelectedNotFocusedBackgroundBrushKey");
+        #endregion SelectedItems Brushkeys
+
+        public static readonly ComponentResourceKey XmlItemDisabledForegroundBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "XmlItemDisabledForegroundBrushKey");
+        public static readonly ComponentResourceKey XmlDelimiterForegroundBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "XmlDelimiterForegroundBrushKey");
+
         // GlyphBrush -> GlyphBrushKey
         public static readonly ComponentResourceKey GlyphBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "GlyphBrushKey");
+        public static readonly ComponentResourceKey GlyphDisabledBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "GlyphDisabledBrushKey");
 
         #region Style Keys
         // ExpandCollapseToggleStyle -> ExpandCollapseToggleStyleKey

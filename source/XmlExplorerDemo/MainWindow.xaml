@@ -51,6 +51,11 @@
                           Command="{Binding ExpandAllNodesCommand}"
                           InputGestureText="Ctrl + +"
                           />
+                <Separator/>
+                <MenuItem Header="Enable/Disable View"
+                          IsCheckable="True"
+                          IsChecked="{Binding ElementName=XPathTreeView,Path=IsEnabled}"
+                          />
             </MenuItem>
         </Menu>
 
@@ -59,7 +64,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <ctrl:XPathTreeView Grid.Column="0" Margin="3"
+            <ctrl:XPathTreeView x:Name="XPathTreeView" Grid.Column="0" Margin="3"
                 ItemsSource="{Binding XmlTree.XPathRoot}"
             />
         </Grid>
