@@ -22,10 +22,21 @@
     <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ItemSelectedNotFocusedForegroundBrushKey}"
                      Color="Black" options:Freeze="true"/>
 
-    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.XmlItemDisabledForegroundBrushKey}" Color="Gray" />
-
     <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.XmlDelimiterForegroundBrushKey}" Color="Blue" />
 
+    <!-- XmlDelimterBrush -->
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.XmlItemDisabledForegroundBrushKey}" Color="Gray" />
+
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.XmlAttributeValueForegroundBrushKey}" Color="Blue" />
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.XmlAttributeNameForegroundBrushKey}" Color="Red" />
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.XmlNameForegroundBrushKey}" Color="DarkRed" />
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.XmlTextForegroundBrushKey}" Color="DarkRed" />
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.XmlCommentForegroundBrushKey}" Color="Green" />
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.XmlProcessingInstructionForegroundBrushKey}" Color="Gray" />
+
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.TreeViewItemFocusVisualForegroundBrushKey}" Color="Black" />
+
+    <!-- GlyphBrushs -->
     <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.GlyphBrushKey}" Color="#444" />
     <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.GlyphDisabledBrushKey}" Color="Gray" />
     

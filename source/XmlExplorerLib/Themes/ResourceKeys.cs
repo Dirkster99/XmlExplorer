@@ -48,13 +48,29 @@
         public static readonly ComponentResourceKey ItemSelectedNotFocusedBackgroundBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "ItemSelectedNotFocusedBackgroundBrushKey");
         #endregion SelectedItems Brushkeys
 
+        /// <summary>
+        /// Gets a the applicable foreground Brush key that should be used for coloring text.
+        /// </summary>
+        public static readonly ComponentResourceKey ControlTextBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlTextBrushKey");
+
+        // Foreground color of disabled Xml items
         public static readonly ComponentResourceKey XmlItemDisabledForegroundBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "XmlItemDisabledForegroundBrushKey");
+
         public static readonly ComponentResourceKey XmlDelimiterForegroundBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "XmlDelimiterForegroundBrushKey");
+
+        public static readonly ComponentResourceKey XmlAttributeValueForegroundBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "XmlAttributeValueForegroundBrushKey");
+        public static readonly ComponentResourceKey XmlAttributeNameForegroundBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "XmlAttributeNameForegroundBrushKey");
+        public static readonly ComponentResourceKey XmlNameForegroundBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "XmlNameForegroundBrushKey");
+        public static readonly ComponentResourceKey XmlTextForegroundBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "XmlTextForegroundBrushKey");
+        public static readonly ComponentResourceKey XmlCommentForegroundBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "XmlCommentForegroundBrushKey");
+        public static readonly ComponentResourceKey XmlProcessingInstructionForegroundBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "XmlProcessingInstructionForegroundBrushKey");
 
         // GlyphBrush -> GlyphBrushKey
         public static readonly ComponentResourceKey GlyphBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "GlyphBrushKey");
         public static readonly ComponentResourceKey GlyphDisabledBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "GlyphDisabledBrushKey");
 
+        public static readonly ComponentResourceKey TreeViewItemFocusVisualForegroundBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "TreeViewItemFocusVisualForegroundBrushKey");
+        
         #region Style Keys
         // ExpandCollapseToggleStyle -> ExpandCollapseToggleStyleKey
         public static readonly ComponentResourceKey ExpandCollapseToggleStyleKey = new ComponentResourceKey(typeof(ResourceKeys), "ExpandCollapseToggleStyleKey");

@@ -42,7 +42,7 @@
                     <Border>
                         <Rectangle Margin="0,0,0,0"
                                    StrokeThickness="5"
-                                   Stroke="Black"
+                                   Stroke="{DynamicResource {x:Static reskeys:ResourceKeys.TreeViewItemFocusVisualForegroundBrushKey}}"
                                    StrokeDashArray="1 2"
                                    Opacity="0"/>
                     </Border>
@@ -64,7 +64,7 @@
                   Value="{Binding Path=VerticalContentAlignment,
                           RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
         <Setter Property="Padding" Value="1,0,0,0"/>
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlTextBrushKey}}"/>
         <Setter Property="FocusVisualStyle" Value="{StaticResource {x:Static reskeys:ResourceKeys.TreeViewItemFocusVisualStyleKey}}"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -113,42 +113,35 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsExpanded" Value="false">
-                            <Setter TargetName="ItemsHost" Property="Visibility"
-                                    Value="Collapsed"/>
-                            <Setter TargetName="EndTag" Property="Visibility"
-                                    Value="Collapsed"/>
+                            <Setter TargetName="ItemsHost" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="EndTag" Property="Visibility" Value="Collapsed"/>
                         </Trigger>
                         <Trigger Property="HasItems" Value="false">
-                            <Setter TargetName="Expander" Property="Visibility"
-                                    Value="Hidden"/>
-                            <Setter TargetName="EndTag" Property="Visibility"
-                                    Value="Collapsed"/>
+                            <Setter TargetName="Expander" Property="Visibility" Value="Hidden"/>
+                            <Setter TargetName="EndTag" Property="Visibility" Value="Collapsed"/>
                         </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="HasHeader" Value="false"/>
                                 <Condition Property="Width" Value="Auto"/>
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="PART_Header" Property="MinWidth"
-                                    Value="75"/>
+                            <Setter TargetName="PART_Header" Property="MinWidth" Value="75"/>
                         </MultiTrigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="HasHeader" Value="false"/>
                                 <Condition Property="Height" Value="Auto"/>
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="PART_Header" Property="MinHeight"
-                                    Value="19"/>
+                            <Setter TargetName="PART_Header" Property="MinHeight" Value="19"/>
                         </MultiTrigger>
                         <Trigger Property="IsSelected" Value="true">
                             <Setter TargetName="Bd"
                                 Property="Background"
                                 Value="{DynamicResource {x:Static reskeys:ResourceKeys.ItemSelectedBackgroundBrushKey}}"/>
-                            <Setter TargetName="EndTag"
-                                Property="Background"
-                                Value="{DynamicResource {x:Static reskeys:ResourceKeys.ItemSelectedBackgroundBrushKey}}"/>
+                            <Setter TargetName="EndTag" Property="Background"
+                                    Value="{DynamicResource {x:Static reskeys:ResourceKeys.ItemSelectedBackgroundBrushKey}}"/>
                             <Setter Property="Foreground"
-                                Value="{DynamicResource {x:Static reskeys:ResourceKeys.ItemSelectedForegroundBrushKey}}"/>
+                                    Value="{DynamicResource {x:Static reskeys:ResourceKeys.ItemSelectedForegroundBrushKey}}"/>
                         </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
@@ -156,15 +149,15 @@
                                 <Condition Property="IsSelectionActive" Value="false"/>
                             </MultiTrigger.Conditions>
                             <Setter TargetName="Bd" Property="Background"
-                                    Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                                    Value="{DynamicResource {x:Static reskeys:ResourceKeys.ItemSelectedBackgroundBrushKey}}"/>
                             <Setter TargetName="EndTag" Property="Background"
-                                    Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                                    Value="{DynamicResource {x:Static reskeys:ResourceKeys.ItemSelectedBackgroundBrushKey}}"/>
                             <Setter Property="Foreground"
-                                    Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                                    Value="{DynamicResource {x:Static reskeys:ResourceKeys.ItemSelectedForegroundBrushKey}}"/>
                         </MultiTrigger>
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter Property="Foreground"
-                                    Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                    Value="{DynamicResource {x:Static reskeys:ResourceKeys.XmlItemDisabledForegroundBrushKey}}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
