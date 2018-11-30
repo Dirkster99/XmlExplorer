@@ -17,7 +17,7 @@
         Height="650" Width="925"
         FontSize="16"
 
-        behav:DialogCloser.DialogResult="{Binding DialogCloseResult}" 
+        behav:DialogCloser.DialogResult="{Binding Demo.DialogCloseResult}" 
         >
     <Window.Resources>
         <views:BindingProxy x:Key="BindingProxy" Data="{Binding}" />
