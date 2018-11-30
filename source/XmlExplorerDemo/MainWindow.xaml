@@ -20,15 +20,15 @@
 
         behav:DialogCloser.DialogResult="{Binding Demo.DialogCloseResult}" 
         >
-    <Window.Resources>
+    <MWindow:MetroWindow.InputBindings>
+        <KeyBinding Key="F4" Modifiers="Alt" Command="{Binding Demo.ApplicationExitCommand}"/>
+        <KeyBinding Key="Plus" Modifiers="Ctrl" Command="{Binding Demo.ExpandAllNodesCommand}"/>
+        <KeyBinding Key="Minus" Modifiers="Ctrl" Command="{Binding Demo.CollapseAllNodesCommand}"/>
+        <KeyBinding Key="O" Modifiers="Ctrl" Command="{Binding Demo.LoadXMLFileCommand}"/>
+    </MWindow:MetroWindow.InputBindings>
+    <MWindow:MetroWindow.Resources>
         <views:BindingProxy x:Key="BindingProxy" Data="{Binding}" />
-    </Window.Resources>
-    <Window.InputBindings>
-        <KeyBinding Key="F4" Modifiers="Alt" Command="{Binding ApplicationExitCommand}"/>
-        <KeyBinding Key="Plus" Modifiers="Ctrl" Command="{Binding ExpandAllNodesCommand}"/>
-        <KeyBinding Key="Minus" Modifiers="Ctrl" Command="{Binding CollapseAllNodesCommand}"/>
-        <KeyBinding Key="O" Modifiers="Ctrl" Command="{Binding LoadXMLFileCommand}"/>
-    </Window.InputBindings>
+    </MWindow:MetroWindow.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -41,17 +41,17 @@
         </Grid.RowDefinitions>
 
         <Menu Grid.Row="0">
-            <MenuItem Header="File">
+            <MenuItem Header="_File">
                 <MenuItem Header="Load Xml File" InputGestureText="Ctrl + O"
                           Command="{Binding Demo.LoadXMLFileCommand}" />
                 <MenuItem Header="Save As..."
                           Command="{Binding Demo.SaveAsXmlFileCommand}" />
                 <Separator/>
-                <MenuItem Header="Exit" InputGestureText="Alt + F4"
+                <MenuItem Header="_Exit" InputGestureText="Alt + F4"
                           Command="{Binding Demo.ApplicationExitCommand}"/>
             </MenuItem>
 
-            <MenuItem Header="View">
+            <MenuItem Header="_View">
                 <MenuItem Header="Collapse all nodes"
                           Command="{Binding Demo.CollapseAllNodesCommand}"
                           InputGestureText="Ctrl + -"
@@ -98,6 +98,7 @@
                 DataContext="{Binding Demo}"
                 ItemsSource="{Binding XmlTree.XPathRoot}"
                 Background="{DynamicResource {x:Static reskeys:ResourceKeys.ControlNormalBackgroundBrushKey}}"
+                TabIndex="0"
             />
         </Grid>
 
