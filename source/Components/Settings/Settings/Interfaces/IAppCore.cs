@@ -1,4 +1,4 @@
-﻿namespace XmlExplorerVMLib.Interfaces
+﻿namespace Settings.Interfaces
 {
     public interface IAppCore
     {

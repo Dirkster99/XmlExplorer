@@ -1,5 +1,6 @@
 ﻿namespace XmlExplorerDemo.ViewModels
 {
+    using Settings.Interfaces;
     using Settings.UserProfile;
     using System;
     using System.Globalization;

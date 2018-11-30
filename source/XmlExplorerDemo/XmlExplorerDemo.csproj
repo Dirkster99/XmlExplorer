@@ -86,13 +86,13 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Behaviors\MergeStyleBehaviour.cs" />
+    <Compile Include="Interfaces\IAppLifeCycleViewModel.cs" />
     <Compile Include="Models\SettingDefaults.cs" />
     <Compile Include="ViewModels\AppLifeCycleViewModel.cs" />
     <Compile Include="ViewModels\AppViewModel.cs" />
     <Compile Include="ViewModels\Base\BaseViewModel.cs" />
     <Compile Include="ViewModels\Base\RelayCommand.cs" />
     <Compile Include="Interfaces\IThemesManagerViewModel.cs" />
-    <Compile Include="Interfaces\IAppLifeCycleViewModel.cs" />
     <Compile Include="Interfaces\IAppViewModel.cs" />
     <Compile Include="ViewModels\Themes\ThemeDefinitionViewModel.cs" />
     <Compile Include="ViewModels\Themes\ThemesManagerViewModel.cs" />

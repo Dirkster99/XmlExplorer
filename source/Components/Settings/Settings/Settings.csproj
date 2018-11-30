@@ -97,6 +97,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppCore.cs" />
+    <Compile Include="Interfaces\IAppCore.cs" />
     <Compile Include="Interfaces\IOptions.cs" />
     <Compile Include="Interfaces\IOptionsPanel.cs" />
     <Compile Include="Interfaces\IProfile.cs" />

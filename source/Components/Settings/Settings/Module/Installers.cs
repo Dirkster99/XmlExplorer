@@ -28,6 +28,10 @@
         public void Install(IWindsorContainer container,
                             IConfigurationStore store)
         {
+            container
+                .Register(Component.For<IAppCore>()
+                .ImplementedBy<AppCore>().LifestyleSingleton());
+
             // Register settings service component to help castle satisfy dependencies on it
             container
                 .Register(Component.For<ISettingsManager>()

@@ -56,8 +56,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Behaviors\DialogCloser.cs" />
-    <Compile Include="Interfaces\IAppCore.cs" />
-    <Compile Include="Models\AppCore.cs" />
     <Compile Include="Models\Error.cs" />
     <Compile Include="Models\Events\EventArgs.cs" />
     <Compile Include="Modul\Installer.cs" />
@@ -71,9 +69,7 @@
     <Compile Include="ViewModels\XPathNavigatorViewModel .cs" />
     <Compile Include="Views\BindingProxy.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\XmlExplorerLib\XmlExplorerLib.csproj">
       <Project>{e363fc08-6ab1-4d43-b708-eda7f467bb2e}</Project>

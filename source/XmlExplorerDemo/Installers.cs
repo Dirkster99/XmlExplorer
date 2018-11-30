@@ -35,18 +35,6 @@
         public void Install(IWindsorContainer container,
                             IConfigurationStore store)
         {
-            container
-                .Register(Component.For<IAppCore>()
-                .ImplementedBy<AppCore>().LifestyleSingleton());
-
-            container.Register(Component.For<IAppearanceManager>()
-                     .Instance(AppearanceManager.GetInstance()).LifestyleSingleton());
-
-            // Register settings service component to help castle satisfy dependencies on it
-            container
-                .Register(Component.For<IAppLifeCycleViewModel>()
-                .ImplementedBy<AppLifeCycleViewModel>().LifestyleSingleton());
-
             try
             {
                 string fullPath = System.Reflection.Assembly.GetAssembly(typeof(Installers)).Location;
@@ -60,6 +48,14 @@
             {
                 Logger.Error(exp);
             }
+
+            container.Register(Component.For<IAppearanceManager>()
+                     .Instance(AppearanceManager.GetInstance()).LifestyleSingleton());
+
+            // Register settings service component to help castle satisfy dependencies on it
+            container
+                .Register(Component.For<IAppLifeCycleViewModel>()
+                .ImplementedBy<AppLifeCycleViewModel>().LifestyleSingleton());
 
             // Register settings service component to help castle satisfy dependencies on it
             container

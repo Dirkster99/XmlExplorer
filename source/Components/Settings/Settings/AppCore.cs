@@ -1,15 +1,15 @@
-﻿namespace XmlExplorerDemo.Models
+﻿namespace Settings
 {
     using System;
     using System.Globalization;
     using System.Reflection;
-    using XmlExplorerVMLib.Interfaces;
+    using Settings.Interfaces;
 
     /// <summary>
     /// Class supplies a set of common static helper methodes that help
     /// localizing application specific items such as setting folders etc.
     /// </summary>
-    public class AppCore : IAppCore
+    internal class AppCore : IAppCore
     {
         #region properties
         /// <summary>
