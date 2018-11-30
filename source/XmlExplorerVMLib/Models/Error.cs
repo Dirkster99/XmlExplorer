@@ -1,4 +1,4 @@
-﻿namespace XmlExplorerDemo.Models
+﻿namespace XmlExplorerVMLib.Models
 {
     using System.Xml.Schema;
 

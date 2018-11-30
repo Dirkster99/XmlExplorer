@@ -6,7 +6,7 @@
 
     <!-- Accent Color Brush Definition
              - Look for references on ControlAccentBrushKey to find where this is being set in code -->
-    <Color x:Key="{x:Static reskeys:ResourceKeys.ControlAccentColorKey}">#1ba1e2</Color>
+    <Color x:Key="{x:Static reskeys:ResourceKeys.ControlAccentColorKey}">#007acc</Color>
 
     <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlAccentBrushKey}"
                      Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" options:Freeze="true"/>

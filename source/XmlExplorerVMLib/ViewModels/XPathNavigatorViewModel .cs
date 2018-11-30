@@ -1,4 +1,4 @@
-﻿namespace XmlExplorerDemo.ViewModels
+﻿namespace XmlExplorerVMLib.ViewModels
 {
     using System.Collections.Generic;
     using System.Xml.XPath;

@@ -1,7 +1,7 @@
-﻿namespace XmlExplorerDemo.ViewModels.XML
+﻿namespace XmlExplorerVMLib.ViewModels.XML
 {
-    using XmlExplorerDemo.Models;
-    using XmlExplorerDemo.Models.Events;
+    using XmlExplorerVMLib.Models;
+    using XmlExplorerVMLib.Models.Events;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;

@@ -1,16 +1,20 @@
-﻿namespace XmlExplorerDemo.ViewModels
+﻿namespace XmlExplorerVMLib.ViewModels
 {
-    using XmlExplorerDemo.ViewModels.Base;
-    using XmlExplorerDemo.ViewModels.XML;
+    using XmlExplorerVMLib.ViewModels.Base;
+    using XmlExplorerVMLib.ViewModels.XML;
     using System;
     using System.Reflection;
     using System.Windows;
     using System.Windows.Input;
     using Microsoft.Win32;
     using System.IO;
-    using System.Xml.XPath;
+    using XmlExplorerVMLib.Interfaces;
 
-    internal class AppViewModel : Base.BaseViewModel
+    /// <summary>
+    /// Implements a viewmodel that keeps and manages all core states relevant to
+    /// the appliaction. This viewmodel is typically bound to the MainWindow.
+    /// </summary>
+    internal class AppViewModel : Base.BaseViewModel, IAppViewModel
     {
         #region fields
         readonly XPathNavigatorTreeViewModel _xmlTree = null;
@@ -53,6 +57,24 @@
             }
         }
 
+        
+        public string CurrentXmlFile
+        {
+            set
+            {
+                if (_currentXmlFile != value)
+                {
+                    _currentXmlFile = value;
+                    NotifyPropertyChanged(() => CurrentXmlFile);
+                }
+            }
+
+            get
+            {
+                return _currentXmlFile;
+            }
+        }
+
         /// <summary>
         /// Gets a command to load an XML file.
         /// </summary>
@@ -72,48 +94,53 @@
                             file = appDir + @"/00_DataSamples/XmlDataSampleDemo.xml";
                         }
 
-                        var dlg = new OpenFileDialog();
-                        dlg.FileName = file;
-                        dlg.Filter = "Extensible Markup Language (*.xml)|*.xml"
-                                   + "|Extensible Application Markup Language (*.xaml)|*.xaml"
-                                   + "|All files (*.*)|*.*";
-                        dlg.Multiselect = false;
-
-                        try
-                        {
-                            if (string.IsNullOrEmpty(file) == false)
-                            {
-                                dlg.InitialDirectory = Path.GetDirectoryName(file);
-                                dlg.FileName = Path.GetFileName(file);
-                            }
-                            else
-                                dlg.InitialDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-                        }
-                        catch (Exception)
-                        {
-                            dlg.InitialDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-                        }
-
-                        if (dlg.ShowDialog().GetValueOrDefault() != true)
-                            return;
-
-                        file = dlg.FileName;
-
-                        try
-                        {
-                            _xmlTree.FileOpen(file, OnDocumentLoaded, null);
-                        }
-                        catch (Exception exp)
-                        {
-                            MessageBox.Show(exp.Message, "An unexpected error occured");
-                        }
-
-                        _currentXmlFile = file;
+                        CurrentXmlFile = OpenfileWithDialog(file, _currentXmlFile);
                     });
                 }
 
                 return _LoadXMLFileCommand;
             }
+        }
+
+        private string OpenfileWithDialog(string file, string currentfile)
+        {
+            var dlg = new OpenFileDialog();
+            dlg.FileName = file;
+            dlg.Filter = "Extensible Markup Language (*.xml)|*.xml"
+                       + "|Extensible Application Markup Language (*.xaml)|*.xaml"
+                       + "|All files (*.*)|*.*";
+            dlg.Multiselect = false;
+
+            try
+            {
+                if (string.IsNullOrEmpty(file) == false)
+                {
+                    dlg.InitialDirectory = Path.GetDirectoryName(file);
+                    dlg.FileName = Path.GetFileName(file);
+                }
+                else
+                    dlg.InitialDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            }
+            catch (Exception)
+            {
+                dlg.InitialDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            }
+
+            if (dlg.ShowDialog().GetValueOrDefault() != true)
+                return currentfile;
+
+            file = dlg.FileName;
+
+            try
+            {
+                _xmlTree.FileOpen(file, OnDocumentLoaded, null);
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.Message, "An unexpected error occured");
+            }
+
+            return file;
         }
 
         /// <summary>

@@ -1,4 +1,4 @@
-﻿namespace XmlExplorerDemo.ViewModels.XML
+﻿namespace XmlExplorerVMLib.ViewModels.XML
 {
     internal class NamespaceDefinition : Base.BaseViewModel
     {

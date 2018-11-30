@@ -1,4 +1,4 @@
-﻿namespace XmlExplorerDemo
+﻿namespace GenericXmlExplorerDemo
 {
     using System.Globalization;
     using System.Windows;

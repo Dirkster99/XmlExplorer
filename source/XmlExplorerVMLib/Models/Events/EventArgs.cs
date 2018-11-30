@@ -1,4 +1,4 @@
-﻿namespace XmlExplorerDemo.Models.Events
+﻿namespace XmlExplorerVMLib.Models.Events
 {
     using System;
 

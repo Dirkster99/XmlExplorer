@@ -1,6 +1,5 @@
 ﻿namespace XmlExplorerDemo
 {
-    using XmlExplorerDemo.ViewModels;
     using System.Windows;
 
     /// <summary>

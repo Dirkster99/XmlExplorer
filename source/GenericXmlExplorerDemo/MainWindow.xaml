@@ -1,4 +1,4 @@
-﻿<Window x:Class="XmlExplorerDemo.MainWindow"
+﻿<Window x:Class="GenericXmlExplorerDemo.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -9,7 +9,6 @@
 
         mc:Ignorable="d"
         Title="{Binding CurrentXmlFile, StringFormat=XmlExplorer - {0}}"
-        Height="650" Width="925"
         FontSize="16"
 
         behav:DialogCloser.DialogResult="{Binding DialogCloseResult}" 
@@ -87,3 +86,4 @@
         </ListBox>
     </Grid>
 </Window>
+

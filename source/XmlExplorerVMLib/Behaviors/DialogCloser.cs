@@ -1,4 +1,4 @@
-namespace XmlExplorerDemo.Behaviors
+namespace XmlExplorerVMLib.Behaviors
 {
     using System.Windows;
 

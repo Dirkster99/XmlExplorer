@@ -1,4 +1,4 @@
-namespace XmlExplorerDemo.ViewModels.Base
+namespace XmlExplorerVMLib.ViewModels.Base
 {
     using System;
     using System.ComponentModel;
