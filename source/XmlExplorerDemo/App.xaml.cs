@@ -1,15 +1,21 @@
 ﻿namespace XmlExplorerDemo
 {
+    using Castle.Windsor;
+    using Castle.Windsor.Installer;
     using System.Globalization;
     using System.Windows;
     using System.Windows.Threading;
-    using XmlExplorerVMLib;
+    using XmlExplorerVMLib.Interfaces;
 
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application
     {
+        #region fields
+        private IWindsorContainer _Container;
+        #endregion fields
+
         #region constructors
         /// <summary>
         /// Class constructor
@@ -34,8 +40,14 @@
         {
             base.OnStartup(e);
 
+            _Container = new WindsorContainer();
+
+            // This allows castle to look at the current assembly and look for implementations
+            // of the IWindsorInstaller interface
+            _Container.Install(FromAssembly.This());                         // Register
+
             var window = new MainWindow();
-            var appVM = Factory.CreateAppViewModel();
+            var appVM = _Container.Resolve<IAppViewModel>();
             window.DataContext = appVM;
 
             // subscribe to close event messing to application viewmodel
