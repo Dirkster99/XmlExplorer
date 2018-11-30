@@ -96,9 +96,9 @@
                                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
                         </Border>
                         <ItemsPresenter x:Name="ItemsHost"
-                                      Grid.Row="1"
-                                      Grid.Column="1"
-                                      Grid.ColumnSpan="2"/>
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        Grid.ColumnSpan="2"/>
                         <Border x:Name="EndTag" Grid.Row="2" Grid.Column="1"
                                 Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
@@ -149,11 +149,11 @@
                                 <Condition Property="IsSelectionActive" Value="false"/>
                             </MultiTrigger.Conditions>
                             <Setter TargetName="Bd" Property="Background"
-                                    Value="{DynamicResource {x:Static reskeys:ResourceKeys.ItemSelectedBackgroundBrushKey}}"/>
+                                    Value="{DynamicResource {x:Static reskeys:ResourceKeys.ItemSelectedNotFocusedBackgroundBrushKey}}"/>
                             <Setter TargetName="EndTag" Property="Background"
-                                    Value="{DynamicResource {x:Static reskeys:ResourceKeys.ItemSelectedBackgroundBrushKey}}"/>
+                                    Value="{DynamicResource {x:Static reskeys:ResourceKeys.ItemSelectedNotFocusedBackgroundBrushKey}}"/>
                             <Setter Property="Foreground"
-                                    Value="{DynamicResource {x:Static reskeys:ResourceKeys.ItemSelectedForegroundBrushKey}}"/>
+                                    Value="{DynamicResource {x:Static reskeys:ResourceKeys.ItemSelectedNotFocusedForegroundBrushKey}}"/>
                         </MultiTrigger>
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter Property="Foreground"
