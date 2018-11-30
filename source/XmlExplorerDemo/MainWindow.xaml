@@ -12,6 +12,8 @@
 
         mc:Ignorable="d"
         Title="{Binding Demo.CurrentXmlFileName, StringFormat=XmlExplorer - {0}}"
+        Icon="/XmlExplorerDemo;component/Resources/App.ico"
+                     
         Height="650" Width="925"
         FontSize="16"
 
