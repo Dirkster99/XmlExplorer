@@ -85,6 +85,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Behaviors\MergeStyleBehaviour.cs" />
     <Compile Include="Models\SettingDefaults.cs" />
     <Compile Include="ViewModels\AppLifeCycleViewModel.cs" />
     <Compile Include="ViewModels\AppViewModel.cs" />

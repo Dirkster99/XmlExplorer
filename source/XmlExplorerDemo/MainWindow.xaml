@@ -7,6 +7,7 @@
         xmlns:reskeys="clr-namespace:MLib.Themes;assembly=MLib"
         xmlns:MWindow="clr-namespace:MWindowLib;assembly=MWindowLib"
         xmlns:behav="clr-namespace:XmlExplorerVMLib.Behaviors;assembly=XmlExplorerVMLib"
+        xmlns:behav2="clr-namespace:XmlExplorerDemo.Behaviors"
         xmlns:ctrl="clr-namespace:XmlExplorerLib.Controls;assembly=XmlExplorerLib"
         xmlns:views="clr-namespace:XmlExplorerVMLib.Views;assembly=XmlExplorerVMLib"
 
@@ -78,6 +79,9 @@
                             <Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
                             <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/>
                             <Setter Property="Margin" Value="3,3,3,0" />
+
+                            <!-- http://social.msdn.microsoft.com/Forums/en-US/wpf/thread/63696841-0358-4f7a-abe1-e6062518e3d6 -->
+                            <Setter Property="behav2:MergeStyleBehaviour.AutoMergeStyle" Value="True"/>
                         </Style>
                     </MenuItem.ItemContainerStyle>
                 </MenuItem>
