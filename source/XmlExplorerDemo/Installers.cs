@@ -4,7 +4,14 @@
     using Castle.MicroKernel.SubSystems.Configuration;
     using Castle.Windsor;
     using Castle.Windsor.Installer;
+    using MLib;
+    using MLib.Interfaces;
     using System;
+    using XmlExplorerDemo.Interfaces;
+    using XmlExplorerDemo.Models;
+    using XmlExplorerDemo.ViewModels;
+    using XmlExplorerDemo.ViewModels.Themes;
+    using XmlExplorerVMLib.Interfaces;
 
     /// <summary>
     /// This class gets picked up by from Castle.Windsor because
@@ -28,6 +35,17 @@
         public void Install(IWindsorContainer container,
                             IConfigurationStore store)
         {
+            container
+                .Register(Component.For<IAppCore>()
+                .ImplementedBy<AppCore>().LifestyleSingleton());
+
+            container.Register(Component.For<IAppearanceManager>()
+                     .Instance(AppearanceManager.GetInstance()).LifestyleSingleton());
+
+            // Register settings service component to help castle satisfy dependencies on it
+            container
+                .Register(Component.For<IAppLifeCycleViewModel>()
+                .ImplementedBy<AppLifeCycleViewModel>().LifestyleSingleton());
 
             try
             {
@@ -35,12 +53,23 @@
                 string dir = System.IO.Path.GetDirectoryName(fullPath);
 
                 // register components in this DLL and make them available here
+                container.Install(FromAssembly.Named(System.IO.Path.Combine(dir, "Settings.dll")));
                 container.Install(FromAssembly.Named(System.IO.Path.Combine(dir, "XmlExplorerVMLib.dll")));
             }
             catch (Exception exp)
             {
                 Logger.Error(exp);
             }
+
+            // Register settings service component to help castle satisfy dependencies on it
+            container
+                .Register(Component.For<IThemesManagerViewModel>()
+                .ImplementedBy<ThemesManagerViewModel>().LifestyleSingleton());
+
+            // Register settings service component to help castle satisfy dependencies on it
+            container
+                .Register(Component.For<IAppViewModel>()
+                .ImplementedBy<AppViewModel>().LifestyleSingleton());
         }
     }
 }

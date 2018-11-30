@@ -2,6 +2,8 @@
 {
     using Castle.Windsor;
     using Castle.Windsor.Installer;
+    using log4net;
+    using log4net.Config;
     using System.Globalization;
     using System.Windows;
     using System.Windows.Threading;
@@ -14,9 +16,19 @@
     {
         #region fields
         private IWindsorContainer _Container;
+        protected static log4net.ILog Logger;
         #endregion fields
 
         #region constructors
+        /// <summary>
+        /// Static class constructor
+        /// </summary>
+        static App()
+        {
+            XmlConfigurator.Configure();
+            Logger = LogManager.GetLogger("default");
+        }
+
         /// <summary>
         /// Class constructor
         /// </summary>
@@ -47,7 +59,7 @@
             _Container.Install(FromAssembly.This());                         // Register
 
             var window = new MainWindow();
-            var appVM = _Container.Resolve<IAppViewModel>();
+            var appVM = _Container.Resolve<IDemoAppViewModel>();
             window.DataContext = appVM;
 
             // subscribe to close event messing to application viewmodel

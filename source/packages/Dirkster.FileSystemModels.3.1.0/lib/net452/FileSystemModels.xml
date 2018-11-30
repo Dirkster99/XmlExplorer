@@ -1,0 +1,2996 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FileSystemModels</name>
+    </assembly>
+    <members>
+        <member name="T:FileSystemModels.Browse.BrowseRequest">
+            <summary>
+            Class models a request to browse to a certain location (path)
+            in the file system. A controller should use this class to formulate
+            a request and Id the corresponding result using the BrowsingEvent
+            and RequestId property.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Browse.BrowseRequest.#ctor(FileSystemModels.Interfaces.IPathModel,System.Threading.CancellationToken)">
+            <summary>
+            Parameterized class constructor.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Browse.BrowseRequest.#ctor">
+            <summary>
+            Class constructor.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Browse.BrowseRequest.NewLocation">
+            <summary>
+            Gets the new location (a path in the file system) to indicate
+            the target of this browse request.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Browse.BrowseRequest.CancelTok">
+            <summary>
+            Gets the CancelationToken (if any) that can be used by the requesting
+            process to cancel this request during its processing (on timeout or by user).
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Browse.BrowseRequest.RequestId">
+            <summary>
+            Gets the Id that identifies this request among all other requests that may
+            occur if multiple browse requests are initiated or if user interaction also
+            causes additional browse processing...
+            </summary>
+        </member>
+        <member name="T:FileSystemModels.Browse.BrowseResult">
+            <summary>
+            Determines the state of a browsing process. for instance, browsing a
+            viewmodel (and it attached view(s)) from 'C:\' to 'G:\' may involve
+            a:
+            - start state == (Unknown)
+            
+            and a state of completion:
+            - error   == Incomplete or
+            - success == Complete
+            </summary>
+        </member>
+        <member name="F:FileSystemModels.Browse.BrowseResult.Unknown">
+            <summary>
+            Result is unknown since browse task is currently running
+            or completed with unknown result ...
+            </summary>
+        </member>
+        <member name="F:FileSystemModels.Browse.BrowseResult.Complete">
+            <summary>
+            Browse Process OK - destination does exist and is accessible
+            </summary>
+        </member>
+        <member name="F:FileSystemModels.Browse.BrowseResult.InComplete">
+            <summary>
+            Error indicator - destination does not exist or is not accessible
+            </summary>
+        </member>
+        <member name="T:FileSystemModels.Browse.BrowsingEventArgs">
+            <summary>
+            A simple event based state model that informs the subscriber about the
+            state of the browser when changing between locations.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Browse.BrowsingEventArgs.#ctor(FileSystemModels.Interfaces.IPathModel,System.Boolean,FileSystemModels.Browse.BrowseResult)">
+            <summary>
+            Event type class constructor from parameter
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Browse.BrowsingEventArgs.#ctor">
+            <summary>
+            Class constructor
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Browse.BrowsingEventArgs.Location">
+            <summary>
+            Path we are browsing to or being arrived at.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Browse.BrowsingEventArgs.IsBrowsing">
+            <summary>
+            Determines if we are:
+            1) Currently browsing towards this path (display progress) or
+            2) if the browsing process has arrived at this location (finish progress display).
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Browse.BrowsingEventArgs.Result">
+            <summary>
+            Gets the result of the browsing process. This should be Unknown
+            if <see cref="P:FileSystemModels.Browse.BrowsingEventArgs.IsBrowsing"/> is true and either Complete or InComplete
+            in all other cases.
+            </summary>
+        </member>
+        <member name="T:FileSystemModels.Browse.FinalBrowseResult">
+             <summary>
+             Class models the final result of the process for browsing to a location (path)
+             in the file system. A controller should use this class to measure success or
+             failure of a previous <seealso cref="T:FileSystemModels.Browse.BrowseRequest"/>.
+            
+             An object of this class can be used to match a previous request with the
+             indicated result (for logging or debugging purposes).
+             </summary>
+        </member>
+        <member name="M:FileSystemModels.Browse.FinalBrowseResult.#ctor(FileSystemModels.Interfaces.IPathModel,System.Guid,FileSystemModels.Browse.BrowseResult)">
+            <summary>
+            Parameterized class constructor.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Browse.FinalBrowseResult.#ctor">
+            <summary>
+            Class constructor.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Browse.FinalBrowseResult.Result">
+            <summary>
+            Gets a descriptive browse result that can be used to classify
+            success or failure and sub-class different types of failures.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Browse.FinalBrowseResult.RequestedLocation">
+            <summary>
+            Gets the new location (a path in the file system) to indicate
+            the target of this browse request.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Browse.FinalBrowseResult.RequestId">
+            <summary>
+            Gets the Id that identifies this request among all other requests that may
+            occur if multiple browse requests are initiated or if user interaction also
+            causes additional browse processing...
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Browse.FinalBrowseResult.UnexpectedError">
+            <summary>
+            Gets/sets an exception object that can be used to communicate exceptional
+            results back to the requesting instance.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Browse.FinalBrowseResult.FromRequest(FileSystemModels.Browse.BrowseRequest,FileSystemModels.Browse.BrowseResult)">
+            <summary>
+            Short-cut to convert a given <seealso cref="T:FileSystemModels.Browse.BrowseRequest"/> into a final
+            result receipt to support simple closure of requests being full-filled or not etc ...
+            </summary>
+            <param name="request"></param>
+            <param name="result"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FileSystemModels.Browse.ICanNavigate">
+            <summary>
+            Defines an interface that should be exposed if a control can
+            request the controller (and hence other controls) to browse to
+            a new file system location.
+            </summary>
+        </member>
+        <member name="E:FileSystemModels.Browse.ICanNavigate.BrowseEvent">
+            <summary>
+            Indicates when the viewmodel starts heading off somewhere else
+            and when its done browsing to a new location.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Browse.ICanNavigate.IsBrowsing">
+            <summary>
+            Can only be set by the control if user started browser process
+            
+            Use IsBrowsing and IsExternallyBrowsing to lock the controls UI
+            during browse operations or display appropriate progress bar(s).
+            </summary>
+        </member>
+        <member name="T:FileSystemModels.Browse.INavigateable">
+            <summary>
+            Defines an interface that supports the case where a controller
+            can request a control or sub-system to browse to a certain location.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Browse.INavigateable.NavigateTo(FileSystemModels.Browse.BrowseRequest)">
+            <summary>
+            Controller can start browser process if IsBrowsing = false
+            </summary>
+            <param name="newPath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.Browse.INavigateable.NavigateToAsync(FileSystemModels.Browse.BrowseRequest)">
+            <summary>
+            Controller can start browser process if IsBrowsing = false
+            </summary>
+            <param name="newPath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.Browse.INavigateable.SetExternalBrowsingState(System.Boolean)">
+            <summary>
+            Sets the IsExternalBrowsing state and cleans up any running processings
+            if any. This method should only be called by an external controll instance.
+            </summary>
+            <param name="isBrowsing"></param>
+        </member>
+        <member name="T:FileSystemModels.Converters.BrowseItemTypeToShellImageConverter">
+            <summary>
+            Converts an <seealso cref="T:FileSystemModels.Interfaces.IItem"/>
+            into <seealso cref="T:System.Windows.Media.ImageSource"/>
+            using available Windows Shell Icons.
+            </summary>
+        </member>
+        <member name="F:FileSystemModels.Converters.BrowseItemTypeToShellImageConverter.Logger">
+            <summary>
+            Log4net logger facility.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Converters.BrowseItemTypeToShellImageConverter.#ctor">
+            <summary>
+            Class constructor
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Converters.BrowseItemTypeToShellImageConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Convert a <see cref="T:FileSystemModels.Interfaces.IItem"/> into an image representation.
+            </summary>
+            <param name="value"></param>
+            <param name="targetType"></param>
+            <param name="parameter"></param>
+            <param name="culture"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.Converters.BrowseItemTypeToShellImageConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Not Implemented - throws <see cref="T:System.NotImplementedException"/>.
+            </summary>
+            <param name="value"></param>
+            <param name="targetType"></param>
+            <param name="parameter"></param>
+            <param name="culture"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FileSystemModels.Events.FileOpenEventArgs">
+            <summary>
+            This event tells the receiver that the user wants to open a file.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Events.FileOpenEventArgs.FileName">
+            <summary>
+            Path an file name of file to open.
+            </summary>
+        </member>
+        <member name="T:FileSystemModels.Events.FilterChangedEventArgs">
+            <summary>
+            Class implements ...
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Events.FilterChangedEventArgs.FilterText">
+            <summary>
+            Path of directory...
+            </summary>
+        </member>
+        <member name="T:FileSystemModels.Events.FolderChangedEventArgs">
+            <summary>
+            Class implements an event that signals that
+            event source (caller) would like to change to indicated path.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Events.FolderChangedEventArgs.#ctor(FileSystemModels.Interfaces.IPathModel)">
+            <summary>
+            Event type class constructor from parameter
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Events.FolderChangedEventArgs.#ctor">
+            <summary>
+            Class constructor
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Events.FolderChangedEventArgs.Folder">
+            <summary>
+            Path to this directory...
+            </summary>
+        </member>
+        <member name="T:FileSystemModels.Events.EditBookmarkEvent">
+            <summary>
+            Implements an event for messaging to a bookmark collection
+            whether a bookmarked entry should be added or removed ...
+            from the collection.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Events.EditBookmarkEvent.#ctor(FileSystemModels.Interfaces.IPathModel,FileSystemModels.Events.EditBookmarkEvent.RecentFolderAction)">
+            <summary>
+            Event type class constructor from parameter
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Events.EditBookmarkEvent.#ctor">
+            <summary>
+            Class constructor
+            </summary>
+        </member>
+        <member name="T:FileSystemModels.Events.EditBookmarkEvent.RecentFolderAction">
+            <summary>
+            Enumeration to define an action on recent folders.
+            </summary>
+        </member>
+        <member name="F:FileSystemModels.Events.EditBookmarkEvent.RecentFolderAction.Remove">
+            <summary>
+            Remove a folder from the current collection.
+            </summary>
+        </member>
+        <member name="F:FileSystemModels.Events.EditBookmarkEvent.RecentFolderAction.Add">
+            <summary>
+            Add a folder into the current collection.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Events.EditBookmarkEvent.Folder">
+            <summary>
+            Path to this directory...
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Events.EditBookmarkEvent.Action">
+            <summary>
+            Gets/sets the type of recent folder action (eg Add/Remove).
+            </summary>
+        </member>
+        <member name="T:FileSystemModels.FileSystemCommands">
+            <summary>
+            Class implements base services for opening and working with folders and files in Windows.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.FileSystemCommands.OpenContainingFolder(System.String)">
+            <summary>
+            Convinience method to open Windows Explorer with a selected file (if it exists).
+            Otherwise, Windows Explorer is opened in the location where the file should be at.
+            Returns falsem if neither file nor given directory exist.
+            </summary>
+            <param name="sFileName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.FileSystemCommands.OpenInWindows(System.String)">
+            <summary>
+            Opens a file with the current Windows default application.
+            </summary>
+            <param name="sFileName"></param>
+        </member>
+        <member name="M:FileSystemModels.FileSystemCommands.CopyPath(System.String)">
+            <summary>
+            Copies the given string into the Windows clipboard.
+            </summary>
+            <param name="sFileName"></param>
+        </member>
+        <member name="T:FileSystemModels.Interfaces.Bookmark.IBookmarksViewModel">
+            <summary>
+            Define an interface to a class that manages recently visited folder entries,
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Interfaces.Bookmark.IBookmarksViewModel.ChangeOfDirectoryCommand">
+            <summary>
+            Request a change of current directory to the directory
+            stated in <seealso cref="T:FileSystemModels.Interfaces.IListItemViewModel"/> in CommandParameter.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Interfaces.Bookmark.IBookmarksViewModel.RemoveFolderBookmark">
+            <summary>
+            Command removes a folder bookmark from the list of
+            currently bookmarked folders. Required command parameter
+            is of type <seealso cref="T:FileSystemModels.Interfaces.IListItemViewModel"/>.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Interfaces.Bookmark.IBookmarksViewModel.DropDownItems">
+            <summary>
+            <inheritedoc />
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Interfaces.Bookmark.IBookmarksViewModel.SelectedItem">
+            <summary>
+            Gets/sets the selected item of the RecentLocations property.
+            
+            This should be bound by the view (ItemsControl) to find the SelectedItem here.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Interfaces.Bookmark.IBookmarksViewModel.IsOpen">
+            <summary>
+            <inheritedoc />
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Interfaces.Bookmark.IBookmarksViewModel.CloneBookmark">
+            <summary>
+            Gets a data copy of the current object. Object specific fields, like events
+            and their handlers are not copied.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.Interfaces.Bookmark.IBookmarksViewModel.AddFolder(System.String,System.Boolean)">
+            <summary>
+            Add a recent folder location into the collection of recent folders.
+            This collection can then be used in the folder combobox drop down
+            list to store user specific customized folder short-cuts.
+            </summary>
+            <param name="folderPath"></param>
+            <param name="selectNewItem"></param>
+        </member>
+        <member name="M:FileSystemModels.Interfaces.Bookmark.IBookmarksViewModel.ClearFolderCollection">
+            <summary>
+            Removes all data items from the current collection of bookmarked folders.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Interfaces.Bookmark.IBookmarksViewModel.RemoveFolder(System.String)">
+            <summary>
+            Removes all data items from the current collection of recent folders.
+            </summary>
+        </member>
+        <member name="T:FileSystemModels.Interfaces.Bookmark.IEditBookmarks">
+            <summary>
+            Defines an interface to Add/Remove Bookmark entries from
+            a list of bookmarked items.
+            
+            The object should be implenented by any client objects that wants to
+            add or remove entries from a bookmark locations model.
+            </summary>
+        </member>
+        <member name="E:FileSystemModels.Interfaces.Bookmark.IEditBookmarks.RequestEditBookmarkedFolders">
+            <summary>
+            Invokes the actual event that adds/removes a bookmark in the bookmark
+            model collection at the client side of this event.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Interfaces.Bookmark.IEditBookmarks.RecentFolderRemoveCommand">
+            <summary>
+            Gets a command that removes folder location via a corresponding event.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Interfaces.Bookmark.IEditBookmarks.RecentFolderAddCommand">
+            <summary>
+            Gets a command that adds folder location via a corresponding event.
+            </summary>
+        </member>
+        <member name="T:FileSystemModels.Interfaces.IConfigExplorerSettings">
+             <summary>
+             Define an interface for configuring and reading setting
+             and user profile data for the explorer (tool window) viewmodel.
+            
+             This interface includes usage of the <see cref="T:FileSystemModels.Models.ExplorerSettingsModel"/> class.
+             </summary>
+        </member>
+        <member name="M:FileSystemModels.Interfaces.IConfigExplorerSettings.ConfigureExplorerSettings(FileSystemModels.Models.ExplorerSettingsModel)">
+            <summary>
+            Configure this viewmodel (+ attached browser viewmodel) with the given settings.
+            </summary>
+            <param name="settings"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.Interfaces.IConfigExplorerSettings.GetExplorerSettings(FileSystemModels.Models.ExplorerSettingsModel)">
+            <summary>
+            Compare given <paramref name="input"/> settings with current settings
+            and return a new settings model if the current settings
+            changed in comparison to the given <paramref name="input"/> settings.
+            
+            Always return current settings if <paramref name="input"/> settings is null.
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FileSystemModels.Interfaces.IItem">
+            <summary>
+            Define the basic properties and methods of a viewmodel for
+            a file system item.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Interfaces.IItem.ItemType">
+            <summary>
+            Gets the type (folder, file) of this item
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Interfaces.IItem.ItemPath">
+            <summary>
+            Gets the path to this item
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Interfaces.IItem.ItemName">
+            <summary>
+            Gets the name (without the path) of this item.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Interfaces.IItem.ItemDisplayString">
+            <summary>
+            Gets a folder item string for display purposes.
+            This string can evaluete to 'C:\ (Windows)' for drives,
+            if the 'C:\' drive was named 'Windows'.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Interfaces.IItem.IsExpanded">
+            <summary>
+            Gets whether this folder is currently expanded or not.
+            </summary>
+        </member>
+        <member name="T:FileSystemModels.Interfaces.IListItemViewModel">
+            <summary>
+            Define the properties and methods of a viewmodel for
+            a file system item.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Interfaces.IListItemViewModel.ShowIcon">
+            <summary>
+            Gets whether or not to show an Icon for this item or not.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Interfaces.IListItemViewModel.DirectoryPathExists">
+            <summary>
+            Determine whether a given path is an exeisting directory or not.
+            </summary>
+            <returns>true if this directory exists and otherwise false</returns>
+        </member>
+        <member name="T:FileSystemModels.Interfaces.IPathModel">
+            <summary>
+            Interface defines properties and methods of elements related to a path
+            in the file system. Such elements are, virtual folders, drives, network
+            drives, folder, files, and shortcuts.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Interfaces.IPathModel.Path">
+            <summary>
+            Gets the path of this <seealso cref="T:FileSystemModels.Models.FSItems.Base.PathModel"/> object.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Interfaces.IPathModel.PathRoot">
+            <summary>
+            Gets the root of the path of this <seealso cref="T:FileSystemModels.Models.FSItems.Base.PathModel"/> object.
+            Thats usually a drive eg. 'C:\'
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Interfaces.IPathModel.PathType">
+            <summary>
+            Gets the type of item of this <seealso cref="T:FileSystemModels.Models.FSItems.Base.PathModel"/> object.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Interfaces.IPathModel.Name">
+            <summary>
+            Gets the name of this item. For folders this is the folder
+            name without its path;
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Interfaces.IPathModel.DirectoryPathExists">
+            <summary>
+            Determine whether a given path is an existing directory or not.
+            </summary>
+            <returns>true if this directory exists and otherwise false</returns>
+        </member>
+        <member name="M:FileSystemModels.Interfaces.IPathModel.DirectoryPathExistsAsync">
+            <summary>
+            Async version to determine whether a given path is an existing directory or not.
+            </summary>
+            <returns>true if this directory exists and otherwise false</returns>
+        </member>
+        <member name="T:FileSystemModels.Local.Strings">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.CMD_Copy_Path_To_Clipboard_Label">
+            <summary>
+              Looks up a localized string similar to Copy path into Windows Clipboard....
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.CMD_Copy_Path_To_Clipboard_Label_TT">
+            <summary>
+              Looks up a localized string similar to Copy as path into Windows clipboard..
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.CMD_Copy_Path_To_Clipboard_Label_TT1">
+            <summary>
+              Looks up a localized string similar to Copy as path into Windows clipboard..
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.CMD_Copy_Path_To_Clipboard_Label1">
+            <summary>
+              Looks up a localized string similar to Copy path into Windows Clipboard....
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.CMD_Open_in_Application_Label">
+            <summary>
+              Looks up a localized string similar to Open ....
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.CMD_Open_in_Application_Label_TT">
+            <summary>
+              Looks up a localized string similar to Open the selected file in the application..
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.CMD_Open_in_Windows_Label">
+            <summary>
+              Looks up a localized string similar to Open folder in Windows Explorer....
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.CMD_Open_in_Windows_Label_TT">
+            <summary>
+              Looks up a localized string similar to Displays the Windows Explorer with the selected folder..
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.CMD_Open_in_Windows_Label_TT1">
+            <summary>
+              Looks up a localized string similar to Displays the Windows Explorer with the selected folder..
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.CMD_Open_with_Windows_Association_Label">
+            <summary>
+              Looks up a localized string similar to Open in Windows....
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.CMD_Open_with_Windows_Association_Label_TT">
+            <summary>
+              Looks up a localized string similar to Execute the selected item (folder or file) with default Windows application..
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.CMD_RecentFolderAdd_Label">
+            <summary>
+              Looks up a localized string similar to Bookmark folder.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.CMD_RecentFolderAdd_Label1">
+            <summary>
+              Looks up a localized string similar to Bookmark folder.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.CMD_RecentFolderAdd_TT">
+            <summary>
+              Looks up a localized string similar to Adds the selected folder to the list of bookmarked folders..
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.CMD_RecentFolderRemove_Label">
+            <summary>
+              Looks up a localized string similar to Remove folder bookmark.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.CMD_RecentFolderRemove_Label1">
+            <summary>
+              Looks up a localized string similar to Remove folder bookmark.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.CMD_RecentFolderRemove_TT">
+            <summary>
+              Looks up a localized string similar to Removes the selected folder from the list of bookmarked folders..
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.CMD_ToggleIsFolderVisibleCommand_TT">
+            <summary>
+              Looks up a localized string similar to Show or hide folder..
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.CMD_ToggleIsIconVisibleCommand_TT">
+            <summary>
+              Looks up a localized string similar to Show or hide icons..
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.FolderItem_Desktop">
+            <summary>
+              Looks up a localized string similar to Desktop.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.FolderItem_MyDocuments">
+            <summary>
+              Looks up a localized string similar to My Documents.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.ForbiddenRenameKeys">
+            <summary>
+              Looks up a localized string similar to \/:*?&quot;&lt;&gt;|.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.ForbiddenRenameKeysMessage">
+             <summary>
+               Looks up a localized string similar to A name cannot contain any of the following characters:
+            \/:*?&quot;&lt;&gt;|.
+             </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.ForbiddenRenameKeysTitle">
+            <summary>
+              Looks up a localized string similar to Invalid Character Input.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.NavigateBackCommand_TT">
+            <summary>
+              Looks up a localized string similar to Back to:.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.NavigateForwardCommand_TT">
+            <summary>
+              Looks up a localized string similar to Forward to:.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.NavigateUpCommand_TT">
+            <summary>
+              Looks up a localized string similar to Up.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.RefreshCommand_TT">
+            <summary>
+              Looks up a localized string similar to Update listed items..
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.SelectFilterCommand_TT">
+            <summary>
+              Looks up a localized string similar to Select a filter to restrict the listed files..
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.SelectLocationCommand_TT">
+            <summary>
+              Looks up a localized string similar to Select a location to navigate to it..
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.STR_CANCEL_BUTTON_CAPTION">
+            <summary>
+              Looks up a localized string similar to Cancel.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.STR_CREATE_FOLDER_ERROR_TITLE">
+            <summary>
+              Looks up a localized string similar to Error while creating new folder.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.STR_ERROR_FOLDER_DOES_NOT_EXIST">
+            <summary>
+              Looks up a localized string similar to Folder &apos;{0}&apos; does not exist..
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.STR_MSG_DEVICE_NOT_READY">
+            <summary>
+              Looks up a localized string similar to Device is not ready..
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.STR_MSG_DEVICE_NOT_READY1">
+            <summary>
+              Looks up a localized string similar to Device is not ready..
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.STR_MSG_DIRECTORY_DOES_NOT_EXIST">
+            <summary>
+              Looks up a localized string similar to The directory &apos;{0}&apos; does not exist or cannot be accessed..
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.STR_MSG_DIRECTORY_DOES_NOT_EXIST1">
+            <summary>
+              Looks up a localized string similar to The directory &apos;{0}&apos; does not exist or cannot be accessed..
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.STR_MSG_ERROR_FINDING_RESOURCE">
+            <summary>
+              Looks up a localized string similar to Error finding requested resource..
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.STR_MSG_ERROR_FINDING_RESOURCE1">
+            <summary>
+              Looks up a localized string similar to Error finding requested resource..
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.STR_MSG_InvalidChar_TITLE">
+            <summary>
+              Looks up a localized string similar to Input Error.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.STR_MSG_UnknownError">
+            <summary>
+              Looks up a localized string similar to An error occured..
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.STR_NEW_DEFAULT_FOLDER_NAME">
+            <summary>
+              Looks up a localized string similar to New folder.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.STR_NewFolder_Command">
+            <summary>
+              Looks up a localized string similar to New Folder.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.STR_NewFolder_Command_TT">
+            <summary>
+              Looks up a localized string similar to Create a new folder in the Windows file system.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.STR_OK_BUTTON_CAPTION">
+            <summary>
+              Looks up a localized string similar to OK.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.STR_Rename_Command">
+            <summary>
+              Looks up a localized string similar to Rename.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.STR_Rename_Command_TT">
+            <summary>
+              Looks up a localized string similar to Rename an item in the Windows file system.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.STR_RenameFolderErrorTitle">
+            <summary>
+              Looks up a localized string similar to Error while renaming folder.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.STR_SELECT_FOLDER_DIALOG_CAPTION">
+            <summary>
+              Looks up a localized string similar to Select a Folder.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.ToggleIsFilteredCommand_TT">
+            <summary>
+              Looks up a localized string similar to Apply or remove the currently configured filter.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Local.Strings.ToggleIsHiddenVisibleCommand_TT">
+            <summary>
+              Looks up a localized string similar to Show or hide hidden files and folders..
+            </summary>
+        </member>
+        <member name="T:FileSystemModels.Models.CustomFolderItemModel">
+            <summary>
+            Wrapper class for <seealso cref="T:System.Environment.SpecialFolder"/> items.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Models.CustomFolderItemModel.#ctor(System.Environment.SpecialFolder)">
+            <summary>
+            Class constructor
+            </summary>
+            <param name="specialFolder"></param>
+        </member>
+        <member name="M:FileSystemModels.Models.CustomFolderItemModel.#ctor">
+            <summary>
+            Protected class constructor
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.CustomFolderItemModel.Path">
+            <summary>
+            Gets the file system path of this custom folder item.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.CustomFolderItemModel.SpecialFolder">
+            <summary>
+            Gets the <seealso cref="T:System.Environment.SpecialFolder"/> enumeration member
+            associated with this class.
+            </summary>
+        </member>
+        <member name="T:FileSystemModels.Models.ExplorerSettingsModel">
+             <summary>
+             Class implements a low level model of the explorer settings that can
+             stored (up exit of application) and retrieved (upon re-start of application).
+            
+             This class is serializable and is a parameter of the
+             IConfigExplorerSettings methods.
+             </summary>
+        </member>
+        <member name="M:FileSystemModels.Models.ExplorerSettingsModel.#ctor(System.Boolean)">
+            <summary>
+            Class constructor with default value initialization.
+            </summary>
+            <param name="createDefaultSettings"></param>
+        </member>
+        <member name="M:FileSystemModels.Models.ExplorerSettingsModel.#ctor">
+            <summary>
+            Class constructor
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.ExplorerSettingsModel.UserProfile">
+            <summary>
+            Gets/Sets user session specific settings that are
+            stored and loaded on each application shutdown/re-start.
+            
+            User profile should be persisted seperately, therefore, its ignored here.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.ExplorerSettingsModel.RecentFolders">
+            <summary>
+            Gets/sets a list of recent folders. Recent folders are
+            folder shortcuts that users can use frequently to navigate
+            there with 1 or 2 mouse clicks.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.ExplorerSettingsModel.LastSelectedRecentFolder">
+            <summary>
+            The last recent folder is the folder that was most recently
+            used for navigation through the list of recent folders.
+            
+            This folder can be presented to the user in a 1 click fashion
+            since its likely that it may be visited again in the next user session.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.ExplorerSettingsModel.FilterCollection">
+            <summary>
+            Gets/sets the collection of file filter items. One of these
+            filter items can be applied in a file list view to filter for
+            file names with a certain pattern (eg: '*.cs')
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.ExplorerSettingsModel.ShowIcons">
+            <summary>
+            Gets/sets whether the display of files and folders includes
+            icons or not.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.ExplorerSettingsModel.ShowFolders">
+            <summary>
+            Gets/sets whether the display of files includes folders or not.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.ExplorerSettingsModel.ShowHiddenFiles">
+            <summary>
+            Gets/sets whether the display of files and folders includes
+            hidden files and folders or not.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.ExplorerSettingsModel.IsFiltered">
+            <summary>
+            Gets/sets whether the the display of files
+            is currently filtered or not.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.ExplorerSettingsModel.SpecialFolders">
+            <summary>
+            Gets the (constant) list of special folders
+            users can visit in 1 or 2 mouse clicks.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.ExplorerSettingsModel.ShowSpecialFoldersInTreeBrowser">
+            <summary>
+            Gets whether special folder shortcuts are shown within
+            the tree view browser. This is currently disabled and always
+            set to false because Special Folders are shown elsewhere within
+            the Explorer (TW).
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Models.ExplorerSettingsModel.CompareSettings(FileSystemModels.Models.ExplorerSettingsModel,FileSystemModels.Models.ExplorerSettingsModel)">
+            <summary>
+            Compares 2 setting models and returns true if they are equal
+            (data is same between both models) or otherwise false.
+            
+            Attention: The UserProfile data property is ignored here.
+            </summary>
+            <param name="input"></param>
+            <param name="settings"></param>
+            <returns>false if both collections differ, otherwise true</returns>
+        </member>
+        <member name="M:FileSystemModels.Models.ExplorerSettingsModel.SetUserProfile(FileSystemModels.Models.ExplorerUserProfile)">
+            <summary>
+            Sets the session data for this settings object.
+            </summary>
+            <param name="profile"></param>
+        </member>
+        <member name="M:FileSystemModels.Models.ExplorerSettingsModel.CreateSpecialFolderCollection">
+            <summary>
+            Creates a default collection of special folders (Desktop, MyDocuments, MyMusic, MyVideos).
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Models.ExplorerSettingsModel.AddSpecialFolder(System.Environment.SpecialFolder)">
+            <summary>
+            Adds another special folder into the collection of special folders.
+            </summary>
+            <param name="folder"></param>
+        </member>
+        <member name="M:FileSystemModels.Models.ExplorerSettingsModel.AddRecentFolder(System.String)">
+            <summary>
+            Add a recent folder location into the collection of recent folders.
+            This collection can then be used in the folder combobox drop down
+            list to store user specific customized folder short-cuts.
+            </summary>
+            <param name="folderPath"></param>
+        </member>
+        <member name="M:FileSystemModels.Models.ExplorerSettingsModel.RemoveRecentFolder(System.String)">
+            <summary>
+            Removes a recent folder location into the collection of recent folders.
+            This collection can then be used in the folder combobox drop down
+            list to store user specific customized folder short-cuts.
+            </summary>
+            <param name="path"></param>
+        </member>
+        <member name="M:FileSystemModels.Models.ExplorerSettingsModel.AddFilter(System.String,System.String,System.Boolean)">
+            <summary>
+            Add a filter item into the collection of filters.
+            </summary>
+            <param name="name"></param>
+            <param name="pattern"></param>
+            <param name="bSelectNewFilter"></param>
+        </member>
+        <member name="M:FileSystemModels.Models.ExplorerSettingsModel.CreateDefaultSettings">
+            <summary>
+            Creates default file filter and recent folder settings
+            for initialization at the very first time (no settings available for load from persistence).
+            </summary>
+        </member>
+        <member name="T:FileSystemModels.Models.ExplorerUserProfile">
+            <summary>
+            Class implements an object that handles the user profile settings
+            of the explorer component. The user profile settings are typically
+            settings that change in every session and are therefore stored and
+            retrieved on EACH application start and shut-down.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Models.ExplorerUserProfile.#ctor">
+            <summary>
+            Class constructor
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.ExplorerUserProfile.CurrentPath">
+            <summary>
+            Gets the currently viewed path.
+            Use this property to save/re-restore data when the application
+            starts or shutsdown.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.ExplorerUserProfile.CurrentFilter">
+            <summary>
+            Gets the currently set filter.
+            Use this property to save/re-restore data when the application
+            starts or shutsdown.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Models.ExplorerUserProfile.SetCurrentPath(System.String)">
+            <summary>
+            Resets the currently viewed path to the path indicated by <paramref name="path"/>.
+            </summary>
+            <param name="path"></param>
+        </member>
+        <member name="M:FileSystemModels.Models.ExplorerUserProfile.SetCurrentFilter(FileSystemModels.Models.FilterItemModel)">
+            <summary>
+            Resets the currently viewed path to the path indicated by the
+            <paramref name="model"/>.
+            </summary>
+            <param name="model"></param>
+        </member>
+        <member name="M:FileSystemModels.Models.ExplorerUserProfile.GetSchema">
+            <summary>
+            Standard method of the <see cref="T:System.Xml.Serialization.IXmlSerializable"/> interface.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.Models.ExplorerUserProfile.ReadXml(System.Xml.XmlReader)">
+            <summary>
+            Standard method of the <see cref="T:System.Xml.Serialization.IXmlSerializable"/> interface.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.Models.ExplorerUserProfile.WriteXml(System.Xml.XmlWriter)">
+            <summary>
+            Standard method of the <see cref="T:System.Xml.Serialization.IXmlSerializable"/> interface.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:FileSystemModels.Models.FilterItemModel">
+            <summary>
+            The Viewmodel for filter item displayed in list of filters
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Models.FilterItemModel.#ctor(FileSystemModels.Models.FilterItemModel)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="item"></param>
+        </member>
+        <member name="M:FileSystemModels.Models.FilterItemModel.#ctor(System.String)">
+            <summary>
+            Class constructor
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Models.FilterItemModel.#ctor(System.String,System.String)">
+            <summary>
+            Class constructor
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Models.FilterItemModel.#ctor">
+            <summary>
+            Protected statndard class constructor
+            (Consumers of this class shall use the parameterized version).
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.FilterItemModel.FilterText">
+            <summary>
+            Gets the regular expression based filter string eg: '*.exe'.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.FilterItemModel.FilterDisplayName">
+            <summary>
+            Gets the name for this filter
+            (human readable for display in tool tip or label).
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Models.FilterItemModel.ToString">
+            <summary>
+            Standard method to display contents of this class.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.Models.FilterItemModel.GetHashCode">
+            <inheritdoc/>
+        </member>
+        <member name="M:FileSystemModels.Models.FilterItemModel.Equals(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:FileSystemModels.Models.FilterItemModel.CompareTo(System.Object)">
+            <summary>
+            Implement <seealso cref="T:System.IComparable"/> interface method.
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FileSystemModels.Models.FSItems.Base.FileSystemModel">
+            <summary>
+            This class models the common aspects of all classes that model
+            file system items (drive, folder, files) and their capabilities.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.FileSystemModel.#ctor(FileSystemModels.Interfaces.IPathModel)">
+            <summary>
+            Parameterized class constructor
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.FileSystemModel.#ctor">
+            <summary>
+            Hidden class constructor
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.FSItems.Base.FileSystemModel.Model">
+            <summary>
+            Gets the path model for this filesystem item.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.FSItems.Base.FileSystemModel.ItemType">
+            <summary>
+            Gets the type of file system item (Drive, folder, file)
+            represented by this object.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.FSItems.Base.FileSystemModel.Name">
+            <summary>
+            Gets the noe of the drive, file, or folder
+            represented by this file system item.
+            </summary>
+        </member>
+        <member name="T:FileSystemModels.Models.FSItems.Base.FSItemType">
+            <summary>
+            Determine whether a file system item is a folder or a file.
+            </summary>
+        </member>
+        <member name="F:FileSystemModels.Models.FSItems.Base.FSItemType.Unknown">
+            <summary>
+            Uknown type of file system item.
+            </summary>
+        </member>
+        <member name="F:FileSystemModels.Models.FSItems.Base.FSItemType.LogicalDrive">
+            <summary>
+            Reference to harddisk or other drives such as 'C:\'
+            </summary>
+        </member>
+        <member name="F:FileSystemModels.Models.FSItems.Base.FSItemType.Folder">
+            <summary>
+            File system item is a folder.
+            </summary>
+        </member>
+        <member name="F:FileSystemModels.Models.FSItems.Base.FSItemType.File">
+            <summary>
+            File system item is a file.
+            </summary>
+        </member>
+        <member name="T:FileSystemModels.Models.FSItems.Base.PathModel">
+            <summary>
+            Class implements basic properties and behaviours
+            of elements related to a path. Such elements are,
+            virtual folders, drives, network drives, folder, files, and shortcuts.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.PathModel.#ctor(System.String,FileSystemModels.Models.FSItems.Base.FSItemType)">
+            <summary>
+            Class constructor
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.PathModel.#ctor(FileSystemModels.Models.FSItems.Base.PathModel)">
+            <summary>
+            Copy Constructor
+            </summary>
+            <param name="pathModelCopy"></param>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.PathModel.#ctor">
+            <summary>
+            Class constructor
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.FSItems.Base.PathModel.Path">
+            <summary>
+            Gets the path of this <seealso cref="T:FileSystemModels.Models.FSItems.Base.PathModel"/> object.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.FSItems.Base.PathModel.PathRoot">
+            <summary>
+            Gets the root of the path of this <seealso cref="T:FileSystemModels.Models.FSItems.Base.PathModel"/> object.
+            Thats usually a drive eg. 'C:\'
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.FSItems.Base.PathModel.PathType">
+            <summary>
+            Gets the type of item of this <seealso cref="T:FileSystemModels.Models.FSItems.Base.PathModel"/> object.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.FSItems.Base.PathModel.Name">
+            <summary>
+            Gets the name of this item. For folders this is the folder
+            name without its path;
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.PathModel.Compare(FileSystemModels.Interfaces.IPathModel,FileSystemModels.Interfaces.IPathModel)">
+            <summary>
+            Compare the paths for 2 <see cref="T:FileSystemModels.Models.FSItems.Base.PathModel"/> objects
+            and return false if they are not equal, otherwise true.
+            </summary>
+            <param name="m"></param>
+            <param name="m1"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.PathModel.Compare(System.String,System.String)">
+            <summary>
+            Compare 2 <see cref="T:System.String"/> objects that represent a path
+            and returns false if they are equal.
+            </summary>
+            <param name="path"></param>
+            <param name="path1"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.PathModel.CheckValidString(System.String)">
+            <summary>
+            Check whether a string has basic properties that
+            (not null, at least 2 characters) it could contain
+            a path reference.
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.PathModel.NormalizePath(System.String)">
+            <summary>
+            Make sure that a path reference does actually work with
+            <see cref="T:System.IO.DirectoryInfo"/> by replacing 'C:' by 'C:\'.
+            </summary>
+            <param name="dirOrfilePath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.PathModel.ExtractDirectoryRoot(System.String)">
+            <summary>
+            Returns a normalized directory reference from a path reference
+            or the parent directory path if the <paramref name="dirPath"/>
+            reference points to a file.
+            </summary>
+            <param name="dirPath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.PathModel.DirectoryPathExists(System.String)">
+            <summary>
+            Determine whether a given path is an existing directory or not.
+            </summary>
+            <param name="path"></param>
+            <returns>true if this directory exists and otherwise false</returns>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.PathModel.DirectoryPathExistsAsync(System.String)">
+            <summary>
+            Determine whether a given path is an existing directory or not.
+            </summary>
+            <param name="path"></param>
+            <returns>true if this directory exists and otherwise false</returns>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.PathModel.GetDirectories(System.String)">
+            <summary>
+            Split the current folder in an array of sub-folder names and return it.
+            </summary>
+            <returns>Returns a string array of su-folder names (including drive) or null if there are no sub-folders.</returns>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.PathModel.GetDirectoriesAsync(System.String)">
+            <summary>
+            Split the current folder in an array of sub-folder names and return it.
+            </summary>
+            <returns>Returns a string array of su-folder names (including drive) or null if there are no sub-folders.</returns>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.PathModel.Join(System.String[],System.Int32,System.Int32)">
+            <summary>
+            Joins all string elements in <paramref name="dirs"/> tp one valid string.
+            Inverse function of string[] GetDirectories(string path) method.
+            </summary>
+            <param name="dirs"></param>
+            <param name="idxStart"></param>
+            <param name="idxEnd"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.PathModel.SpecialFolderHasPath(System.Environment.SpecialFolder)">
+            <summary>
+            Determine whether a special folder has physical information on current computer or not.
+            </summary>
+            <param name="specialFolder"></param>
+            <returns>Path to special folder (if any) or null</returns>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.PathModel.SpecialFolderHasPathAsync(System.Environment.SpecialFolder)">
+            <summary>
+            Determine whether a special folder has physical information on current computer or not.
+            </summary>
+            <param name="specialFolder"></param>
+            <returns>Path to special folder (if any) or null</returns>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.PathModel.RenameFileOrDirectory(FileSystemModels.Interfaces.IPathModel,System.String,FileSystemModels.Interfaces.IPathModel@)">
+            <summary>
+            Rename an existing directory into the <paramref name="newFolderName"/>.
+            </summary>
+            <param name="source"></param>
+            <param name="newFolderName"></param>
+            <param name="newFolderPathName"></param>
+            <returns>false Item to be renamed does not exist or something else is not as expected, otherwise true</returns>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.PathModel.CreateDir(FileSystemModels.Interfaces.IPathModel,System.String)">
+            <summary>
+            Create a new folder new standard sub folder in <paramref name="folderPath"/>.
+            The new folder has a standard name like 'New folder n'.
+            </summary>
+            <param name="folderPath"></param>
+            <param name="newDefaultFolderName">Compute default name for new folder</param>
+            <returns>PathModel object to new folder or null</returns>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.PathModel.CreateDirAsync(FileSystemModels.Interfaces.IPathModel,System.String)">
+            <summary>
+            Create a new folder new standard sub folder in <paramref name="folderPath"/>.
+            The new folder has a standard name like 'New folder n'.
+            </summary>
+            <param name="folderPath"></param>
+            <param name="newDefaultFolderName">Compute default name for new folder</param>
+            <returns>PathModel object to new folder or null</returns>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.PathModel.LoadFolders(System.String)">
+            <summary>
+            Load all sub-folders into the Folders collection via
+            IEnumerable/Yield.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.PathModel.LoadFoldersAsync(System.String)">
+            <summary>
+            Load all sub-folders into the Folders collection via
+            Async method with complete list return.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.PathModel.DirectoryPathExists">
+            <summary>
+            Determine whether a given path is an existing directory or not.
+            </summary>
+            <returns>true if this directory exists and otherwise false</returns>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.PathModel.DirectoryPathExistsAsync">
+            <summary>
+            Async version to determine whether a given path is an existing directory or not.
+            </summary>
+            <returns>true if this directory exists and otherwise false</returns>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.PathModel.Clone">
+            <summary>
+            Get a copy of this <seealso cref="T:FileSystemModels.Models.FSItems.Base.PathModel"/> object via
+            the <seealso cref="T:System.ICloneable"/> interface.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.PathModel.Equals(System.Object,System.Object)">
+             <summary>
+             Determine whether two <seealso cref="T:FileSystemModels.Models.FSItems.Base.PathModel"/> objects describe
+             the same location/item in the file system or not.
+            
+             Method implements <seealso cref="T:System.Collections.IEqualityComparer"/> interface.
+             </summary>
+             <param name="x"></param>
+             <param name="y"></param>
+             <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.PathModel.GetHashCode(System.Object)">
+             <summary>
+             Serves as the default hash function.
+            
+             Method implements <seealso cref="T:System.Collections.IEqualityComparer"/> interface.
+             </summary>
+             <param name="obj"></param>
+             <returns>A hash code for the current object.</returns>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.PathModel.Equals(FileSystemModels.Interfaces.IPathModel,FileSystemModels.Interfaces.IPathModel)">
+             <summary>
+             Determine whether two <seealso cref="T:FileSystemModels.Models.FSItems.Base.PathModel"/> objects
+             describe the same location/item in the file system or not.
+            
+             Method implements <seealso cref="T:System.Collections.Generic.IEqualityComparer`1"/> interface.
+             </summary>
+             <param name="x"></param>
+             <param name="y"></param>
+             <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.PathModel.GetHashCode(FileSystemModels.Interfaces.IPathModel)">
+             <summary>
+             Serves as the default hash function.
+            
+             Method implements <seealso cref="T:System.Collections.Generic.IEqualityComparer`1"/> interface.
+             </summary>
+             <param name="obj"></param>
+             <returns>A hash code for the current object.</returns>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.PathModel.CompareTo(System.Object)">
+             <summary>
+             Compares the current instance with another object of the same type and returns
+             an integer that indicates whether the current instance precedes, follows, or
+             occurs in the same position in the sort order as the other object.
+            
+             Method implements <seealso cref="T:System.IComparable"/> interface.
+             </summary>
+             <param name="obj">An object to compare with this instance.</param>
+             <returns>
+             A value that indicates the relative order of the objects being compared. The
+             return value has these meanings: Value Meaning Less than zero This instance precedes
+             obj in the sort order. Zero This instance occurs in the same position in the
+             sort order as obj. Greater than zero This instance follows obj in the sort order.
+            
+             Exceptions:
+               T:System.ArgumentException:
+                 Object does not implement IPathModel interface.
+             </returns>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.PathModel.CompareTo(FileSystemModels.Interfaces.IPathModel)">
+             <summary>
+             Determine whether two <seealso cref="T:FileSystemModels.Models.FSItems.Base.PathModel"/> objects describe the same
+             location/item in the file system or not.
+            
+             Method implements <seealso cref="T:System.IComparable`1"/> interface.
+             </summary>
+             <param name="path"></param>
+             <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.Base.PathModel.Equals(FileSystemModels.Interfaces.IPathModel)">
+             <summary>
+             Determine whether two <seealso cref="T:FileSystemModels.Models.FSItems.Base.PathModel"/> objects describe the same
+             location/item in the file system or not.
+            
+             Method implements <seealso cref="T:System.IEquatable`1"/> interface.
+             </summary>
+             <param name="other"></param>
+             <returns></returns>
+        </member>
+        <member name="T:FileSystemModels.Models.FSItems.DriveModel">
+            <summary>
+            Implements a low level wrapper class for drive items with storage space
+            for files and folders.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.DriveModel.#ctor(FileSystemModels.Interfaces.IPathModel)">
+            <summary>
+            Parameterized class  constructor
+            </summary>
+            <param name="model"></param>
+        </member>
+        <member name="P:FileSystemModels.Models.FSItems.DriveModel.AvailableFreeSpace">
+            <summary>
+            Indicates the amount of available free space on a drive, in bytes
+            or 0, if there is no space available or drive is not ready.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.FSItems.DriveModel.DriveFormat">
+            <summary>
+            Gets the name of the file system, such as NTFS or FAT32,
+            or string.Empty, if there is no space available or drive is not ready.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.FSItems.DriveModel.Exists">
+            <summary>
+            Gets a true value indicating whether the drive root directory exists,
+            or false, if there is no space available or drive is not ready.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.FSItems.DriveModel.IsReady">
+            <summary>
+            Gets a true value that indicates whether a drive is ready,
+            or false, if there is no space available or drive is not ready.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.FSItems.DriveModel.TotalFreeSpace">
+            <summary>
+            Gets the total amount of free space available on a drive, in bytes,
+            or 0, if there is no space available or drive is not ready.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.FSItems.DriveModel.TotalSize">
+            <summary>
+            Gets the total size of storage space on a drive, in bytes,
+            or 0, if there is no space available or drive is not ready.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.FSItems.DriveModel.VolumeLabel">
+            <summary>
+            Gets or sets the volume label of a drive,
+            or string.Empty, if there is no space available or drive is not ready.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.DriveModel.GetLogicalDrives">
+            <summary>
+            Gets all drives that are currently attached/registered on a given computer.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:FileSystemModels.Models.FSItems.FileModel">
+            <summary>
+            Implements a low level wrapper class for file items stored on a
+            drive or folder.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.FileModel.#ctor(FileSystemModels.Interfaces.IPathModel)">
+            <summary>
+            Parameterized class  constructor
+            </summary>
+            <param name="model"></param>
+        </member>
+        <member name="P:FileSystemModels.Models.FSItems.FileModel.Directory">
+            <summary>
+            Gets an instance of the parent directory or null
+            if file is no longer available or in-accessible or ...
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.FSItems.FileModel.DirectoryName">
+            <summary>
+            Gets a string representing the directory's full path.
+            or string.Empty if file is no longer available or in-accessible or ...
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.FSItems.FileModel.Exists">
+            <summary>
+            Gets a true value if file actually exists, or false if not,
+            if file is no longer available or in-accessible or ...
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.FSItems.FileModel.IsReadOnly">
+            <summary>
+            Gets a false value if file is not readonly,
+            or true if it is readonly, or if file is no
+            longer available or in-accessible or ...
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.FSItems.FileModel.Length">
+            <summary>
+            Gets the length of a file in bytes,
+            or 0 if file is no longer available or in-accessible or ...
+            </summary>
+        </member>
+        <member name="T:FileSystemModels.Models.FSItems.FolderModel">
+            <summary>
+            Implements a low level wrapper class for folder items stored on a
+            drive or other folders.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.FolderModel.#ctor(FileSystemModels.Interfaces.IPathModel)">
+            <summary>
+            Parameterized class  constructor
+            </summary>
+            <param name="model"></param>
+        </member>
+        <member name="P:FileSystemModels.Models.FSItems.FolderModel.Exists">
+            <summary>
+            Gets whether this folder really exists or not.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.FSItems.FolderModel.Parent">
+            <summary>
+            Gets the parent directory of this folder.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.Models.FSItems.FolderModel.Root">
+            <summary>
+            Gets the root entry of this folder.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.FolderModel.SelectFilesByFilter(System.IO.DirectoryInfo,System.String[])">
+            <summary>
+            Method implements an extension that lets us filter files
+            with multiple filter arguments.
+            </summary>
+            <param name="dir">Points at the folder that is queried for files and folder entries.</param>
+            <param name="extensions">Contains the extension that we want to filter for, eg: string[]{"*.*"} or string[]{"*.tex", "*.txt"}</param>
+        </member>
+        <member name="M:FileSystemModels.Models.FSItems.FolderModel.SelectDirectoriesByFilter(System.IO.DirectoryInfo,System.String[])">
+            <summary>
+            Method implements an extension that lets us filter (sub-)directory entries
+            with multiple filter aruments.
+            </summary>
+            <param name="dir">Points at the folder that is queried for sub-directory entries.</param>
+            <param name="extensions">Contains the extension that we want to filter for, eg: string[]{"*.*"} or string[]{"*.tex", "*.txt"}</param>
+        </member>
+        <member name="T:FileSystemModels.Factory">
+            <summary>
+            Implements a factory for core models and viemodels that can be implemented
+            by clients and controls that are based on this library.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Factory.CreateBookmarksViewModel">
+            <summary>
+            Factory pattern that can create objects to manage
+            recently visited file system folder entries.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:FileSystemModels.PathFactory">
+            <summary>
+            Class implements base services for working with the
+            <see cref="T:FileSystemModels.Interfaces.IPathModel"/>
+            interface and its associated methods.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.PathFactory.SysDefault">
+            <summary>
+            Gets the default system drive - usually 'C:\'.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.PathFactory.Create(System.String,FileSystemModels.Models.FSItems.Base.FSItemType)">
+            <summary>
+            Constructs a new <seealso cref="T:FileSystemModels.Interfaces.IPathModel"/> object and returns it.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.PathFactory.Compare(FileSystemModels.Interfaces.IPathModel,FileSystemModels.Interfaces.IPathModel)">
+            <summary>
+            Compare the paths for 2 <see cref="T:FileSystemModels.Models.FSItems.Base.PathModel"/> objects
+            and return false if they are not equal, otherwise true.
+            </summary>
+            <param name="m"></param>
+            <param name="m1"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.PathFactory.Compare(System.String,System.String)">
+            <summary>
+            Compare 2 <see cref="T:System.String"/> objects that represent a path
+            and returns false if they are equal.
+            </summary>
+            <param name="path"></param>
+            <param name="path1"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.PathFactory.CheckValidString(System.String)">
+            <summary>
+            Check whether a string has basic properties that
+            (not null, at least 2 characters) it could contain
+            a path reference.
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.PathFactory.NormalizePath(System.String)">
+            <summary>
+            Make sure that a path reference does actually work with
+            <see cref="T:System.IO.DirectoryInfo"/> by replacing 'C:' by 'C:\'.
+            </summary>
+            <param name="dirOrfilePath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.PathFactory.ExtractDirectoryRoot(System.String)">
+            <summary>
+            Returns a normalized directory reference from a path reference
+            or the parent directory path if the <paramref name="dirPath"/>
+            reference points to a file.
+            </summary>
+            <param name="dirPath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.PathFactory.DirectoryPathExists(System.String)">
+            <summary>
+            Determine whether a given path is an existing directory or not.
+            </summary>
+            <param name="path"></param>
+            <returns>true if this directory exists and otherwise false</returns>
+        </member>
+        <member name="M:FileSystemModels.PathFactory.DirectoryPathExistsAsync(System.String)">
+            <summary>
+            Determine whether a given path is an existing directory or not.
+            </summary>
+            <param name="path"></param>
+            <returns>true if this directory exists and otherwise false</returns>
+        </member>
+        <member name="M:FileSystemModels.PathFactory.GetDirectories(System.String)">
+            <summary>
+            Split the current folder in an array of sub-folder names and return it.
+            </summary>
+            <returns>Returns a string array of su-folder names (including drive) or null if there are no sub-folders.</returns>
+        </member>
+        <member name="M:FileSystemModels.PathFactory.GetDirectoriesAsync(System.String)">
+            <summary>
+            Split the current folder in an array of sub-folder names and return it.
+            </summary>
+            <returns>Returns a string array of su-folder names (including drive) or null if there are no sub-folders.</returns>
+        </member>
+        <member name="M:FileSystemModels.PathFactory.Join(System.String[],System.Int32,System.Int32)">
+            <summary>
+            Joins all string elements in <paramref name="dirs"/> tp one valid string.
+            Inverse function of string[] GetDirectories(string path) method.
+            </summary>
+            <param name="dirs"></param>
+            <param name="idxStart"></param>
+            <param name="idxEnd"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.PathFactory.SpecialFolderHasPath(System.Environment.SpecialFolder)">
+            <summary>
+            Determine whether a special folder has physical information on current computer or not.
+            </summary>
+            <param name="specialFolder"></param>
+            <returns>Path to special folder (if any) or null</returns>
+        </member>
+        <member name="M:FileSystemModels.PathFactory.SpecialFolderHasPathAsync(System.Environment.SpecialFolder)">
+            <summary>
+            Determine whether a special folder has physical information on current computer or not.
+            </summary>
+            <param name="specialFolder"></param>
+            <returns>Path to special folder (if any) or null</returns>
+        </member>
+        <member name="M:FileSystemModels.PathFactory.RenameFileOrDirectory(FileSystemModels.Interfaces.IPathModel,System.String,FileSystemModels.Interfaces.IPathModel@)">
+            <summary>
+            Rename an existing directory into the <paramref name="newFolderName"/>.
+            </summary>
+            <param name="source"></param>
+            <param name="newFolderName"></param>
+            <param name="newFolderPathName"></param>
+            <returns>false Item to be renamed does not exist or something else is not as expected, otherwise true</returns>
+        </member>
+        <member name="M:FileSystemModels.PathFactory.CreateDir(FileSystemModels.Interfaces.IPathModel,System.String)">
+            <summary>
+            Create a new folder new standard sub folder in <paramref name="folderPath"/>.
+            The new folder has a standard name like 'New folder n'.
+            </summary>
+            <param name="folderPath"></param>
+            <param name="newDefaultFolderName">Compute default name for new folder</param>
+            <returns>PathModel object to new folder or null</returns>
+        </member>
+        <member name="M:FileSystemModels.PathFactory.CreateDirAsync(FileSystemModels.Interfaces.IPathModel,System.String)">
+            <summary>
+            Create a new folder new standard sub folder in <paramref name="folderPath"/>.
+            The new folder has a standard name like 'New folder n'.
+            </summary>
+            <param name="folderPath"></param>
+            <param name="newDefaultFolderName">Compute default name for new folder</param>
+            <returns>PathModel object to new folder or null</returns>
+        </member>
+        <member name="M:FileSystemModels.PathFactory.LoadFolders(System.String)">
+            <summary>
+            Load all sub-folders into the Folders collection via
+            IEnumerable/Yield.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.PathFactory.LoadFoldersAsync(System.String)">
+            <summary>
+            Load all sub-folders into the Folders collection via
+            Async method with complete list return.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.PathFactory.Create(System.String)">
+            <summary>
+            Attempts to create an <see cref="T:FileSystemModels.Interfaces.IPathModel"/> instance from a given string.
+            This method will throw a <see cref="T:System.NotSupportedException"/> if the string
+            apeears to be invalid or is indeed not supported by this model.
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FileSystemModels.Utils.DirectoryInfoExtension">
+            <summary>
+            Class implements an extension of the <seealso cref="T:System.IO.DirectoryInfo"/> class.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Utils.DirectoryInfoExtension.SelectFilesByFilter(System.IO.DirectoryInfo,System.String[])">
+            <summary>
+            Method implements an extension that lets us filter files
+            with multiple filter aruments.
+            </summary>
+            <param name="dir">Points at the folder that is queried for files and folder entries.</param>
+            <param name="extensions">Contains the extension that we want to filter for, eg: string[]{"*.*"} or string[]{"*.tex", "*.txt"}</param>
+        </member>
+        <member name="M:FileSystemModels.Utils.DirectoryInfoExtension.SelectDirectoriesByFilter(System.IO.DirectoryInfo,System.String[])">
+            <summary>
+            Method implements an extension that lets us filter (sub-)directory entries
+            with multiple filter aruments.
+            </summary>
+            <param name="dir">Points at the folder that is queried for sub-directory entries.</param>
+            <param name="extensions">Contains the extension that we want to filter for, eg: string[]{"*.*"} or string[]{"*.tex", "*.txt"}</param>
+        </member>
+        <member name="T:FileSystemModels.Utils.IconExtractor">
+            <summary>
+            Helper class to retrieve icons for file of folder
+            representation from Windows file system sub-system.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Utils.IconExtractor.GetFileIcon(System.String)">
+            <summary>
+            Gets an icon that is extracted right out of the given file.
+            </summary>
+            <param name="cFile"></param>
+        </member>
+        <member name="M:FileSystemModels.Utils.IconExtractor.GetFolderIcon(System.String,System.Boolean)">
+            <summary>
+            Gets an icon that represents the corresponding folder.
+            </summary>
+            <param name="cFolder"></param>
+            <param name="bOpen"></param>
+        </member>
+        <member name="T:FileSystemModels.Utils.IconUtilities">
+            <summary>
+            Internal extension method for ImageSource class.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Utils.IconUtilities.ToImageSource(System.Drawing.Icon)">
+            <summary>
+            Extension method for <seealso cref="T:System.Windows.Media.ImageSource"/> class to convert
+            reference to an icon into a WPF <seealso cref="T:System.Windows.Media.ImageSource"/>.
+            </summary>
+            <param name="icon"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FileSystemModels.Utils.IItemExtension">
+            <summary>
+            Implements simple method based extensions that can be used for classes
+            implementing the <see cref="T:FileSystemModels.Interfaces.IItem"/> interface.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Utils.IItemExtension.GetDisplayString(FileSystemModels.Interfaces.IItem,System.String)">
+            <summary>
+            Gets a display string for a file system item (file, folder, drive).
+            
+            The string for display is not necessarily the same as the actual name
+            of the item - drives for example are named like 'F:\' but an intended
+            display string may be 'F:\ (drive is not ready)'.
+            
+            The label is displayed in brackets if supplied to this call of if it
+            can be determined, for examples, for drives.
+            </summary>
+            <param name="item"></param>
+            <param name="label"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FileSystemModels.Utils.LinqExtensions">
+            <summary>
+            Class provides extension methods for manipulating collections with Linq.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.Utils.LinqExtensions.Remove``1(System.Collections.ObjectModel.ObservableCollection{``0},System.Func{``0,System.Boolean})">
+            <summary>
+            Remove all elements that satisfy a condition from an observable collection.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="coll"></param>
+            <param name="condition"></param>
+            <returns>item count of removed items</returns>
+        </member>
+        <member name="T:FileSystemModels.ViewModels.Base.RelayCommand`1">
+            <summary>
+            A command whose sole purpose is to 
+            relay its functionality to other
+            objects by invoking delegates. The
+            default return value for the CanExecute
+            method is 'true'.
+            
+            Source: http://www.codeproject.com/Articles/31837/Creating-an-Internationalized-Wizard-in-WPF
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Base.RelayCommand`1.#ctor(System.Action{`0})">
+            <summary>
+            Class constructor
+            </summary>
+            <param name="execute"></param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Base.RelayCommand`1.#ctor(System.Action{`0},System.Predicate{`0})">
+            <summary>
+            Creates a new command.
+            </summary>
+            <param name="execute">The execution logic.</param>
+            <param name="canExecute">The execution status logic.</param>
+        </member>
+        <member name="E:FileSystemModels.ViewModels.Base.RelayCommand`1.CanExecuteChanged">
+            <summary>
+            Eventhandler to re-evaluate whether this command can execute or not
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Base.RelayCommand`1.CanExecute(System.Object)">
+            <summary>
+            Determine whether this pre-requisites to execute this command are given or not.
+            </summary>
+            <param name="parameter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Base.RelayCommand`1.Execute(System.Object)">
+            <summary>
+            Execute the command method managed in this class.
+            </summary>
+            <param name="parameter"></param>
+        </member>
+        <member name="T:FileSystemModels.ViewModels.Base.RelayCommand">
+            <summary>
+            A command whose sole purpose is to 
+            relay its functionality to other
+            objects by invoking delegates. The
+            default return value for the CanExecute
+            method is 'true'.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Base.RelayCommand.#ctor(System.Action)">
+            <summary>
+            Creates a new command that can always execute.
+            </summary>
+            <param name="execute">The execution logic.</param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Base.RelayCommand.#ctor(FileSystemModels.ViewModels.Base.RelayCommand)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="inputRC"></param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Base.RelayCommand.#ctor(System.Action,System.Func{System.Boolean})">
+            <summary>
+            Creates a new command.
+            </summary>
+            <param name="execute">The execution logic.</param>
+            <param name="canExecute">The execution status logic.</param>
+        </member>
+        <member name="E:FileSystemModels.ViewModels.Base.RelayCommand.CanExecuteChanged">
+            <summary>
+            Eventhandler to re-evaluate whether this command can execute or not
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Base.RelayCommand.CanExecute(System.Object)">
+            <summary>
+            Execute the attached CanExecute methode delegate (or always return true)
+            to determine whether the command managed in this object can execute or not.
+            </summary>
+            <param name="parameter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Base.RelayCommand.Execute(System.Object)">
+            <summary>
+            Return the attached delegate method.
+            </summary>
+            <param name="parameter"></param>
+        </member>
+        <member name="T:FileSystemModels.ViewModels.Base.ViewModelBase">
+            <summary>
+            Base of Viewmodel classes implemented in this assembly.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Base.ViewModelBase.#ctor">
+            <summary>
+            Standard <seealso cref="T:FileSystemModels.ViewModels.Base.ViewModelBase"/> class constructor
+            </summary>
+        </member>
+        <member name="E:FileSystemModels.ViewModels.Base.ViewModelBase.PropertyChanged">
+            <summary>
+            Standard event of the <seealso cref="T:System.ComponentModel.INotifyPropertyChanged"/> interface.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Base.ViewModelBase.RaisePropertyChanged(System.String)">
+            <summary>
+            Tell bound controls (via WPF binding) to refresh their display
+            for the viewmodel property indicated as string.
+            </summary>
+            <param name="propName"></param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Base.ViewModelBase.RaisePropertyChanged``1(System.Linq.Expressions.Expression{System.Func{``0}})">
+            <summary>
+            Tell bound controls (via WPF binding) to refresh their display.
+            
+            Sample call: this.OnPropertyChanged(() => this.IsSelected);
+            where 'this' is derived from <seealso cref="T:FileSystemModels.ViewModels.Base.ViewModelBase"/>
+            and IsSelected is a property.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="propertyExpression"></param>
+        </member>
+        <member name="T:FileSystemModels.ViewModels.BookmarkesViewModel">
+            <summary>
+            Implement viewmodel for management of recent folder locations.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.BookmarkesViewModel.#ctor">
+            <summary>
+            Class constructor
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.BookmarkesViewModel.#ctor(FileSystemModels.ViewModels.BookmarkesViewModel)">
+            <summary>
+            Copy class constructor
+            </summary>
+            <param name="copyThis"></param>
+        </member>
+        <member name="E:FileSystemModels.ViewModels.BookmarkesViewModel.BrowseEvent">
+            <summary>
+            Indicates when the viewmodel starts heading off somewhere else
+            and when its done browsing to a new location.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.ViewModels.BookmarkesViewModel.ChangeOfDirectoryCommand">
+            <summary>
+            Gets a command that requests a change of current directory to the
+            directory stated in <seealso cref="T:FileSystemModels.Interfaces.IListItemViewModel"/> in
+            CommandParameter.  -> Fires a FolderChange Event.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.ViewModels.BookmarkesViewModel.RemoveFolderBookmark">
+            <summary>
+            Command removes a folder bookmark from the list of
+            currently bookmarked folders. Required command parameter
+            is of type <seealso cref="T:FileSystemModels.ViewModels.ListItemViewModel"/>.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.ViewModels.BookmarkesViewModel.DropDownItems">
+            <summary>
+            <inheritedoc />
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.ViewModels.BookmarkesViewModel.SelectedItem">
+            <summary>
+            Gets/set the selected item of the RecentLocations property.
+            
+            This should be bound by the view (ItemsControl) to find the SelectedItem here.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.ViewModels.BookmarkesViewModel.IsOpen">
+            <summary>
+            <inheritedoc />
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.ViewModels.BookmarkesViewModel.IsBrowsing">
+            <summary>
+            This control cannot browse towards a certain location which
+            is why it returns a constant value of false here.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.BookmarkesViewModel.CloneBookmark">
+            <summary>
+            Gets a data copy of the current object. Object specific fields, like events
+            and their handlers are not copied.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.BookmarkesViewModel.Clone">
+            <summary>
+            Gets a data copy of the current object. Object specific fields, like events
+            and their handlers are not copied.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.BookmarkesViewModel.AddFolder(System.String,System.Boolean)">
+            <summary>
+            Add a recent folder location into the collection of recent folders.
+            This collection can then be used in the folder combobox drop down
+            list to store user specific customized folder short-cuts.
+            </summary>
+            <param name="folderPath"></param>
+            <param name="selectNewItem"></param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.BookmarkesViewModel.RemoveFolder(System.String)">
+            <summary>
+            Remove a recent folder location from the collection of recent folders.
+            This collection can then be used in the folder combobox drop down
+            list to store user specific customized folder short-cuts.
+            </summary>
+            <param name="folderPath"></param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.BookmarkesViewModel.ClearFolderCollection">
+            <summary>
+            Removes all data items from the current collection of recent folders.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.BookmarkesViewModel.ChangeOfDirectoryCommand_Executed(FileSystemModels.Interfaces.IListItemViewModel)">
+            <summary>
+            Method is invoked when the control requests the controller to browse
+            to a new location as selected by the user in the list of recent locations (bookmarks).
+            </summary>
+            <param name="path"></param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.BookmarkesViewModel.RemoveFolderBookmark_Executed(FileSystemModels.Interfaces.IListItemViewModel)">
+            <summary>
+            Method removes a folder bookmark from the list of currently bookmarked folders.
+            </summary>
+            <param name="param"></param>
+        </member>
+        <member name="T:FileSystemModels.ViewModels.Collections.BinarySorter`1">
+            <summary>
+            This class is a helper for creating binary sorted lists
+            </summary>
+        </member>
+        <member name="F:FileSystemModels.ViewModels.Collections.BinarySorter`1._comparer">
+            <summary>
+            Optional comparer used for sorting keys
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.BinarySorter`1.#ctor(System.Collections.Generic.IComparer{`0})">
+            <summary>
+            Constructor that takes a comparer
+            </summary>
+            <param name="comparer"></param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.BinarySorter`1.GetInsertIndex(System.Int32,`0,System.Func{System.Int32,`0})">
+            <summary>
+            Gets the position for a key to be inserted such that the sort order is maintained.
+            </summary>
+            <param name="key"></param>
+            <param name="count"></param>
+            <param name="indexToKey"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.BinarySorter`1.Compare(`0,`0)">
+            <summary>
+            Compares two objects and returns a value indicating whether one is less than, equal to, or greater than the other.
+            </summary>
+            <param name="key1"></param>
+            <param name="key2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.BinarySorter`1.BinarySearchForIndex(System.Int32,System.Int32,`0,System.Func{System.Int32,`0})">
+            <summary>
+            Searches for the index of the insertion point for the key passed in such that
+            the sort order is maintained. Implemented as a non-recursive method.
+            </summary>
+            <param name="low"></param>
+            <param name="high"></param>
+            <param name="key"></param>
+            <param name="indexToKey"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FileSystemModels.ViewModels.Collections.DoubleLinkListIndexNode">
+            <summary>
+            This class is used for linked objects in a 2 way linked list,
+            which are also all held in a dictionary. The purpose of this
+            class is to allow the position of items in a dictionary to be
+            quickly determined.
+            </summary>
+        </member>
+        <member name="F:FileSystemModels.ViewModels.Collections.DoubleLinkListIndexNode.Previous">
+            <summary>
+            The previous node in the linked list
+            </summary>
+        </member>
+        <member name="F:FileSystemModels.ViewModels.Collections.DoubleLinkListIndexNode.Next">
+            <summary>
+            The next node in the linked list
+            </summary>
+        </member>
+        <member name="F:FileSystemModels.ViewModels.Collections.DoubleLinkListIndexNode.Index">
+            <summary>
+            The position within the linked list
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.DoubleLinkListIndexNode.#ctor(FileSystemModels.ViewModels.Collections.DoubleLinkListIndexNode,System.Int32)">
+            <summary>
+            Constructor for when a node is added to the end of the list.
+            </summary>
+            <param name="previous"></param>
+            <param name="index"></param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.DoubleLinkListIndexNode.#ctor(FileSystemModels.ViewModels.Collections.DoubleLinkListIndexNode,FileSystemModels.ViewModels.Collections.DoubleLinkListIndexNode)">
+            <summary>
+            Constructor for when a node is inserted into the middle of the list.
+            </summary>
+            <param name="previous"></param>
+            <param name="next"></param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.DoubleLinkListIndexNode.Remove">
+            <summary>
+            This function effectively removes this node from the linked list,
+            and decrements the position index of all the nodes that follow it.
+            It removes the node by changing the nodes that come before and
+            after it to point to each other, thus bypassing this node.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.DoubleLinkListIndexNode.DecrementForward">
+            <summary>
+            This recursive function decrements the position index of all the nodes
+            in front of this node. Used for when a node is removed from a list.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.DoubleLinkListIndexNode.IncrementForward">
+            <summary>
+            This recursive function decrements the position index of all the nodes
+            in front of this node. Used for when a node is inserted into a list.
+            </summary>
+        </member>
+        <member name="T:FileSystemModels.ViewModels.Collections.FastObservableCollection`1">
+            <summary>
+            Observable collection with fewer notif property changed notifiactions
+            to speed up updates and fluid ui experience.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="F:FileSystemModels.ViewModels.Collections.FastObservableCollection`1.suspendCollectionChangeNotification">
+            <summary>
+            This private variable holds the flag to
+            turn on and off the collection changed notification.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.FastObservableCollection`1.#ctor">
+            <summary>
+            Initializes a new instance of the FastObservableCollection class.
+            </summary>
+        </member>
+        <member name="E:FileSystemModels.ViewModels.Collections.FastObservableCollection`1.CollectionChanged">
+            <summary>
+            This event is overriden CollectionChanged event of the observable collection.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.FastObservableCollection`1.AddItems(System.Collections.Generic.IList{`0})">
+            <summary>
+            This method adds the given generic list of items
+            as a range into current collection by casting them as type T.
+            It then notifies once after all items are added.
+            </summary>
+            <param name="items">The source collection.</param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.FastObservableCollection`1.NotifyChanges">
+            <summary>
+            Raises collection change event.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.FastObservableCollection`1.RemoveItems(System.Collections.Generic.IList{`0})">
+            <summary>
+            This method removes the given generic list of items as a range
+            into current collection by casting them as type T.
+            It then notifies once after all items are removed.
+            </summary>
+            <param name="items">The source collection.</param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.FastObservableCollection`1.ResumeCollectionChangeNotification">
+            <summary>
+            Resumes collection changed notification.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.FastObservableCollection`1.SuspendCollectionChangeNotification">
+            <summary>
+            Suspends collection changed notification.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.FastObservableCollection`1.OnCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+            <summary>
+            This collection changed event performs thread safe event raising.
+            </summary>
+            <param name="e">The event argument.</param>
+        </member>
+        <member name="T:FileSystemModels.ViewModels.Collections.Generics.SortableObservableCollection`1">
+            <summary>
+            Source: https://stackoverflow.com/questions/5487927/expand-wpf-treeview-to-support-sorting
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.Generics.SortableObservableCollection`1.#ctor">
+            <summary>
+            Class constructor.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.Generics.SortableObservableCollection`1.#ctor(System.Collections.Generic.List{`0})">
+            <summary>
+            Class constructor.
+            </summary>
+            <param name="l"></param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.Generics.SortableObservableCollection`1.#ctor(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Class constructor.
+            </summary>
+            <param name="l"></param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.Generics.SortableObservableCollection`1.Sort``1(System.Func{`0,``0})">
+            <summary>
+            Sorts the items of the collection in ascending order according to a key.
+            </summary>
+            <typeparam name="TKey">The type of the key returned by <paramref name="keySelector"/>.</typeparam>
+            <param name="keySelector">A function to extract a key from an item.</param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.Generics.SortableObservableCollection`1.SortDescending``1(System.Func{`0,``0})">
+            <summary>
+            Sorts the items of the collection in descending order according to a key.
+            </summary>
+            <typeparam name="TKey">The type of the key returned by <paramref name="keySelector"/>.</typeparam>
+            <param name="keySelector">A function to extract a key from an item.</param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.Generics.SortableObservableCollection`1.Sort``1(System.Func{`0,``0},System.Collections.Generic.IComparer{``0})">
+            <summary>
+            Sorts the items of the collection in ascending order according to a key.
+            </summary>
+            <typeparam name="TKey">The type of the key returned by <paramref name="keySelector"/>.</typeparam>
+            <param name="keySelector">A function to extract a key from an item.</param>
+            <param name="comparer">An <see cref="T:System.Collections.Generic.IComparer`1"/> to compare keys.</param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.Generics.SortableObservableCollection`1.InternalSort(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Moves the items of the collection so that their orders are the same as those of the items provided.
+            </summary>
+            <param name="sortedItems">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> to provide item orders.</param>
+        </member>
+        <member name="T:FileSystemModels.ViewModels.Collections.Generics.SortableObservableDictionaryCollection`1">
+            <summary>
+            Class implements a sortable observable disctionary object that can be used to
+            key templated items (of any class) with a string and bind them to a view.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.Generics.SortableObservableDictionaryCollection`1.#ctor">
+            <summary>
+            class constructor
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.Generics.SortableObservableDictionaryCollection`1.AddItem(`0)">
+            <summary>
+            This method is not implemented and will throw a <seealso cref="T:System.NotSupportedException"/>.
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.Generics.SortableObservableDictionaryCollection`1.AddItem(System.String,`0)">
+            <summary>
+            Adds an item with the key as string and will throw an exception if the ToLower()
+            string is already present in the collection of keys.
+            </summary>
+            <param name="key"></param>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.Generics.SortableObservableDictionaryCollection`1.RemoveItem(`0)">
+            <summary>
+            This method is not implemented and will throw a <seealso cref="T:System.NotSupportedException"/>.
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.Generics.SortableObservableDictionaryCollection`1.RemoveItem(System.String,`0)">
+            <summary>
+            Removes the item with the given key.
+            </summary>
+            <param name="key"></param>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.Generics.SortableObservableDictionaryCollection`1.TryGet(System.String)">
+            <summary>
+            Attempts to find a given item by its key value.
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.Generics.SortableObservableDictionaryCollection`1.Clear">
+            <summary>
+            Removes all items from the current collections.
+            </summary>
+        </member>
+        <member name="T:FileSystemModels.ViewModels.Collections.ImmutableCollectionBase`1">
+            <summary>
+            This class provides the base restrictions for an immutable collection
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.ViewModels.Collections.ImmutableCollectionBase`1.Count">
+            <summary>
+            Gets the number of elements contained in the collection&lt;T>.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.ViewModels.Collections.ImmutableCollectionBase`1.IsReadOnly">
+            <summary>
+            Gets a value indicating that the collection is read-only.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ImmutableCollectionBase`1.Add(`0)">
+            <summary>
+            Throws the exception System.NotSupportedException:
+            </summary>
+            <paramref name="item"/>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ImmutableCollectionBase`1.Clear">
+            <summary>
+            Throws the exception System.NotSupportedException:
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ImmutableCollectionBase`1.Contains(`0)">
+            <summary>
+            Determines whether an object is contained in the collection or not.
+            </summary>
+            <param name="item">The object to locate</param>
+            <returns>true if item is found otherwise false</returns>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ImmutableCollectionBase`1.CopyTo(`0[],System.Int32)">
+            <summary>
+             Copies the elements of the collection to an array, starting
+            at a particular index.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ImmutableCollectionBase`1.Remove(`0)">
+            <summary>
+            Method is not implemented.
+            Throws the exception System.NotSupportedException:
+            </summary>
+            <paramref name="item"/>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ImmutableCollectionBase`1.GetEnumerator">
+            <summary>
+            Gets the enumerator for the collection
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ImmutableCollectionBase`1.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Gets the enumerator for the collection
+            </summary>
+        </member>
+        <member name="T:FileSystemModels.ViewModels.Collections.KeyCollection`2">
+            <summary>
+            Provides an immutable key collection as an interface to the keys
+            stored in an observable dictionary
+            </summary>
+        </member>
+        <member name="F:FileSystemModels.ViewModels.Collections.KeyCollection`2._dictionary">
+            <summary>
+            The source dictionary
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.KeyCollection`2.#ctor(FileSystemModels.ViewModels.Collections.ObservableDictionary{`0,`1})">
+            <summary>
+            Constructor that takes the source dictionary as a parameter
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.ViewModels.Collections.KeyCollection`2.Count">
+            <summary>
+            Gets the number of elements contained in the collection&lt;T>.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.KeyCollection`2.Contains(`0)">
+            <summary>
+            determines whether an item is contained in the collection or not.
+            </summary>
+            <param name="item">The object to locate</param>
+            <returns>true if item is found otherwise false</returns>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.KeyCollection`2.CopyTo(`0[],System.Int32)">
+            <summary>
+             Copies the elements of the collection to an array, starting
+            at a particular index.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.KeyCollection`2.GetEnumerator">
+            <summary>
+            Gets the enumerator for the collection
+            </summary>
+        </member>
+        <member name="T:FileSystemModels.ViewModels.Collections.ObservableDictionary`2">
+            <summary>
+            This class provides a dictionary that can be bound to a WPF control.
+            </summary>
+        </member>
+        <member name="F:FileSystemModels.ViewModels.Collections.ObservableDictionary`2._keyToIndex">
+            <summary>
+            A dictionary of link list nodes to work out for the key the corresponding
+            index for the master list, key list, and value list.
+            </summary>
+        </member>
+        <member name="F:FileSystemModels.ViewModels.Collections.ObservableDictionary`2._masterList">
+            <summary>
+            An observable list of key value pairs
+            </summary>
+        </member>
+        <member name="F:FileSystemModels.ViewModels.Collections.ObservableDictionary`2._lastNode">
+            <summary>
+            The last node of the link list, used for adding new nodes to the end
+            </summary>
+        </member>
+        <member name="F:FileSystemModels.ViewModels.Collections.ObservableDictionary`2._keys">
+            <summary>
+            The list of keys for the keys property
+            </summary>
+        </member>
+        <member name="F:FileSystemModels.ViewModels.Collections.ObservableDictionary`2._values">
+            <summary>
+            The list of values for the values property
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ObservableDictionary`2.#ctor">
+            <summary>
+            Initializes a new instance of this class that is empty, has the default
+            initial capacity, and uses the default equality comparer for the key
+            type.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ObservableDictionary`2.#ctor(System.Collections.Generic.IDictionary{`0,`1})">
+            <summary>
+            Initializes a new instance of this class that contains elements copied
+            from the specified IDictionary&lt;TKey, TValue> and uses the default
+            equality comparer for the key type.
+            </summary>
+            <param name="source"></param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ObservableDictionary`2.#ctor(System.Collections.Generic.IEqualityComparer{`0})">
+            <summary>
+            Initializes a new instance of this class that is empty, has the default
+            initial capacity, and uses the specified IEqualityComparer&lt;T>.
+            </summary>
+            <param name="equalityComparer"></param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ObservableDictionary`2.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of this class that is empty, has the
+            specified initial capacity, and uses the default equality comparer for
+            the key type.
+            </summary>
+            <param name="capactity"></param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ObservableDictionary`2.#ctor(System.Collections.Generic.IDictionary{`0,`1},System.Collections.Generic.IEqualityComparer{`0})">
+            <summary>
+            Initializes a new instance of this class that contains elements copied
+            from the specified IDictionary&lt;TKey, TValue> and uses the specified
+            IEqualityComparer&lt;T>.
+            </summary>
+            <param name="source"></param>
+            <param name="equalityComparer"></param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ObservableDictionary`2.#ctor(System.Int32,System.Collections.Generic.IEqualityComparer{`0})">
+            <summary>
+            Initializes a new instance of this class that is empty, has the
+            specified initial capacity, and uses the specified
+            IEqualityComparer&lt;T>.
+            </summary>
+            <param name="capacity"></param>
+            <param name="equalityComparer"></param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ObservableDictionary`2.IndexOfKey(`0)">
+            <summary>
+            Gets the array index of the key passed in.
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ObservableDictionary`2.TryGetIndexOf(`0,System.Int32@)">
+            <summary>
+            Tries to get the index of the key passed in. Returns true if succeeded
+            and false otherwise.
+            </summary>
+            <param name="key"></param>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ObservableDictionary`2.masterList_CollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+            <summary>
+            Handles when the internal key value list changes, and passes on the
+            message.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ObservableDictionary`2.OnCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+            <summary>
+            Triggers the CollectionChanged event in a way that it can be handled
+            by controls on a different thread.
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="E:FileSystemModels.ViewModels.Collections.ObservableDictionary`2.CollectionChanged">
+            <summary>
+            Triggers the event NotifyCollectionChanged event when the collection has changed.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ObservableDictionary`2.Add(`0,`1)">
+            <summary>
+            Adds an element with the provided key and value to the IDictionary&lt;TKey, TValue>.
+            </summary>
+            <param name="key">
+            The object to use as the key of the element to add.
+            </param>
+            <param name="value">
+            The object to use as the value of the element to add.
+            </param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ObservableDictionary`2.ContainsKey(`0)">
+            <summary>
+            Determines whether the IDictionary&lt;TKey, TValue> contains an element with the specified key.
+            </summary>
+            <param name="key">
+            The key to locate in the IDictionary&lt;TKey, TValue>.
+            </param>
+            <returns>
+            True if the IDictionary&lt;TKey, TValue> contains an element with the key; otherwise, false.
+            </returns>
+        </member>
+        <member name="P:FileSystemModels.ViewModels.Collections.ObservableDictionary`2.Keys">
+            <summary>
+            Gets an ICollection&lt;T> containing the keys of the IDictionary&lt;TKey, TValue>.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ObservableDictionary`2.Remove(`0)">
+            <summary>
+            Removes the element with the specified key from the IDictionary&lt;TKey, TValue>.
+            </summary>
+            <param name="key">
+            The key of the element to remove.
+            </param>
+            <returns>
+            True if the element is successfully removed; otherwise, false. This method also returns false if key was not found in the original IDictionary&lt;TKey, TValue>.
+            </returns>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ObservableDictionary`2.TryGetValue(`0,`1@)">
+            <summary>
+            Gets the value associated with the specified key.
+            </summary>
+            <param name="key">
+            The key whose value to get.
+            </param>
+            <param name="value">
+            When this method returns, the value associated with the specified key, if the key is found; otherwise, the default value for the type of the value parameter. This parameter is passed uninitialized.
+            </param>
+            <returns>
+            True if the object that implements IDictionary&lt;TKey, TValue> contains an element with the specified key; otherwise, false.
+            </returns>
+        </member>
+        <member name="P:FileSystemModels.ViewModels.Collections.ObservableDictionary`2.Values">
+            <summary>
+            Gets an ICollection&lt;T> containing the values in the IDictionary&lt;TKey, TValue>.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.ViewModels.Collections.ObservableDictionary`2.Item(`0)">
+            <summary>
+            Gets or sets the element with the specified key.
+            </summary>
+            <param name="key">
+            The key of the element to get or set.
+            </param>
+            <returns>
+            The element with the specified key.
+            </returns>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ObservableDictionary`2.Add(System.Collections.Generic.KeyValuePair{`0,`1})">
+            <summary>
+            Adds an item to the ICollection&lt;T>.
+            </summary>
+            <param name="item"></param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ObservableDictionary`2.Clear">
+            <summary>
+            Removes all items from the ICollection&lt;T>.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ObservableDictionary`2.Contains(System.Collections.Generic.KeyValuePair{`0,`1})">
+            <summary>
+            Determines whether the ICollection&lt;T> contains a specific value.
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ObservableDictionary`2.CopyTo(System.Collections.Generic.KeyValuePair{`0,`1}[],System.Int32)">
+            <summary>
+            Copies the elements of the ICollection&lt;T> to an Array, starting at a particular Array index.
+            </summary>
+            <param name="array"></param>
+            <param name="arrayIndex"></param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ObservableDictionary`2.Remove(System.Collections.Generic.KeyValuePair{`0,`1})">
+            <summary>
+            Removes the first occurrence of a specific object from the ICollection&lt;T>.
+            </summary>
+            <param name="item">
+            The object to remove from the ICollection&lt;T>.
+            </param>
+            <returns>
+            True if item was successfully removed from the ICollection&lt;T>; otherwise, false. This method also returns false if item is not found in the original ICollection&lt;T>.
+            </returns>
+        </member>
+        <member name="P:FileSystemModels.ViewModels.Collections.ObservableDictionary`2.Count">
+            <summary>
+            Gets the number of elements contained in the ICollection&lt;T>.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.ViewModels.Collections.ObservableDictionary`2.IsReadOnly">
+            <summary>
+            Gets a value indicating whether the ICollection&lt;T> is read-only.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ObservableDictionary`2.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+            <returns>
+            A IEnumerator&lt;T> that can be used to iterate through the collection.
+            </returns>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ObservableDictionary`2.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+            <returns>
+            An IEnumerator object that can be used to iterate through the collection.
+            </returns>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ObservableDictionary`2.CopyTo(System.Array,System.Int32)">
+            <summary>
+            Copies the elements of the ICollection to an Array, starting at a particular Array index.
+            </summary>
+            <param name="array"></param>
+            <param name="index"></param>
+        </member>
+        <member name="P:FileSystemModels.ViewModels.Collections.ObservableDictionary`2.IsSynchronized">
+            <summary>
+            Gets a value indicating whether access to the ICollection is synchronized (thread safe).
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.ViewModels.Collections.ObservableDictionary`2.SyncRoot">
+            <summary>
+            Gets an object that can be used to synchronize access to the ICollection.
+            </summary>
+        </member>
+        <member name="T:FileSystemModels.ViewModels.Collections.ObservableSortedDictionary`2">
+            <summary>
+            This class provides a sorted collection that can be bound to
+            a WPF control.
+            </summary>
+        </member>
+        <member name="F:FileSystemModels.ViewModels.Collections.ObservableSortedDictionary`2._sorter">
+            <summary>
+            Utitlity object that is used for sorting the list
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ObservableSortedDictionary`2.#ctor(System.Collections.Generic.IComparer{`0})">
+            <summary>
+            Constructor with an optional IComparer&lt;TKey> parameter.
+            </summary>
+            <param name="comparer">Comparer used to sort the keys.</param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ObservableSortedDictionary`2.Add(`0,`1)">
+            <summary>
+            Adds an element with the provided key and value to the IDictionary&lt;TKey, TValue>.
+            </summary>
+            <param name="key">
+            The object to use as the key of the element to add.
+            </param>
+            <param name="value">
+            The object to use as the value of the element to add.
+            </param>
+        </member>
+        <member name="T:FileSystemModels.ViewModels.Collections.SortableObservableCollection`1">
+            <summary>
+            Source: https://stackoverflow.com/questions/5487927/expand-wpf-treeview-to-support-sorting
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.SortableObservableCollection`1.#ctor">
+            <summary>
+            Class constructor.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.SortableObservableCollection`1.#ctor(System.Collections.Generic.List{`0})">
+            <summary>
+            Class constructor.
+            </summary>
+            <param name="l"></param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.SortableObservableCollection`1.#ctor(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Class constructor.
+            </summary>
+            <param name="l"></param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.SortableObservableCollection`1.Sort``1(System.Func{`0,``0})">
+            <summary>
+            Sorts the items of the collection in ascending order according to a key.
+            </summary>
+            <typeparam name="TKey">The type of the key returned by <paramref name="keySelector"/>.</typeparam>
+            <param name="keySelector">A function to extract a key from an item.</param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.SortableObservableCollection`1.SortDescending``1(System.Func{`0,``0})">
+            <summary>
+            Sorts the items of the collection in descending order according to a key.
+            </summary>
+            <typeparam name="TKey">The type of the key returned by <paramref name="keySelector"/>.</typeparam>
+            <param name="keySelector">A function to extract a key from an item.</param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.SortableObservableCollection`1.Sort``1(System.Func{`0,``0},System.Collections.Generic.IComparer{``0})">
+            <summary>
+            Sorts the items of the collection in ascending order according to a key.
+            </summary>
+            <typeparam name="TKey">The type of the key returned by <paramref name="keySelector"/>.</typeparam>
+            <param name="keySelector">A function to extract a key from an item.</param>
+            <param name="comparer">An <see cref="T:System.Collections.Generic.IComparer`1"/> to compare keys.</param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.SortableObservableCollection`1.InternalSort(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Moves the items of the collection so that their orders are the same as those of the items provided.
+            </summary>
+            <param name="sortedItems">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> to provide item orders.</param>
+        </member>
+        <member name="T:FileSystemModels.ViewModels.Collections.ValueCollection`2">
+            <summary>
+            Provides an immutable value collection as an interface to the keys
+            stored in an observable dictionary
+            </summary>
+        </member>
+        <member name="F:FileSystemModels.ViewModels.Collections.ValueCollection`2._dictionary">
+            <summary>
+            The source dictionary
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ValueCollection`2.#ctor(FileSystemModels.ViewModels.Collections.ObservableDictionary{`0,`1})">
+            <summary>
+            Constructor that takes the source dictionary as a parameter
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.ViewModels.Collections.ValueCollection`2.Count">
+            <summary>
+            Gets the number of elements contained in the collection&lt;T>.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ValueCollection`2.Contains(`1)">
+            <summary>
+            Determines whether a given item is part of the collection or not.
+            </summary>
+            <param name="item">The object to locate</param>
+            <returns>true if item is found otherwise false</returns>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ValueCollection`2.CopyTo(`1[],System.Int32)">
+            <summary>
+             Copies the elements of the collection to an array, starting
+            at a particular index.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Collections.ValueCollection`2.GetEnumerator">
+            <summary>
+            Gets the enumerator for the collection
+            </summary>
+        </member>
+        <member name="T:FileSystemModels.ViewModels.ListItemViewModel">
+            <summary>
+            Implements a viewmodel for file system items that are listed in a
+            list like control (pop-up list, list box, combobox etc..)
+            </summary>
+        </member>
+        <member name="F:FileSystemModels.ViewModels.ListItemViewModel.Logger">
+            <summary>
+            Logger facility
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.ListItemViewModel.#ctor(System.String,FileSystemModels.Models.FSItems.Base.FSItemType,System.String,System.Boolean)">
+            <summary>
+            class constructor
+            </summary>
+            <param name="curdir"></param>
+            <param name="itemName"></param>
+            <param name="itemType"></param>
+            <param name="showIcon"></param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.ListItemViewModel.#ctor(System.String,FileSystemModels.Models.FSItems.Base.FSItemType,System.String)">
+            <summary>
+            class constructor
+            </summary>
+            <param name="curdir"></param>
+            <param name="itemName"></param>
+            <param name="itemType"></param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.ListItemViewModel.#ctor(FileSystemModels.ViewModels.ListItemViewModel)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="copyThis"></param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.ListItemViewModel.#ctor">
+            <summary>
+            Hidden standard class constructor
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.ViewModels.ListItemViewModel.ItemType">
+            <summary>
+            Gets the type (folder, file) of this item
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.ViewModels.ListItemViewModel.ItemPath">
+            <summary>
+            Gets the path to this item
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.ViewModels.ListItemViewModel.IsExpanded">
+            <summary>
+            Gets whether this folder is currently expanded or not.
+            
+            This viewmodel, currently, has no use case for an expanded item.
+            Therefore, this property returns a constanst false value.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.ViewModels.ListItemViewModel.ItemName">
+            <summary>
+            Gets a name that can be used for display
+            (is not necessarily the same as path)
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.ViewModels.ListItemViewModel.ItemDisplayString">
+            <summary>
+            Gets a folder item string for display purposes.
+            This string can evaluete to 'C:\ (Windows)' for drives,
+            if the 'C:\' drive was named 'Windows'.
+            </summary>
+        </member>
+        <member name="P:FileSystemModels.ViewModels.ListItemViewModel.ShowIcon">
+            <summary>
+            Gets whether or not to show a tooltip for this item.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.ListItemViewModel.ToString">
+            <summary>
+            Standard method to display contents of this class.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.ListItemViewModel.DirectoryPathExists">
+            <summary>
+            Determine whether a given path is an exeisting directory or not.
+            </summary>
+            <returns>true if this directory exists and otherwise false</returns>
+        </member>
+        <member name="T:FileSystemModels.ViewModels.Semaphores.AsyncLock">
+             <summary>
+             Slightly simplified implemenaton of AsyncSemaphore from
+             http://blogs.msdn.com/b/pfxteam/archive/2012/02/12/10266988.aspx
+            
+             by creating an AsyncLock type that supports interaction with the ‘using’ keyword.
+             Our goal is to be able to achieve the same thing as in the previous code snippet
+             but instead via code like the following:
+             
+             private readonly AsyncLock m_lock = new AsyncLock(); 
+             … 
+             using(var releaser = await m_lock.LockAsync()) 
+             { 
+                 … // protected code here 
+             }
+             </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Semaphores.AsyncLock.#ctor">
+            <summary>
+            Class constructor.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Semaphores.AsyncLock.LockAsync">
+            <summary>
+            Implements the lock method for usage with using keyword.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:FileSystemModels.ViewModels.Semaphores.AsyncLock.Releaser">
+            <summary>
+            Implements a releaser structure to support the lock via using functionality.
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Semaphores.AsyncLock.Releaser.Dispose">
+            <summary>
+            Disposes the releaser structure.
+            </summary>
+        </member>
+        <member name="T:FileSystemModels.ViewModels.Semaphores.AsyncSemaphore">
+            <summary>
+            Semaphores are great for throttling and resource management.  You can give a semaphore an
+            initial count of the number of things to protect, and then it’ll only allow that many consumers
+            to successfully acquire the semaphore, forcing all others to wait until a resource is freed up
+            and count on the semaphore is released.  That resource to protect could be the right to enter
+            a particular region of code, and the count could be set to 1: in this way, you can use a
+            semaphore to achieve mutual exclusion.
+            
+            private readonly AsyncSemaphore m_lock = new AsyncSemaphore(1); 
+            … 
+            await m_lock.WaitAsync(); 
+            try 
+            { 
+                … // protected code here 
+            }  
+            finally { m_lock.Release(); }
+            
+            Source: http://blogs.msdn.com/b/pfxteam/archive/2012/02/12/10266988.aspx
+            </summary>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Semaphores.AsyncSemaphore.#ctor(System.Int32)">
+            <summary>
+            Class constructor.
+            </summary>
+            <param name="initialCount"></param>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Semaphores.AsyncSemaphore.WaitAsync">
+            <summary>
+            Implements the wait operation for waiting asynchronously.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FileSystemModels.ViewModels.Semaphores.AsyncSemaphore.Release">
+            <summary>
+            Implements the release method for releasing a wait lock.
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,14 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:reskeys="clr-namespace:XmlExplorerLib.Themes;assembly=XmlExplorerLib"
+    xmlns:MLib_reskeys="clr-namespace:MLib.Themes;assembly=MLib"
+    xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options" >
+
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlAccentBrushKey}"
+                     Color="{DynamicResource {x:Static MLib_reskeys:ResourceKeys.ControlAccentColorKey}}" options:Freeze="true"/>
+
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ItemSelectedBackgroundBrushKey}"
+                     Color="{DynamicResource {x:Static MLib_reskeys:ResourceKeys.ControlAccentColorKey}}" options:Freeze="true"/>
+
+</ResourceDictionary>

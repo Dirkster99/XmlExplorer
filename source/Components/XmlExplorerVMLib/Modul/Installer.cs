@@ -26,8 +26,8 @@
         {
             // resolve this viewmodel class via its interface
             container
-                .Register(Component.For<IAppViewModel>()
-                .ImplementedBy<AppViewModel>().LifestyleSingleton());
+                .Register(Component.For<IDemoAppViewModel>()
+                .ImplementedBy<DemoAppViewModel>().LifestyleSingleton());
         }
     }
 }
