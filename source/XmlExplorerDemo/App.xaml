@@ -6,8 +6,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/XmlExplorerLib;component/Themes/Generic.xaml" />
             </ResourceDictionary.MergedDictionaries>
-
-            <Style TargetType="{x:Type Rectangle}" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

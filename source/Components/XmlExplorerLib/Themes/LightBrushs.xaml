@@ -1,0 +1,43 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:reskeys="clr-namespace:XmlExplorerLib.Themes"
+    xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options" >
+
+    <!-- Accent Color Brush Definition
+             - Look for references on ControlAccentBrushKey to find where this is being set in code -->
+    <Color x:Key="{x:Static reskeys:ResourceKeys.ControlAccentColorKey}">#007acc</Color>
+
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlAccentBrushKey}"
+                     Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" options:Freeze="true"/>
+
+    <!-- Foreground and Background of selected XML elements -->
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ItemSelectedForegroundBrushKey}"
+                     Color="White" options:Freeze="true"/>
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ItemSelectedBackgroundBrushKey}"
+                     Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" options:Freeze="true"/>
+    
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ItemSelectedNotFocusedBackgroundBrushKey}"
+                     Color="#FFE2E2E2" options:Freeze="true"/>
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ItemSelectedNotFocusedForegroundBrushKey}"
+                     Color="Black" options:Freeze="true"/>
+
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.XmlDelimiterForegroundBrushKey}" Color="Blue" />
+
+    <!-- XmlDelimterBrush -->
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.XmlItemDisabledForegroundBrushKey}" Color="Gray" />
+
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.XmlAttributeValueForegroundBrushKey}" Color="Blue" />
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.XmlAttributeNameForegroundBrushKey}" Color="Red" />
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.XmlNameForegroundBrushKey}" Color="DarkRed" />
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.XmlTextForegroundBrushKey}" Color="DarkRed" />
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.XmlCommentForegroundBrushKey}" Color="Green" />
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.XmlProcessingInstructionForegroundBrushKey}" Color="Gray" />
+
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.TreeViewItemFocusVisualForegroundBrushKey}" Color="Black" />
+
+    <!-- GlyphBrushs -->
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.GlyphBrushKey}" Color="#444" />
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.GlyphDisabledBrushKey}" Color="Gray" />
+    
+</ResourceDictionary>

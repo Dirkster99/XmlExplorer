@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>XmlExplorerDemo</RootNamespace>
     <AssemblyName>XmlExplorerDemo</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,10 +34,41 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\App.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Core.4.3.1\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Windsor, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Windsor.4.1.1\lib\net45\Castle.Windsor.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dirkster.MWindowLib.1.0.4.2\lib\net452\Microsoft.Expression.Interactions.dll</HintPath>
+    </Reference>
+    <Reference Include="MLib, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dirkster.MLib.1.0.6\lib\net4\MLib.dll</HintPath>
+    </Reference>
+    <Reference Include="MWindowInterfacesLib, Version=1.0.4.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dirkster.MWindowLib.1.0.4.2\lib\net452\MWindowInterfacesLib.dll</HintPath>
+    </Reference>
+    <Reference Include="MWindowLib, Version=1.0.4.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dirkster.MWindowLib.1.0.4.2\lib\net452\MWindowLib.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dirkster.MWindowLib.1.0.4.2\lib\net452\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -53,15 +85,24 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Behaviors\DialogCloser.cs" />
-    <Compile Include="Models\Error.cs" />
-    <Compile Include="Models\Events\EventArgs.cs" />
+    <Compile Include="Models\SettingDefaults.cs" />
+    <Compile Include="ViewModels\AppLifeCycleViewModel.cs" />
     <Compile Include="ViewModels\AppViewModel.cs" />
     <Compile Include="ViewModels\Base\BaseViewModel.cs" />
     <Compile Include="ViewModels\Base\RelayCommand.cs" />
-    <Compile Include="ViewModels\XML\NamespaceDefinition.cs" />
-    <Compile Include="ViewModels\XML\XPathNavigatoreTreeViewModel.cs" />
-    <Compile Include="ViewModels\XPathNavigatorViewModel .cs" />
+    <Compile Include="Interfaces\IThemesManagerViewModel.cs" />
+    <Compile Include="Interfaces\IAppLifeCycleViewModel.cs" />
+    <Compile Include="Interfaces\IAppViewModel.cs" />
+    <Compile Include="ViewModels\Themes\ThemeDefinitionViewModel.cs" />
+    <Compile Include="ViewModels\Themes\ThemesManagerViewModel.cs" />
+    <Page Include="BindToMLib\XmlExplorerLib_DarkLightBrushs.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="BindToMLib\MWindowLib_DarkLightBrushs.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -70,6 +111,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Installers.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -89,6 +131,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Resources\App.ico" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -96,6 +139,7 @@
     <Content Include="00_DataSamples\XmlDataSampleDemo.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -105,10 +149,23 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\XmlExplorerLib\XmlExplorerLib.csproj">
+    <ProjectReference Include="..\Components\Settings\SettingsModel\SettingsModel.csproj">
+      <Project>{9B0BA841-5A2F-4ED3-A908-253DBCA70E77}</Project>
+      <Name>SettingsModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Components\Settings\Settings\Settings.csproj">
+      <Project>{2807b493-cc2e-402e-901a-eb138698fedc}</Project>
+      <Name>Settings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Components\XmlExplorerLib\XmlExplorerLib.csproj">
       <Project>{e363fc08-6ab1-4d43-b708-eda7f467bb2e}</Project>
       <Name>XmlExplorerLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Components\XmlExplorerVMLib\XmlExplorerVMLib.csproj">
+      <Project>{f0c7f0e0-0f12-4c33-a8b9-8e3cc4321d54}</Project>
+      <Name>XmlExplorerVMLib</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

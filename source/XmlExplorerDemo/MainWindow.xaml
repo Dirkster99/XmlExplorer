@@ -1,18 +1,25 @@
-﻿<Window x:Class="XmlExplorerDemo.MainWindow"
+﻿<MWindow:MetroWindow x:Class="XmlExplorerDemo.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:behav="clr-namespace:XmlExplorerDemo.Behaviors"
         
+        xmlns:reskeys="clr-namespace:MLib.Themes;assembly=MLib"
+        xmlns:MWindow="clr-namespace:MWindowLib;assembly=MWindowLib"
+        xmlns:behav="clr-namespace:XmlExplorerVMLib.Behaviors;assembly=XmlExplorerVMLib"
         xmlns:ctrl="clr-namespace:XmlExplorerLib.Controls;assembly=XmlExplorerLib"
+        xmlns:views="clr-namespace:XmlExplorerVMLib.Views;assembly=XmlExplorerVMLib"
 
         mc:Ignorable="d"
-        Title="MainWindow" Height="650" Width="925"
+        Title="{Binding Demo.CurrentXmlFileName, StringFormat=XmlExplorer - {0}}"
+        Height="650" Width="925"
         FontSize="16"
 
         behav:DialogCloser.DialogResult="{Binding DialogCloseResult}" 
         >
+    <Window.Resources>
+        <views:BindingProxy x:Key="BindingProxy" Data="{Binding}" />
+    </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Key="F4" Modifiers="Alt" Command="{Binding ApplicationExitCommand}"/>
         <KeyBinding Key="Plus" Modifiers="Ctrl" Command="{Binding ExpandAllNodesCommand}"/>
@@ -25,7 +32,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="2*" />
+            <RowDefinition Height="4*" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
@@ -33,22 +40,22 @@
         <Menu Grid.Row="0">
             <MenuItem Header="File">
                 <MenuItem Header="Load Xml File" InputGestureText="Ctrl + O"
-                          Command="{Binding LoadXMLFileCommand}" />
+                          Command="{Binding Demo.LoadXMLFileCommand}" />
                 <MenuItem Header="Save As..."
-                          Command="{Binding SaveAsXmlFileCommand}" />
+                          Command="{Binding Demo.SaveAsXmlFileCommand}" />
                 <Separator/>
                 <MenuItem Header="Exit" InputGestureText="Alt + F4"
-                          Command="{Binding ApplicationExitCommand}"/>
+                          Command="{Binding Demo.ApplicationExitCommand}"/>
             </MenuItem>
 
             <MenuItem Header="View">
                 <MenuItem Header="Collapse all nodes"
-                          Command="{Binding CollapseAllNodesCommand}"
+                          Command="{Binding Demo.CollapseAllNodesCommand}"
                           InputGestureText="Ctrl + -"
                           />
 
                 <MenuItem Header="Expand all nodes"
-                          Command="{Binding ExpandAllNodesCommand}"
+                          Command="{Binding Demo.ExpandAllNodesCommand}"
                           InputGestureText="Ctrl + +"
                           />
                 <Separator/>
@@ -56,6 +63,23 @@
                           IsCheckable="True"
                           IsChecked="{Binding ElementName=XPathTreeView,Path=IsEnabled}"
                           />
+                
+                <MenuItem Header="Themes"
+                          ItemsSource="{Binding Path=ApplicationThemes.ListOfThemes}">
+                    <MenuItem.ItemContainerStyle>
+                        <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
+                            <Setter Property="Header" Value="{Binding Model.Name}" />
+                            <!-- Setter Property="IsCheckable" Value="True" / -->
+                            <Setter Property="IsChecked" Value="{Binding IsSelected, Mode=OneWay}" />
+                            <Setter Property="Command" Value="{Binding Path=Data.ThemeSelectionChangedCommand, Source={StaticResource BindingProxy}}" />
+                            <Setter Property="CommandParameter" Value="{Binding Model.Name}" />
+                            <Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
+                            <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/>
+                            <Setter Property="Margin" Value="3,3,3,0" />
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
+                </MenuItem>
+
             </MenuItem>
         </Menu>
 
@@ -65,7 +89,9 @@
             </Grid.ColumnDefinitions>
 
             <ctrl:XPathTreeView x:Name="XPathTreeView" Grid.Column="0" Margin="3"
+                DataContext="{Binding Demo}"
                 ItemsSource="{Binding XmlTree.XPathRoot}"
+                Background="{DynamicResource {x:Static reskeys:ResourceKeys.ControlNormalBackgroundBrushKey}}"
             />
         </Grid>
 
@@ -76,6 +102,7 @@
 
         <ListBox
             Grid.Row="3" Margin="3"
+            DataContext="{Binding Demo}"
             ItemsSource="{Binding XmlTree.Errors}"
             >
             <ListBox.ItemTemplate>
@@ -85,4 +112,4 @@
             </ListBox.ItemTemplate>
         </ListBox>
     </Grid>
-</Window>
+</MWindow:MetroWindow>
