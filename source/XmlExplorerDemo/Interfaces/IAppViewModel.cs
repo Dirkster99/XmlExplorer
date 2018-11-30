@@ -1,7 +1,10 @@
 ﻿namespace XmlExplorerDemo.Interfaces
 {
+    using System.Windows;
     using System.Windows.Input;
     using MLib.Interfaces;
+    using Settings.Interfaces;
+    using Settings.UserProfile;
     using XmlExplorerVMLib.Interfaces;
 
     internal interface IAppViewModel
@@ -37,6 +40,10 @@
         #endregion properties
 
         #region methods
+        void GetSessionData(IProfile sessionData, IViewSize window);
+
+        void SetSessionData(IProfile sessionData, IViewSize window);
+
         /// <summary>
         /// Standard dispose method of the <seealso cref="IDisposable" /> interface.
         /// </summary>
@@ -60,6 +67,20 @@
         /// Method should not be called after <seealso cref="InitForMainWindow"/>
         /// </summary>
         void InitWithoutMainWindow();
+
+        /// <summary>
+        /// Save session data on closing
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void OnClosing(object sender,
+                       System.ComponentModel.CancelEventArgs e);
+
+        /// <summary>
+        /// Execute closing function and persist session data to be reloaded on next restart
+        /// </summary>
+        /// <param name="win"></param>
+        void OnClosed(Window window);
         #endregion methods
     }
 }

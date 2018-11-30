@@ -4,6 +4,8 @@
     using Castle.Windsor.Installer;
     using log4net;
     using log4net.Config;
+    using MLib.Interfaces;
+    using Settings.Interfaces;
     using System.Globalization;
     using System.Windows;
     using System.Windows.Threading;
@@ -58,10 +60,20 @@
             // of the IWindsorInstaller interface
             _Container.Install(FromAssembly.This());                         // Register
 
+            ISettingsManager settings = null;
             try
             {
                 // Apply the selected theme (either default or reloaded from options)
                 var themeManager = _Container.Resolve<IThemesManagerViewModel>();
+
+                settings = _Container.Resolve<ISettingsManager>();
+                var appearance = _Container.Resolve<IAppearanceManager>();
+
+                var lifeCycle = _Container.Resolve<IAppLifeCycleViewModel>();
+                lifeCycle.LoadConfigOnAppStartup(settings, appearance);
+
+                themeManager.ApplyTheme(settings.Options.GetOptionValue<string>("Appearance", "ThemeDisplayName"));
+
                 themeManager.ApplyTheme(themeManager.SelectedTheme);
             }
             catch (System.Exception exp)
@@ -71,17 +83,24 @@
 
             var window = new MainWindow();
             var appVM = _Container.Resolve<IAppViewModel>();
+            appVM.SetSessionData(settings.SessionData, window);
             window.DataContext = appVM;
 
-            // subscribe to close event messing to application viewmodel
-            window.Closing += appVM.Demo.OnClosing;
+            // subscribe to close event messaging to application viewmodel
+            window.Closing += appVM.OnClosing;
+
+            window.Closed += delegate
+            {
+                // Save session data and close application
+                appVM.OnClosed(window);
+            };
 
             // When the ViewModel asks to be closed, close the window.
             // Source: http://msdn.microsoft.com/en-us/magazine/dd419663.aspx
             appVM.Demo.RequestClose += delegate
             {
                 // Save session data and close application
-                appVM.Demo.OnClosed(window);
+                appVM.OnClosed(window);
             };
 
             window.Show();

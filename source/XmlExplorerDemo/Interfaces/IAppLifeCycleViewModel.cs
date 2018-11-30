@@ -45,6 +45,12 @@
         /// Save application settings when the application is being closed down
         /// </summary>
         void SaveConfigOnAppClosed(IViewSize win);
+
+        /// <summary>
+        /// Load configuration from persistence on startup of application
+        /// </summary>
+        void LoadConfigOnAppStartup(ISettingsManager settings
+                                   ,IAppearanceManager appearance);
         #endregion Save Load Application configuration
 
         #region StartUp/ShutDown

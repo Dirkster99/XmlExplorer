@@ -3,6 +3,7 @@
     using Base;
     using MLib.Interfaces;
     using Settings.Interfaces;
+    using Settings.UserProfile;
     using System;
     using System.Threading;
     using System.Windows;
@@ -171,35 +172,36 @@
 
         #region methods
         #region Get/set Session Application Data
-        internal void GetSessionData(IProfile sessionData)
+        public void GetSessionData(IProfile sessionData, IViewSize window)
         {
-/***
-            if (sessionData.LastActiveTargetFile != TargetFile.FileName)
-                sessionData.LastActiveTargetFile = TargetFile.FileName;
+            ViewPosSizeModel winModel = null;
+            sessionData.WindowPosSz.TryGetValue(sessionData.MainWindowName, out winModel);
 
-            sessionData.LastActiveSourceFiles = new List<SettingsModel.Models.FileReference>();
-            if (SourceFiles != null)
-            {
-                foreach (var item in SourceFiles)
-                    sessionData.LastActiveSourceFiles.Add(new SettingsModel.Models.FileReference()
-                    { path = item.FileName }
-                                                         );
-            }
-***/
+            winModel.Height = window.Height;
+            winModel.Width = window.Width;
+            winModel.X = window.Left;
+            winModel.Y = window.Top;
+
+            if (window.WindowState == WindowState.Maximized)
+                winModel.IsMaximized = true;
+            else
+                winModel.IsMaximized = false;
         }
 
-        internal void SetSessionData(IProfile sessionData)
+        public void SetSessionData(IProfile sessionData, IViewSize window)
         {
-/***
-            TargetFile.FileName = sessionData.LastActiveTargetFile;
+            ViewPosSizeModel winModel = null;
+            sessionData.WindowPosSz.TryGetValue(sessionData.MainWindowName, out winModel);
 
-            _SourceFiles = new ObservableCollection<FileInfoViewModel>();
-            if (sessionData.LastActiveSourceFiles != null)
-            {
-                foreach (var item in sessionData.LastActiveSourceFiles)
-                    _SourceFiles.Add(new FileInfoViewModel(item.path));
-            }
-***/
+            window.Height = winModel.Height;
+            window.Width = winModel.Width;
+            window.Left = winModel.X;
+            window.Top = winModel.Y;
+
+            if (winModel.IsMaximized == true)
+                window.WindowState = WindowState.Maximized;
+            else
+                window.WindowState = WindowState.Normal;
         }
         #endregion Get/set Session Application Data
 
@@ -230,7 +232,7 @@
         /// Method should not be called after <seealso cref="InitWithoutMainWindow"/>
         /// </summary>
         public void InitForMainWindow(IAppearanceManager appearance
-                                      , string themeDisplayName)
+                                     ,string themeDisplayName)
         {
             // Initialize base that does not require UI
             InitWithoutMainWindow();
@@ -283,6 +285,52 @@
         private void Appearance_AccentColorChanged(object sender, MLib.Events.ColorChangedEventArgs e)
         {
 
+        }
+
+        /// <summary>
+        /// Save session data on closing
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void OnClosing(object sender,
+                              System.ComponentModel.CancelEventArgs e)
+        {
+            try
+            {
+                ////if (Exit_CheckConditions(sender))      // Close all open files and check whether application is ready to close
+                ////{
+                ////    OnRequestClose();                  // (other than exception and error handling)
+                ////
+                e.Cancel = false;
+                ////    //if (wsVM != null)
+                ////    //  wsVM.SaveConfigOnAppClosed(); // Save application layout
+                ////}
+                ////else
+                ////    e.Cancel = ShutDownInProgressCancel = true;
+            }
+            catch
+            {
+            }
+        }
+
+        /// <summary>
+        /// Execute closing function and persist session data to be reloaded on next restart
+        /// </summary>
+        /// <param name="win"></param>
+        public void OnClosed(Window win)
+        {
+            try
+            {
+                GetSessionData(_SettingsManager.SessionData, win as IViewSize);
+
+                // Save/initialize program options that determine global programm behaviour
+                _AppLifeCycle.SaveConfigOnAppClosed(win as IViewSize);
+                ////
+                ////DisposeResources();
+            }
+            catch
+            {
+            }
         }
         #endregion methods
     }

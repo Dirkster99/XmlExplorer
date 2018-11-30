@@ -1,11 +1,14 @@
 ﻿namespace XmlExplorerDemo.ViewModels
 {
+    using MLib.Interfaces;
     using Settings.Interfaces;
     using Settings.UserProfile;
     using System;
     using System.Globalization;
+    using System.Windows;
     using System.Windows.Input;
     using XmlExplorerDemo.Interfaces;
+    using XmlExplorerDemo.Models;
     using XmlExplorerVMLib.Interfaces;
 
     /// <summary>
@@ -23,15 +26,20 @@
         private bool mShutDownInProgress_Cancel = false;
 
         private ICommand mExitApp = null;
+
+        private readonly ISettingsManager _SettingsManager;
         #endregion fields
 
         #region ctors
         /// <summary>
         /// Class constructor
         /// </summary>
-        public AppLifeCycleViewModel(IAppCore appCore)
+        public AppLifeCycleViewModel(IAppCore appCore,
+                                     ISettingsManager settingsManager)
+            : this()
         {
             Core = appCore;
+            _SettingsManager = settingsManager;
         }
 
         /// <summary>
@@ -140,43 +148,55 @@
         #endregion properties
 
         #region methods
-
-
         #region Save Load Application configuration
         /// <summary>
         /// Save application settings when the application is being closed down
         /// </summary>
         public void SaveConfigOnAppClosed(IViewSize win)
         {
-            /***
-                        try
-                        {
-                            Models.AppCore.CreateAppDataFolder();
+            try
+            {
+                Core.CreateAppDataFolder();
 
-                            // Save App view model fields
-                            var settings = base.GetService<ISettingsManager>();
+                //// settings.SessionData.LastActiveSourceFile = this.mStringDiff.SourceFilePath;
+                //// settings.SessionData.LastActiveTargetFile = this.mStringDiff.TargetFilePath;
 
-                            //// settings.SessionData.LastActiveSourceFile = this.mStringDiff.SourceFilePath;
-                            //// settings.SessionData.LastActiveTargetFile = this.mStringDiff.TargetFilePath;
+                // Save program options only if there are un-saved changes that need persistence
+                // This can be caused when WPF theme was changed or something else
+                // but should normally not occur as often as saving session data
+                if (_SettingsManager.Options.IsDirty == true)
+                {
+                    ////settings.SaveOptions(AppCore.DirFileAppSettingsData, settings.SettingData);
+                    _SettingsManager.Options.WriteXML(DirFileAppSettingsData);
+                }
 
-                            // Save program options only if there are un-saved changes that need persistence
-                            // This can be caused when WPF theme was changed or something else
-                            // but should normally not occur as often as saving session data
-                            if (settings.Options.IsDirty == true)
-                            {
-                                ////settings.SaveOptions(AppCore.DirFileAppSettingsData, settings.SettingData);
-                                settings.Options.WriteXML(DirFileAppSettingsData);
-                            }
+                _SettingsManager.SaveSessionData(Core.DirFileAppSessionData,
+                                                _SettingsManager.SessionData);
+            }
+            catch (Exception exp)
+            {
+                logger.Error(exp);
+            }
+        }
 
-                            settings.SaveSessionData(Models.AppCore.DirFileAppSessionData, settings.SessionData);
-                        }
-                        catch (Exception exp)
-                        {
-                            var msg = GetService<IMessageBoxService>();
-                            msg.Show(exp, "Unexpected Error" // Local.Strings.STR_UnexpectedError_Caption
-                                        , MsgBoxButtons.OK, MsgBoxImage.Error);
-                        }
-            ***/
+        /// <summary>
+        /// Load configuration from persistence on startup of application
+        /// </summary>
+        public void LoadConfigOnAppStartup(ISettingsManager settings
+                                          ,IAppearanceManager appearance)
+        {
+            try
+            {
+                // Re/Load program options and user profile session data to control global behaviour of program
+                settings.Options.ReadXML(DirFileAppSettingsData);
+                settings.LoadSessionData(Core.DirFileAppSessionData);
+
+                settings.CheckSettingsOnLoad(SystemParameters.VirtualScreenLeft,
+                                                SystemParameters.VirtualScreenTop);
+            }
+            catch
+            {
+            }
         }
         #endregion Save Load Application configuration
 

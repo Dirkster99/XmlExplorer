@@ -362,8 +362,8 @@
             try
             {
                 ////EnableMainWindowActivated(false);
-                ////
-                ////// Persist window position, width and height from this session
+
+                // Persist window position, width and height from this session
                 ////_SettingsManager.SessionData.MainWindowPosSz =
                 ////    SettingsFactory.GetViewPosition(win.Left, win.Top, win.Width, win.Height,
                 ////                                    (win.WindowState == WindowState.Maximized));

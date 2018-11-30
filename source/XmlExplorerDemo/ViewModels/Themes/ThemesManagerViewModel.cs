@@ -160,6 +160,7 @@
                     ThemeDefinitionViewModel o;
                     _ListOfThemes.TryGetValue(themeName, out o);
                     SelectedTheme = o;
+                    _SettingsManager.Options.SetOptionValue("Appearance", "ThemeDisplayName", themeName);
 
                     return true;
                 }
