@@ -8,7 +8,7 @@
         xmlns:ctrl="clr-namespace:XmlExplorerLib.Controls;assembly=XmlExplorerLib"
 
         mc:Ignorable="d"
-        Title="{Binding CurrentXmlFile, StringFormat=XmlExplorer - {0}}"
+        Title="{Binding CurrentXmlFileName, StringFormat=XmlExplorer - {0}}"
         FontSize="16"
 
         behav:DialogCloser.DialogResult="{Binding DialogCloseResult}" 

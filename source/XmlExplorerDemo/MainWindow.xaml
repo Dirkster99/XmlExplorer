@@ -8,7 +8,7 @@
         xmlns:ctrl="clr-namespace:XmlExplorerLib.Controls;assembly=XmlExplorerLib"
 
         mc:Ignorable="d"
-        Title="{Binding CurrentXmlFile, StringFormat=XmlExplorer - {0}}"
+        Title="{Binding CurrentXmlFileName, StringFormat=XmlExplorer - {0}}"
         Height="650" Width="925"
         FontSize="16"
 

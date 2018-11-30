@@ -4,11 +4,13 @@ VisualStudioVersion = 15.0.26730.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlExplorerDemo", "XmlExplorerDemo\XmlExplorerDemo.csproj", "{BA1C7851-45F1-41D5-B9FC-486D89424B20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlExplorerLib", "XmlExplorerLib\XmlExplorerLib.csproj", "{E363FC08-6AB1-4D43-B708-EDA7F467BB2E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlExplorerVMLib", "XmlExplorerVMLib\XmlExplorerVMLib.csproj", "{F0C7F0E0-0F12-4C33-A8B9-8E3CC4321D54}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericXmlExplorerDemo", "GenericXmlExplorerDemo\GenericXmlExplorerDemo.csproj", "{8E1AFD88-DE1C-4563-B93F-2BF5CB2E054A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlExplorerLib", "Components\XmlExplorerLib\XmlExplorerLib.csproj", "{E363FC08-6AB1-4D43-B708-EDA7F467BB2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlExplorerVMLib", "Components\XmlExplorerVMLib\XmlExplorerVMLib.csproj", "{F0C7F0E0-0F12-4C33-A8B9-8E3CC4321D54}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Components", "Components", "{AA2C4FB8-1231-497F-8B71-09320D03D4ED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +73,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E363FC08-6AB1-4D43-B708-EDA7F467BB2E} = {AA2C4FB8-1231-497F-8B71-09320D03D4ED}
+		{F0C7F0E0-0F12-4C33-A8B9-8E3CC4321D54} = {AA2C4FB8-1231-497F-8B71-09320D03D4ED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0DB686CA-C0FF-451F-9478-B64232604F88}

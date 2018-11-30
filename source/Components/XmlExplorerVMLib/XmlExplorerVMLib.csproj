@@ -57,7 +57,7 @@
     <Compile Include="ViewModels\XPathNavigatorViewModel .cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Views\" />
+    <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\XmlExplorerLib\XmlExplorerLib.csproj">

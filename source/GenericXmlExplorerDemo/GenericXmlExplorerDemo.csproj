@@ -33,6 +33,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\App.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -95,14 +98,17 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\XmlExplorerLib\XmlExplorerLib.csproj">
+    <ProjectReference Include="..\Components\XmlExplorerLib\XmlExplorerLib.csproj">
       <Project>{e363fc08-6ab1-4d43-b708-eda7f467bb2e}</Project>
       <Name>XmlExplorerLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\XmlExplorerVMLib\XmlExplorerVMLib.csproj">
+    <ProjectReference Include="..\Components\XmlExplorerVMLib\XmlExplorerVMLib.csproj">
       <Project>{f0c7f0e0-0f12-4c33-a8b9-8e3cc4321d54}</Project>
       <Name>XmlExplorerVMLib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\App.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -57,7 +57,9 @@
             }
         }
 
-        
+        /// <summary>
+        /// Gets the complete path of the currently open file.
+        /// </summary>
         public string CurrentXmlFile
         {
             set
@@ -66,12 +68,33 @@
                 {
                     _currentXmlFile = value;
                     NotifyPropertyChanged(() => CurrentXmlFile);
+                    NotifyPropertyChanged(() => CurrentXmlFileName);
                 }
             }
 
             get
             {
                 return _currentXmlFile;
+            }
+        }
+
+        /// <summary>
+        /// Gets the complete path of the currently open file.
+        /// </summary>
+        public string CurrentXmlFileName
+        {
+            get
+            {
+                try
+                {
+                    if (string.IsNullOrEmpty(_currentXmlFile) == false)
+                        return System.IO.Path.GetFileName( _currentXmlFile );
+                }
+                catch
+                {
+                }
+
+                return string.Empty;
             }
         }
 
