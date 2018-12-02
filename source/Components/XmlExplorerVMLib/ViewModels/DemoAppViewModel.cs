@@ -9,6 +9,11 @@
     using Microsoft.Win32;
     using System.IO;
     using XmlExplorerVMLib.Interfaces;
+    using XmlExplorerLib.interfaces;
+    using System.Xml.XPath;
+    using System.Xml;
+    using System.Text;
+    using System.Linq;
 
     /// <summary>
     /// Implements a viewmodel that keeps and manages all core states relevant to
@@ -28,6 +33,14 @@
 
         private bool? _DialogCloseResult = null;
         private bool _ShutDownInProgress = false;
+
+        private XPathNavigatorViewModel _SelectedObject;
+        private ICommand _SelectedItemChangedCommand;
+        private ICommand _ExpandAllItemsHereCommand;
+        private ICommand _CollapseAllNodesHereCommand;
+        private ICommand _CopyXPathCommand;
+        private ICommand _CopyXMlTagCommand;
+        private ICommand _CopyXMlCommand;
         #endregion fields
 
         #region ctors
@@ -54,6 +67,42 @@
             get
             {
                 return _xmlTree;
+            }
+        }
+
+        public ICommand SelectedItemChangedCommand
+        {
+            get
+            {
+                if (_SelectedItemChangedCommand == null)
+                {
+                    _SelectedItemChangedCommand = new RelayCommand<object>((p) =>
+                    {
+                        var param = p as XPathNavigatorViewModel;
+
+                        if (param != null)
+                            SelectedObject = param;
+                    });
+                }
+
+                return _SelectedItemChangedCommand;
+            }
+        }
+
+        public XPathNavigatorViewModel SelectedObject
+        {
+            set
+            {
+                if (_SelectedObject != value)
+                {
+                    _SelectedObject = value;
+                    NotifyPropertyChanged(() => _SelectedObject);
+                }
+            }
+
+            get
+            {
+                return _SelectedObject;
             }
         }
 
@@ -178,88 +227,6 @@
         }
 
         /// <summary>
-        /// Gets a command that will expand all currently visible XML nodes (if any).
-        /// </summary>
-        public ICommand ExpandAllNodesCommand
-        {
-            get
-            {
-                if (_ExpandAllNodesCommand == null)
-                {
-                    _ExpandAllNodesCommand = new RelayCommand<object>((p) =>
-                    {
-                        if (_xmlTree == null)
-                            return;
-
-                        if (_xmlTree.IsLoading == true)
-                            return;
-
-                        var root = _xmlTree.XPathRoot;
-
-                        foreach (var item in root)
-                        {
-                            item.IsExpanded = true;
-                            item.ExpandAll();
-                        }
-
-                    }, (p) =>
-                    {
-                        if (_xmlTree != null)
-                            return true;
-
-                        if (_xmlTree.IsLoading == true)
-                            return false;
-
-                        return false;
-                    });
-                }
-
-                return _ExpandAllNodesCommand;
-            }
-        }
-
-        /// <summary>
-        /// Gets a command that will collapse all currently visible XML nodes (if any).
-        /// </summary>
-        public ICommand CollapseAllNodesCommand
-        {
-            get
-            {
-                if (_CollapseAllNodesCommand == null)
-                {
-                    _CollapseAllNodesCommand = new RelayCommand<object>((p) =>
-                    {
-                        if (_xmlTree == null)
-                            return;
-
-                        if (_xmlTree.IsLoading == true)
-                            return;
-
-                        var root = _xmlTree.XPathRoot;
-
-                        foreach (var item in root)
-                        {
-                            item.IsExpanded = false;
-                            item.CollapseAll();
-                        }
-
-                    }, (p) =>
-                    {
-                        if (_xmlTree != null)
-                            return true;
-
-                        if (_xmlTree.IsLoading == true)
-                            return false;
-
-                        return false;
-                    });
-                }
-
-                return _CollapseAllNodesCommand;
-            }
-        }
-
-        /// <summary>
         /// Gets a command that will collapse all currently visible XML nodes (if any).
         /// </summary>
         public ICommand ApplicationExitCommand
@@ -293,6 +260,301 @@
 
                 _DialogCloseResult = value;
                 NotifyPropertyChanged(() => DialogCloseResult);
+            }
+        }
+
+        /// <summary>
+        /// Gets a command that writes the XMl TAG text of a given
+        /// <see cref="IXPathNavigator"/> node and its child into the Winodws Clipboard.
+        /// 
+        /// The <see cref="IXPathNavigator"/> node should be supplied as parameter,
+        /// into the Window clipboard.
+        /// </summary>
+        public ICommand CopyXMlCommand
+        {
+            get
+            {
+                if (_CopyXMlCommand == null)
+                {
+                    _CopyXMlCommand = new RelayCommand<object>((p) =>
+                    {
+                        var param = p as IXPathNavigator;
+
+                        if (param == null)
+                            return;
+
+                        string text = this.GetXPathNavigatorFormattedOuterXml(param.XPathNavigator);
+                        Clipboard.SetText(text);
+
+                    }, (p) =>
+                    {
+                        if (_xmlTree == null)
+                            return false;
+
+                        if (_xmlTree.IsLoading == true)
+                            return false;
+
+                        var param = p as IXPathNavigator;
+
+                        if (param != null)
+                            return true;
+
+                        return false;
+                    });
+                }
+
+                return _CopyXMlCommand;
+            }
+        }
+
+        /// <summary>
+        /// Gets a command that writes the XMl Tag text of a given
+        /// <see cref="IXPathNavigator"/> node, which should be supplied as parameter,
+        /// into the Window clipboard.
+        /// </summary>
+        public ICommand CopyXMlTagCommand
+        {
+            get
+            {
+                if (_CopyXMlTagCommand == null)
+                {
+                    _CopyXMlTagCommand = new RelayCommand<object>((p) =>
+                    {
+                        var param = p as IXPathNavigator;
+
+                        if (param == null)
+                            return;
+
+                        string xmlText = param.GetXPathNavigatorFormattedXml(param.XPathNavigator);
+                        Clipboard.SetText(xmlText);
+
+                    }, (p) =>
+                    {
+                        if (_xmlTree == null)
+                            return false;
+
+                        if (_xmlTree.IsLoading == true)
+                            return false;
+
+                        var param = p as IXPathNavigator;
+
+                        if (param != null)
+                            return true;
+
+                        return false;
+                    });
+                }
+
+                return _CopyXMlTagCommand;
+            }
+        }
+
+        /// <summary>
+        /// Gets a command that writes the XPath of a given
+        /// <see cref="IXPathNavigator"/> node, which should be supplied as parameter,
+        /// into the Window clipboard.
+        /// </summary>
+        public ICommand CopyXPathCommand
+        {
+            get
+            {
+                if (_CopyXPathCommand == null)
+                {
+                    _CopyXPathCommand = new RelayCommand<object>((p) =>
+                    {
+                        var param = p as IXPathNavigator;
+
+                        if (param == null)
+                            return;
+
+                        string xpath = param.GetXmlNodeFullPath(param.XPathNavigator);
+                        Clipboard.SetText(xpath);
+
+                    }, (p) =>
+                    {
+                        if (_xmlTree == null)
+                            return false;
+
+                        if (_xmlTree.IsLoading == true)
+                            return false;
+
+                        var param = p as IXPathNavigator;
+
+                        if (param != null)
+                            return true;
+
+                        return false;
+                    });
+                }
+
+                return _CopyXPathCommand;
+            }
+        }
+
+        /// <summary>
+        /// Gets a command that will expand all currently visible XML nodes (if any).
+        /// </summary>
+        public ICommand ExpandAllNodesCommand
+        {
+            get
+            {
+                if (_ExpandAllNodesCommand == null)
+                {
+                    _ExpandAllNodesCommand = new RelayCommand<object>((p) =>
+                    {
+                        if (_xmlTree == null)
+                            return;
+
+                        if (_xmlTree.IsLoading == true)
+                            return;
+
+                        var root = _xmlTree.XPathRoot;
+
+                        foreach (var item in root)
+                        {
+                            item.IsExpanded = true;
+                            item.ExpandAll();
+                        }
+
+                    }, (p) =>
+                    {
+                        if (_xmlTree == null)
+                            return false;
+
+                        if (_xmlTree.IsLoading == true)
+                            return false;
+
+                        if (_xmlTree.XPathRoot.Count() == 0)
+                            return false;
+
+                        return true;
+                    });
+                }
+
+                return _ExpandAllNodesCommand;
+            }
+        }
+
+        /// <summary>
+        /// Gets a command that expand all Xml Nodes underneath a given
+        /// <see cref="IXPathNavigator"/> node which should be supplied as parameter.
+        /// </summary>
+        public ICommand ExpandAllItemsHereCommand
+        {
+            get
+            {
+                if (_ExpandAllItemsHereCommand == null)
+                {
+                    _ExpandAllItemsHereCommand = new RelayCommand<object>((p) =>
+                    {
+                        var param = p as IXPathNavigator;
+
+                        if (param == null)
+                            return;
+
+                        param.ExpandAll();
+                    }, (p) =>
+                    {
+                        if (_xmlTree == null)
+                            return false;
+
+                        if (_xmlTree.IsLoading == true)
+                            return false;
+
+                        var param = p as IXPathNavigator;
+
+                        if (param != null)
+                            return true;
+
+                        return false;
+                    });
+                }
+
+                return _ExpandAllItemsHereCommand;
+            }
+        }
+
+        /// <summary>
+        /// Gets a command that will collapse all currently visible XML nodes (if any).
+        /// </summary>
+        public ICommand CollapseAllNodesCommand
+        {
+            get
+            {
+                if (_CollapseAllNodesCommand == null)
+                {
+                    _CollapseAllNodesCommand = new RelayCommand<object>((p) =>
+                    {
+                        if (_xmlTree == null)
+                            return;
+
+                        if (_xmlTree.IsLoading == true)
+                            return;
+
+                        var root = _xmlTree.XPathRoot;
+
+                        foreach (var item in root)
+                        {
+                            item.IsExpanded = false;
+                            item.CollapseAll();
+                        }
+
+                    }, (p) =>
+                    {
+                        if (_xmlTree == null)
+                            return false;
+
+                        if (_xmlTree.IsLoading == true)
+                            return false;
+
+                        if (_xmlTree.XPathRoot.Count() == 0)
+                            return false;
+
+                        return true;
+                    });
+                }
+
+                return _CollapseAllNodesCommand;
+            }
+        }
+
+        /// <summary>
+        /// Gets a command that collapses all Xml Nodes underneath a given
+        /// <see cref="IXPathNavigator"/> node which should be supplied as parameter.
+        /// </summary>
+        public ICommand CollapseAllNodesHereCommand
+        {
+            get
+            {
+                if (_CollapseAllNodesHereCommand == null)
+                {
+                    _CollapseAllNodesHereCommand = new RelayCommand<object>((p) =>
+                    {
+                        var param = p as IXPathNavigator;
+
+                        if (param == null)
+                            return;
+
+                        param.CollapseAll();
+
+                    }, (p) =>
+                    {
+                        if (_xmlTree == null)
+                            return false;
+
+                        if (_xmlTree.IsLoading == true)
+                            return false;
+
+                        var param = p as IXPathNavigator;
+
+                        if (param != null)
+                            return true;
+
+                        return false;
+                    });
+                }
+
+                return _CollapseAllNodesHereCommand;
             }
         }
         #endregion properties
@@ -476,6 +738,28 @@
             }
 
             return file;
+        }
+
+        private string GetXPathNavigatorFormattedOuterXml(XPathNavigator navigator)
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                XmlWriterSettings settings = new XmlWriterSettings();
+
+                settings.Encoding = Encoding.ASCII;
+                settings.Indent = true;
+                settings.OmitXmlDeclaration = true;
+                settings.ConformanceLevel = ConformanceLevel.Fragment;
+
+                using (XmlWriter writer = XmlTextWriter.Create(stream, settings))
+                {
+                    navigator.WriteSubtree(writer);
+
+                    writer.Flush();
+
+                    return Encoding.ASCII.GetString(stream.ToArray());
+                }
+            }
         }
         #endregion methods
     }

@@ -25,6 +25,26 @@
         <KeyBinding Key="Plus" Modifiers="Ctrl" Command="{Binding Demo.ExpandAllNodesCommand}"/>
         <KeyBinding Key="Minus" Modifiers="Ctrl" Command="{Binding Demo.CollapseAllNodesCommand}"/>
         <KeyBinding Key="O" Modifiers="Ctrl" Command="{Binding Demo.LoadXMLFileCommand}"/>
+
+        <KeyBinding Key="C" Modifiers="Ctrl+Shift"
+                    Command="{Binding Demo.CopyXPathCommand}"
+                    CommandParameter="{Binding ElementName=XPathTreeView,Path=SelectedItem}"
+                    />
+
+        <KeyBinding Key="C" Modifiers="Ctrl"
+                    Command="{Binding Demo.CopyXMlCommand}"
+                    CommandParameter="{Binding ElementName=XPathTreeView,Path=SelectedItem}"
+                    />
+
+        <KeyBinding Key="Right" Modifiers="Ctrl"
+                    Command="{Binding Demo.ExpandAllItemsHereCommand}"
+                    CommandParameter="{Binding ElementName=XPathTreeView,Path=SelectedItem}"
+                    />
+        
+        <KeyBinding Key="Left" Modifiers="Alt"
+                    Command="{Binding Demo.CollapseAllNodesHereCommand}"
+                    CommandParameter="{Binding ElementName=XPathTreeView,Path=SelectedItem}"
+                    />
     </MWindow:MetroWindow.InputBindings>
     <MWindow:MetroWindow.Resources>
         <views:BindingProxy x:Key="BindingProxy" Data="{Binding}" />
@@ -51,17 +71,48 @@
                           Command="{Binding Demo.ApplicationExitCommand}"/>
             </MenuItem>
 
-            <MenuItem Header="_View">
-                <MenuItem Header="Collapse all nodes"
+            <MenuItem Header="_Edit">
+                <MenuItem Header="Copy XML"
+                          Command="{Binding Data.Demo.CopyXMlCommand, Source={StaticResource BindingProxy}}"
+                          CommandParameter="{Binding ElementName=XPathTreeView,Path=SelectedItem}"
+                          InputGestureText="Ctrl + C"
+                        />
+
+                <MenuItem Header="Copy XPath"
+                          Command="{Binding Data.Demo.CopyXPathCommand, Source={StaticResource BindingProxy}}"
+                          CommandParameter="{Binding ElementName=XPathTreeView,Path=SelectedItem}"
+                          InputGestureText="Ctrl + Shift + C"
+                        />
+
+                <MenuItem Header="Copy XML Tag"
+                          Command="{Binding Data.Demo.CopyXMlTagCommand, Source={StaticResource BindingProxy}}"
+                          CommandParameter="{Binding ElementName=XPathTreeView,Path=SelectedItem}"
+                        />
+                <Separator/>
+                <MenuItem Header="Expand Selection"
+                          Command="{Binding Data.Demo.ExpandAllItemsHereCommand, Source={StaticResource BindingProxy}}"
+                          CommandParameter="{Binding ElementName=XPathTreeView,Path=SelectedItem}"
+                          InputGestureText="Alt + Right"
+                        />
+                <MenuItem Header="Collapse Selection"
+                          Command="{Binding Data.Demo.CollapseAllNodesHereCommand, Source={StaticResource BindingProxy}}"
+                          CommandParameter="{Binding ElementName=XPathTreeView,Path=SelectedItem}"
+                          InputGestureText="Alt + Left"
+                         />
+
+                <Separator/>
+
+                <MenuItem Header="Collapse All Nodes"
                           Command="{Binding Demo.CollapseAllNodesCommand}"
                           InputGestureText="Ctrl + -"
                           />
-
-                <MenuItem Header="Expand all nodes"
+                <MenuItem Header="Expand All Nodes"
                           Command="{Binding Demo.ExpandAllNodesCommand}"
                           InputGestureText="Ctrl + +"
                           />
-                <Separator/>
+            </MenuItem>
+            
+            <MenuItem Header="_View">
                 <MenuItem Header="Enable/Disable View"
                           IsCheckable="True"
                           IsChecked="{Binding ElementName=XPathTreeView,Path=IsEnabled}"
@@ -97,9 +148,52 @@
             <ctrl:XPathTreeView x:Name="XPathTreeView" Grid.Column="0" Margin="3"
                 DataContext="{Binding Demo}"
                 ItemsSource="{Binding XmlTree.XPathRoot}"
+                                
+                behav2:TreeViewSelectionChangedBehavior.ChangedCommand="{Binding SelectedItemChangedCommand}"
+                behav2:TreeViewSelectionChangedBehavior.IsProcessing="False"
+
                 Background="{DynamicResource {x:Static reskeys:ResourceKeys.ControlNormalBackgroundBrushKey}}"
                 TabIndex="0"
-            />
+            >
+                <ctrl:XPathTreeView.ItemContainerStyle>
+                    <Style TargetType="ctrl:XPathTreeViewItem" BasedOn="{StaticResource {x:Type ctrl:XPathTreeViewItem}}">
+                        <Setter Property="ContextMenu">
+                            <Setter.Value>
+                                <ContextMenu>
+                                    <MenuItem Header="Copy XML"
+                                              Command="{Binding Data.Demo.CopyXMlCommand, Source={StaticResource BindingProxy}}"
+                                              CommandParameter="{Binding}"
+                                              InputGestureText="Ctrl + C"
+                                              />
+
+                                    <MenuItem Header="Copy XPath"
+                                              Command="{Binding Data.Demo.CopyXPathCommand, Source={StaticResource BindingProxy}}"
+                                              CommandParameter="{Binding}"
+                                              InputGestureText="Ctrl + Shift + C"
+                                              />
+
+                                    <MenuItem Header="Copy XML Tag"
+                                              Command="{Binding Data.Demo.CopyXMlTagCommand, Source={StaticResource BindingProxy}}"
+                                              CommandParameter="{Binding}"
+                                              />
+                                    <Separator/>
+                                    <MenuItem Header="Expand All"
+                                              Command="{Binding Data.Demo.ExpandAllItemsHereCommand, Source={StaticResource BindingProxy}}"
+                                              CommandParameter="{Binding}"
+                                              InputGestureText="Alt + Right"
+                                              />
+                                    <MenuItem Header="Collapse All"
+                                              Command="{Binding Data.Demo.CollapseAllNodesHereCommand, Source={StaticResource BindingProxy}}"
+                                              CommandParameter="{Binding}"
+                                              InputGestureText="Alt + Left"
+                                              />
+                                    
+                                </ContextMenu>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ctrl:XPathTreeView.ItemContainerStyle>
+        </ctrl:XPathTreeView>
         </Grid>
 
         <GridSplitter Grid.Row="2" Height="6" Background="Transparent"
