@@ -42,7 +42,7 @@
         /// <summary>
         /// Gets the demo viewmodel and all its properties and commands
         /// </summary>
-        IDocumentViewModel Demo { get; }
+        IDocumentViewModel XmlDoc { get; }
         #endregion properties
 
         #region methods

@@ -45,8 +45,8 @@
         private ICommand _ApplicationExitCommand;
         private readonly IAppLifeCycleViewModel _AppLifeCycle = null;
         private readonly ISettingsManager _SettingsManager;
-        private readonly IThemesManagerViewModel _AppTheme = null;
-        private readonly XmlExplorerVMLib.Interfaces.IDocumentViewModel _demo;
+        private readonly IThemesManagerViewModel _ThemesManager = null;
+        private readonly XmlExplorerVMLib.Interfaces.IDocumentViewModel _XmlDoc;
         #endregion private fields
 
         #region constructors
@@ -62,10 +62,9 @@
             _AppLifeCycle = lifecycle;
 
             _SettingsManager = settingsManager;
-            _AppTheme = themesManager;
             ApplicationThemes = themesManager;
 
-            _demo = demo;
+            _XmlDoc = demo;
         }
 
         /// <summary>
@@ -111,7 +110,7 @@
                 {
                     _LoadXMLFileCommand = new RelayCommand<object>((p) =>
                     {
-                        var file = Demo.CurrentXmlFile;
+                        var file = XmlDoc.CurrentXmlFile;
                         if (file == null)
                         {
                             // Gets the assembly entry location
@@ -119,7 +118,7 @@
                             file = appDir + @"/00_DataSamples/XmlDataSampleDemo.xml";
                         }
 
-                        var newfile = OpenfileWithDialog(file, Demo.CurrentXmlFile);
+                        var newfile = OpenfileWithDialog(file, XmlDoc.CurrentXmlFile);
                         if (string.IsNullOrEmpty(newfile) == false)
                             MRU.List.UpdateEntry(newfile);
                     });
@@ -142,7 +141,7 @@
                     {
                         SaveWithDialog_Executed();
                     },
-                    p => Demo.SaveXml_CanExecut());
+                    p => XmlDoc.SaveXml_CanExecut());
                 }
 
                 return _SaveAsXmlFileCommand;
@@ -151,18 +150,18 @@
 
         private void SaveWithDialog_Executed()
         {
-            if (Demo.SaveXml_CanExecut() == false)
+            if (XmlDoc.SaveXml_CanExecut() == false)
                 return;
 
             var dlg = new SaveFileDialog();
             dlg.Filter = "XML Files (*.xml)|*.xml|All Files (*.*)|*.*";
 
-            dlg.FileName = Demo.CurrentXmlFile;
+            dlg.FileName = XmlDoc.CurrentXmlFile;
 
             if (dlg.ShowDialog() != true)
                 return;
 
-            if (Demo.SaveXml(dlg.FileName) == true)
+            if (XmlDoc.SaveXml(dlg.FileName) == true)
             {
                 MRU.List.UpdateEntry(dlg.FileName);
             }
@@ -185,7 +184,7 @@
                         if (string.IsNullOrEmpty(param))
                             return;
 
-                        if (Demo.FileOpenXml(param) == true)
+                        if (XmlDoc.FileOpenXml(param) == true)
                             MRU.List.UpdateEntry(param);
                     });
                 }
@@ -255,7 +254,6 @@
                                             return;
 
                                         _SettingsManager.Options.SetOptionValue("Appearance", "ThemeDisplayName", newThemeName);
-//                                        ResetTheme();                        // Initialize theme in process
                                     }
                                     catch (Exception exp)
                                     {
@@ -286,18 +284,18 @@
         /// </summary>
         public IThemesManagerViewModel AppTheme
         {
-            get { return _AppTheme; }
+            get { return _ThemesManager; }
         }
         #endregion app theme
 
         /// <summary>
         /// Gets the demo viewmodel and all its properties and commands
         /// </summary>
-        public XmlExplorerVMLib.Interfaces.IDocumentViewModel Demo
+        public XmlExplorerVMLib.Interfaces.IDocumentViewModel XmlDoc
         {
             get
             {
-                return _demo;
+                return _XmlDoc;
             }
         }
 
@@ -312,7 +310,7 @@
                 {
                     _ApplicationExitCommand = new RelayCommand<object>(
                         (p) => AppExit_CommandExecuted(),
-                        (p) => Demo.Closing_CanExecute());
+                        (p) => XmlDoc.Closing_CanExecute());
                 }
 
                 return _ApplicationExitCommand;
@@ -588,7 +586,7 @@
 
             try
             {
-                if (Demo.FileOpenXml(file) == true)
+                if (XmlDoc.FileOpenXml(file) == true)
                     return file;
             }
             catch (Exception exp)
@@ -603,7 +601,7 @@
         {
             try
             {
-                if (Demo.Closing_CanExecute() == false)
+                if (XmlDoc.Closing_CanExecute() == false)
                     return;
 
                 ////_ShutDownInProgressCancel = false;

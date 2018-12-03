@@ -15,7 +15,7 @@
         xmlns:unitcmb="clr-namespace:UnitComboLib;assembly=UnitComboLib"                     
 
         mc:Ignorable="d"
-        Title="{Binding Demo.CurrentXmlFileName, StringFormat=XmlExplorer - {0}}"
+        Title="{Binding XmlDoc.CurrentXmlFileName, StringFormat=XmlExplorer - {0}}"
         Icon="/XmlExplorerDemo;component/Resources/App.ico"
                      
         Height="650" Width="925"
@@ -25,27 +25,27 @@
         >
     <MWindow:MetroWindow.InputBindings>
         <KeyBinding Key="F4" Modifiers="Alt" Command="{Binding ApplicationExitCommand}"/>
-        <KeyBinding Key="Plus" Modifiers="Ctrl" Command="{Binding Demo.ExpandAllNodesCommand}"/>
-        <KeyBinding Key="Minus" Modifiers="Ctrl" Command="{Binding Demo.CollapseAllNodesCommand}"/>
+        <KeyBinding Key="Plus" Modifiers="Ctrl" Command="{Binding XmlDoc.ExpandAllNodesCommand}"/>
+        <KeyBinding Key="Minus" Modifiers="Ctrl" Command="{Binding XmlDoc.CollapseAllNodesCommand}"/>
         <KeyBinding Key="O" Modifiers="Ctrl" Command="{Binding LoadXMLFileCommand}"/>
 
         <KeyBinding Key="C" Modifiers="Ctrl+Shift"
-                    Command="{Binding Demo.CopyXPathCommand}"
+                    Command="{Binding XmlDoc.CopyXPathCommand}"
                     CommandParameter="{Binding ElementName=XPathTreeView,Path=SelectedItem}"
                     />
 
         <KeyBinding Key="C" Modifiers="Ctrl"
-                    Command="{Binding Demo.CopyXMlCommand}"
+                    Command="{Binding XmlDoc.CopyXMlCommand}"
                     CommandParameter="{Binding ElementName=XPathTreeView,Path=SelectedItem}"
                     />
 
         <KeyBinding Key="Right" Modifiers="Ctrl"
-                    Command="{Binding Demo.ExpandAllItemsHereCommand}"
+                    Command="{Binding XmlDoc.ExpandAllItemsHereCommand}"
                     CommandParameter="{Binding ElementName=XPathTreeView,Path=SelectedItem}"
                     />
         
         <KeyBinding Key="Left" Modifiers="Alt"
-                    Command="{Binding Demo.CollapseAllNodesHereCommand}"
+                    Command="{Binding XmlDoc.CollapseAllNodesHereCommand}"
                     CommandParameter="{Binding ElementName=XPathTreeView,Path=SelectedItem}"
                     />
     </MWindow:MetroWindow.InputBindings>
@@ -109,29 +109,29 @@
 
             <MenuItem Header="_Edit">
                 <MenuItem Header="Copy XML"
-                          Command="{Binding Data.Demo.CopyXMlCommand, Source={StaticResource BindingProxy}}"
+                          Command="{Binding Data.XmlDoc.CopyXMlCommand, Source={StaticResource BindingProxy}}"
                           CommandParameter="{Binding ElementName=XPathTreeView,Path=SelectedItem}"
                           InputGestureText="Ctrl + C"
                         />
 
                 <MenuItem Header="Copy XPath"
-                          Command="{Binding Data.Demo.CopyXPathCommand, Source={StaticResource BindingProxy}}"
+                          Command="{Binding Data.XmlDoc.CopyXPathCommand, Source={StaticResource BindingProxy}}"
                           CommandParameter="{Binding ElementName=XPathTreeView,Path=SelectedItem}"
                           InputGestureText="Ctrl + Shift + C"
                         />
 
                 <MenuItem Header="Copy XML Tag"
-                          Command="{Binding Data.Demo.CopyXMlTagCommand, Source={StaticResource BindingProxy}}"
+                          Command="{Binding Data.XmlDoc.CopyXMlTagCommand, Source={StaticResource BindingProxy}}"
                           CommandParameter="{Binding ElementName=XPathTreeView,Path=SelectedItem}"
                         />
                 <Separator/>
                 <MenuItem Header="Expand Selection"
-                          Command="{Binding Data.Demo.ExpandAllItemsHereCommand, Source={StaticResource BindingProxy}}"
+                          Command="{Binding Data.XmlDoc.ExpandAllItemsHereCommand, Source={StaticResource BindingProxy}}"
                           CommandParameter="{Binding ElementName=XPathTreeView,Path=SelectedItem}"
                           InputGestureText="Alt + Right"
                         />
                 <MenuItem Header="Collapse Selection"
-                          Command="{Binding Data.Demo.CollapseAllNodesHereCommand, Source={StaticResource BindingProxy}}"
+                          Command="{Binding Data.XmlDoc.CollapseAllNodesHereCommand, Source={StaticResource BindingProxy}}"
                           CommandParameter="{Binding ElementName=XPathTreeView,Path=SelectedItem}"
                           InputGestureText="Alt + Left"
                          />
@@ -139,11 +139,11 @@
                 <Separator/>
 
                 <MenuItem Header="Collapse All Nodes"
-                          Command="{Binding Demo.CollapseAllNodesCommand}"
+                          Command="{Binding XmlDoc.CollapseAllNodesCommand}"
                           InputGestureText="Ctrl + -"
                           />
                 <MenuItem Header="Expand All Nodes"
-                          Command="{Binding Demo.ExpandAllNodesCommand}"
+                          Command="{Binding XmlDoc.ExpandAllNodesCommand}"
                           InputGestureText="Ctrl + +"
                           />
             </MenuItem>
@@ -164,8 +164,8 @@
                             <Setter Property="Command" Value="{Binding Path=Data.ThemeSelectionChangedCommand, Source={StaticResource BindingProxy}}" />
                             <Setter Property="CommandParameter" Value="{Binding Model.Name}" />
                             <Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
-                            <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/>
-                            <Setter Property="Margin" Value="3,3,3,0" />
+                            <!--Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/-->
+                            <Setter Property="Margin" Value="3" />
 
                             <!-- http://social.msdn.microsoft.com/Forums/en-US/wpf/thread/63696841-0358-4f7a-abe1-e6062518e3d6 -->
                             <Setter Property="behav2:MergeStyleBehaviour.AutoMergeStyle" Value="True"/>
@@ -187,7 +187,7 @@
             </Grid.RowDefinitions>
             
             <ctrl:XPathTreeView x:Name="XPathTreeView" Grid.Column="0" Margin="3"
-                DataContext="{Binding Demo}"
+                DataContext="{Binding XmlDoc}"
                 ItemsSource="{Binding XmlTree.XPathRoot}"
                                 
                 behav2:TreeViewSelectionChangedBehavior.ChangedCommand="{Binding SelectedItemChangedCommand}"
@@ -203,29 +203,29 @@
                             <Setter.Value>
                                 <ContextMenu>
                                     <MenuItem Header="Copy XML"
-                                              Command="{Binding Data.Demo.CopyXMlCommand, Source={StaticResource BindingProxy}}"
+                                              Command="{Binding Data.XmlDoc.CopyXMlCommand, Source={StaticResource BindingProxy}}"
                                               CommandParameter="{Binding}"
                                               InputGestureText="Ctrl + C"
                                               />
 
                                     <MenuItem Header="Copy XPath"
-                                              Command="{Binding Data.Demo.CopyXPathCommand, Source={StaticResource BindingProxy}}"
+                                              Command="{Binding Data.XmlDoc.CopyXPathCommand, Source={StaticResource BindingProxy}}"
                                               CommandParameter="{Binding}"
                                               InputGestureText="Ctrl + Shift + C"
                                               />
 
                                     <MenuItem Header="Copy XML Tag"
-                                              Command="{Binding Data.Demo.CopyXMlTagCommand, Source={StaticResource BindingProxy}}"
+                                              Command="{Binding Data.XmlDoc.CopyXMlTagCommand, Source={StaticResource BindingProxy}}"
                                               CommandParameter="{Binding}"
                                               />
                                     <Separator/>
                                     <MenuItem Header="Expand All"
-                                              Command="{Binding Data.Demo.ExpandAllItemsHereCommand, Source={StaticResource BindingProxy}}"
+                                              Command="{Binding Data.XmlDoc.ExpandAllItemsHereCommand, Source={StaticResource BindingProxy}}"
                                               CommandParameter="{Binding}"
                                               InputGestureText="Alt + Right"
                                               />
                                     <MenuItem Header="Collapse All"
-                                              Command="{Binding Data.Demo.CollapseAllNodesHereCommand, Source={StaticResource BindingProxy}}"
+                                              Command="{Binding Data.XmlDoc.CollapseAllNodesHereCommand, Source={StaticResource BindingProxy}}"
                                               CommandParameter="{Binding}"
                                               InputGestureText="Alt + Left"
                                               />
@@ -263,7 +263,7 @@
         
         <ListBox
             Grid.Row="3" Margin="3,0,3,3"
-            DataContext="{Binding Demo}"
+            DataContext="{Binding XmlDoc}"
             ItemsSource="{Binding XmlTree.Errors}"
             >
             <ListBox.ItemTemplate>
