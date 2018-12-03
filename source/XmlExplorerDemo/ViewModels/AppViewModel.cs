@@ -245,15 +245,13 @@
                             ThreadStart start = delegate
                             {
                                 // This works in the UI tread using the dispatcher with highest Priority
-                                Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Send,
+                                Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Render,
                                 (Action)(() =>
                                 {
                                     try
                                     {
                                         if (ApplicationThemes.ApplyTheme(newThemeName) == false)
                                             return;
-
-                                        _SettingsManager.Options.SetOptionValue("Appearance", "ThemeDisplayName", newThemeName);
                                     }
                                     catch (Exception exp)
                                     {
@@ -264,8 +262,10 @@
 
                             // Create the thread and kick it started!
                             Thread thread = new Thread(start);
-
+                            thread.SetApartmentState(ApartmentState.STA);
                             thread.Start();
+
+                            _SettingsManager.Options.SetOptionValue("Appearance", "ThemeDisplayName", newThemeName);
                         }
                         catch (Exception)
                         {
