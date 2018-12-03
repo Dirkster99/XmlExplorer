@@ -115,6 +115,15 @@
                 return false;
             }
         }
+
+        public string XmlTag
+        {
+            get
+            {
+                var ret = GetXPathNavigatorFormattedXml(this.XPathNavigator);
+                return ret;
+            }
+        }
         #endregion properties
 
         #region methods
@@ -163,6 +172,8 @@
                 settings.Indent = true;
                 settings.OmitXmlDeclaration = true;
                 settings.ConformanceLevel = ConformanceLevel.Fragment;
+                settings.CloseOutput = true;
+                settings.NewLineOnAttributes = true;
 
                 using (XmlWriter writer = XmlTextWriter.Create(stream, settings))
                 {
