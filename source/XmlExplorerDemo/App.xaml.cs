@@ -74,7 +74,7 @@
 
                 themeManager.ApplyTheme(settings.Options.GetOptionValue<string>("Appearance", "ThemeDisplayName"));
 
-                themeManager.ApplyTheme(themeManager.SelectedTheme);
+                themeManager.ApplyTheme(themeManager.SelectedTheme.Model.Name);
             }
             catch (System.Exception exp)
             {

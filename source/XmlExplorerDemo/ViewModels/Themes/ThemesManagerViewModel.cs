@@ -177,15 +177,6 @@
             return false;
         }
 
-        /// <summary>
-        /// Applies a new theme based on the given parameter.
-        /// </summary>
-        /// <param name="thisTheme"></param>
-        public bool ApplyTheme(ThemeDefinitionViewModel thisTheme)
-        {
-            return ApplyTheme(thisTheme.Model.Name);
-        }
-
         public static Color GetCurrentAccentColor(ISettingsManager settings)
         {
             Color AccentColor = default(Color);

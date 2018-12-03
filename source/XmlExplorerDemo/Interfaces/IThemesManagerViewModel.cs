@@ -15,11 +15,5 @@
         /// </summary>
         /// <param name="themeName"></param>
         bool ApplyTheme(string themeName);
-
-        /// <summary>
-        /// Applies a new theme based on the given parameter.
-        /// </summary>
-        /// <param name="thisTheme"></param>
-        bool ApplyTheme(ThemeDefinitionViewModel thisTheme);
     }
 }

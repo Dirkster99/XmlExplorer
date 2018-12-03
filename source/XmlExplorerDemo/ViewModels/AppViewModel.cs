@@ -239,38 +239,24 @@
 
                         try
                         {
-                            var oldTheme = ApplicationThemes.DefaultTheme;
-
-                            // The Work to perform on another thread
-                            ThreadStart start = delegate
+                            Application.Current.Dispatcher.Invoke(new Action(() =>
                             {
-                                // This works in the UI tread using the dispatcher with highest Priority
-                                Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Render,
-                                (Action)(() =>
+                                try
                                 {
-                                    try
-                                    {
-                                        if (ApplicationThemes.ApplyTheme(newThemeName) == false)
-                                            return;
-                                    }
-                                    catch (Exception exp)
-                                    {
-                                        logger.Error(exp.Message, exp);
-                                    }
-                                }));
-                            };
-
-                            // Create the thread and kick it started!
-                            Thread thread = new Thread(start);
-                            thread.SetApartmentState(ApartmentState.STA);
-                            thread.Start();
+                                    if (ApplicationThemes.ApplyTheme(newThemeName) == false)
+                                        return;
+                                }
+                                catch (Exception exp)
+                                {
+                                    logger.Error(exp.Message, exp);
+                                }
+                            }));
 
                             _SettingsManager.Options.SetOptionValue("Appearance", "ThemeDisplayName", newThemeName);
                         }
-                        catch (Exception)
+                        catch (Exception exp)
                         {
-
-                            throw;
+                            logger.Error(exp.Message, exp);
                         }
                     });
                 }
