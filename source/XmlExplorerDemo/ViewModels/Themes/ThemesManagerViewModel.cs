@@ -225,7 +225,9 @@
                   new Uri("/MWindowLib;component/Themes/DarkTheme.xaml", UriKind.RelativeOrAbsolute)
                  ,new Uri("/XmlExplorerDemo;component/BindToMLib/MWindowLib_DarkLightBrushs.xaml", UriKind.RelativeOrAbsolute)
                  ,new Uri("/XmlExplorerLib;component/Themes/DarkBrushs.xaml", UriKind.RelativeOrAbsolute)
+                 ,new Uri("/UnitComboLib;component/Themes/DarkBrushs.xaml", UriKind.RelativeOrAbsolute)
                  ,new Uri("/XmlExplorerDemo;component/BindToMLib/XmlExplorerLib_DarkLightBrushs.xaml", UriKind.RelativeOrAbsolute)
+                 ,new Uri("/XmlExplorerDemo;component/BindToMLib/UnitComboLib_DarkLightBrushs.xaml", UriKind.RelativeOrAbsolute)
 
                 }, settings.Themes);
             }
@@ -242,8 +244,9 @@
                   new Uri("/MWindowLib;component/Themes/LightTheme.xaml", UriKind.RelativeOrAbsolute)
                  ,new Uri("/XmlExplorerDemo;component/BindToMLib/MWindowLib_DarkLightBrushs.xaml", UriKind.RelativeOrAbsolute)
                  ,new Uri("/XmlExplorerLib;component/Themes/LightBrushs.xaml", UriKind.RelativeOrAbsolute)
+                 ,new Uri("/UnitComboLib;component/Themes/LightBrushs.xaml", UriKind.RelativeOrAbsolute)
                  ,new Uri("/XmlExplorerDemo;component/BindToMLib/XmlExplorerLib_DarkLightBrushs.xaml", UriKind.RelativeOrAbsolute)
-
+                 ,new Uri("/XmlExplorerDemo;component/BindToMLib/UnitComboLib_DarkLightBrushs.xaml", UriKind.RelativeOrAbsolute)
                 }, settings.Themes);
             }
             catch

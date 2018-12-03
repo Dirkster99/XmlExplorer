@@ -10,6 +10,9 @@
         xmlns:behav2="clr-namespace:XmlExplorerDemo.Behaviors"
         xmlns:ctrl="clr-namespace:XmlExplorerLib.Controls;assembly=XmlExplorerLib"
         xmlns:views="clr-namespace:XmlExplorerVMLib.Views;assembly=XmlExplorerVMLib"
+        
+        xmlns:mru_conv="clr-namespace:MRULib.Converters;assembly=MRULib"
+        xmlns:unitcmb="clr-namespace:UnitComboLib;assembly=UnitComboLib"                     
 
         mc:Ignorable="d"
         Title="{Binding Demo.CurrentXmlFileName, StringFormat=XmlExplorer - {0}}"
@@ -18,13 +21,13 @@
         Height="650" Width="925"
         FontSize="16"
 
-        behav:DialogCloser.DialogResult="{Binding Demo.DialogCloseResult}" 
+        behav:DialogCloser.DialogResult="{Binding DialogCloseResult}" 
         >
     <MWindow:MetroWindow.InputBindings>
-        <KeyBinding Key="F4" Modifiers="Alt" Command="{Binding Demo.ApplicationExitCommand}"/>
+        <KeyBinding Key="F4" Modifiers="Alt" Command="{Binding ApplicationExitCommand}"/>
         <KeyBinding Key="Plus" Modifiers="Ctrl" Command="{Binding Demo.ExpandAllNodesCommand}"/>
         <KeyBinding Key="Minus" Modifiers="Ctrl" Command="{Binding Demo.CollapseAllNodesCommand}"/>
-        <KeyBinding Key="O" Modifiers="Ctrl" Command="{Binding Demo.LoadXMLFileCommand}"/>
+        <KeyBinding Key="O" Modifiers="Ctrl" Command="{Binding LoadXMLFileCommand}"/>
 
         <KeyBinding Key="C" Modifiers="Ctrl+Shift"
                     Command="{Binding Demo.CopyXPathCommand}"
@@ -47,6 +50,8 @@
                     />
     </MWindow:MetroWindow.InputBindings>
     <MWindow:MetroWindow.Resources>
+        <mru_conv:ZeroToVisibilityConverter x:Key="zeroToVisibilityConverter" />
+
         <views:BindingProxy x:Key="BindingProxy" Data="{Binding}" />
     </MWindow:MetroWindow.Resources>
     <Grid>
@@ -60,15 +65,46 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Menu Grid.Row="0">
+        <Menu Grid.Row="0"
+              xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase">
+            <Menu.Resources>
+                <CollectionViewSource Source="{Binding  MRU.List.Entries}" x:Key="LastUpdateViewEntries"
+                                      IsLiveGroupingRequested="True"
+                                      IsLiveSortingRequested="True"
+                                      >
+                    <CollectionViewSource.SortDescriptions>
+                        <!--This will sort items-->
+                        <scm:SortDescription PropertyName="Value.LastUpdate" Direction="Descending"/>
+                    </CollectionViewSource.SortDescriptions>
+                </CollectionViewSource>
+            </Menu.Resources>
             <MenuItem Header="_File">
                 <MenuItem Header="Load Xml File" InputGestureText="Ctrl + O"
-                          Command="{Binding Demo.LoadXMLFileCommand}" />
+                          Command="{Binding LoadXMLFileCommand}" />
                 <MenuItem Header="Save As..."
-                          Command="{Binding Demo.SaveAsXmlFileCommand}" />
+                          Command="{Binding SaveAsXmlFileCommand}" />
+                <Separator/>
+                <MenuItem ItemsSource="{Binding Source={StaticResource LastUpdateViewEntries}}"
+                          Header="Recent Files"
+                          Visibility="{Binding Path=MRU.List.Entries.Count, Mode=OneWay, Converter={StaticResource zeroToVisibilityConverter}}">
+                    <MenuItem.ItemContainerStyle>
+                        <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
+                            <Setter Property="Header" Value="{Binding Value.DisplayPathFileName, Mode=OneWay}" />
+                            <Setter Property="Command" Value="{Binding Path=Data.NavigateUriCommand, Source={StaticResource BindingProxy}}" />
+                            <Setter Property="CommandParameter" Value="{Binding Value.PathFileName, Mode=OneWay}" />
+
+                            <Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
+                            <Setter Property="ToolTip" Value="{Binding Value.PathFileName}" />
+                            <!-- Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}" / -->
+
+                            <!-- http://social.msdn.microsoft.com/Forums/en-US/wpf/thread/63696841-0358-4f7a-abe1-e6062518e3d6 -->
+                            <Setter Property="behav2:MergeStyleBehaviour.AutoMergeStyle" Value="True"/>
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
+                </MenuItem>
                 <Separator/>
                 <MenuItem Header="_Exit" InputGestureText="Alt + F4"
-                          Command="{Binding Demo.ApplicationExitCommand}"/>
+                          Command="{Binding ApplicationExitCommand}"/>
             </MenuItem>
 
             <MenuItem Header="_Edit">
@@ -145,6 +181,11 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            
             <ctrl:XPathTreeView x:Name="XPathTreeView" Grid.Column="0" Margin="3"
                 DataContext="{Binding Demo}"
                 ItemsSource="{Binding XmlTree.XPathRoot}"
@@ -154,6 +195,7 @@
 
                 Background="{DynamicResource {x:Static reskeys:ResourceKeys.ControlNormalBackgroundBrushKey}}"
                 TabIndex="0"
+                FontSize="{Binding Path=Data.SizeUnitLabel.ScreenPoints, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Source={StaticResource BindingProxy}}"
             >
                 <ctrl:XPathTreeView.ItemContainerStyle>
                     <Style TargetType="ctrl:XPathTreeViewItem" BasedOn="{StaticResource {x:Type ctrl:XPathTreeViewItem}}">
@@ -193,16 +235,34 @@
                         </Setter>
                     </Style>
                 </ctrl:XPathTreeView.ItemContainerStyle>
-        </ctrl:XPathTreeView>
+            </ctrl:XPathTreeView>
+
+            <unitcmb:UnitCombobox DataContext="{Binding SizeUnitLabel}"
+                Margin="3,0,3,0"
+                Grid.Row="1" HorizontalAlignment="Left"
+                ItemsSource="{Binding SelectedItem.DefaultValues}"
+                ToolTip="{Binding ValueTip}"
+                IsEditable="True"
+                FontSize="12"
+                BorderThickness="1"
+                BorderBrush="Transparent"
+                IsEnabled="{Binding ElementName=XPathTreeView,Path=IsEnabled}"
+                >
+                <unitcmb:UnitCombobox.Text>
+                    <Binding Path="StringValue" Mode="TwoWay" ValidatesOnDataErrors="True">
+                        <Binding.ValidationRules>
+                            <ExceptionValidationRule />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </unitcmb:UnitCombobox.Text>
+            </unitcmb:UnitCombobox>
         </Grid>
 
         <GridSplitter Grid.Row="2" Height="6" Background="Transparent"
-                      HorizontalAlignment="Stretch"
-                      VerticalAlignment="Stretch"
-                      />
-
+                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+        
         <ListBox
-            Grid.Row="3" Margin="3"
+            Grid.Row="3" Margin="3,0,3,3"
             DataContext="{Binding Demo}"
             ItemsSource="{Binding XmlTree.Errors}"
             >

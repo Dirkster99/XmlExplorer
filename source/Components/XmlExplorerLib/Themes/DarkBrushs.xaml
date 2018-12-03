@@ -41,4 +41,6 @@
     <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.GlyphBrushKey}" Color="White" />
     <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.GlyphDisabledBrushKey}" Color="Gray" />
 
+    <!-- Standard Color Keys -->
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlTextBrushKey}" Color="White"/>
 </ResourceDictionary>

@@ -2,6 +2,7 @@
 {
     using Castle.Windsor;
     using Castle.Windsor.Installer;
+    using GenericXmlExplorerDemo.Interfaces;
     using log4net;
     using log4net.Config;
     using System.Globalization;
@@ -59,7 +60,7 @@
             _Container.Install(FromAssembly.This());                         // Register
 
             var window = new MainWindow();
-            var appVM = _Container.Resolve<IDemoAppViewModel>();
+            var appVM = _Container.Resolve<IGenericAppViewModel>();
             window.DataContext = appVM;
 
             // subscribe to close event messing to application viewmodel

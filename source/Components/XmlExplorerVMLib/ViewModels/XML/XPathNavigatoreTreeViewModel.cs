@@ -217,18 +217,27 @@
         /// <summary>
         /// Saves a copy of the tree's XML file.
         /// </summary>
-        public void Save(bool formatting, string fileName)
+        public bool Save(bool formatting, string fileName)
         {
-            var fileInfo = new FileInfo(fileName);
-
-            using (FileStream stream = new FileStream(fileInfo.FullName,
-                                                      FileMode.Create, FileAccess.Write,
-                                                      FileShare.None))
+            try
             {
-                this.Save(stream, formatting);
+                var fileInfo = new FileInfo(fileName);
+
+                using (FileStream stream = new FileStream(fileInfo.FullName,
+                                                          FileMode.Create, FileAccess.Write,
+                                                          FileShare.None))
+                {
+                    this.Save(stream, formatting);
+                }
+
+                FileName = fileName;
+                return true;
+            }
+            catch
+            {
             }
 
-            FileName = fileName;
+            return false;
         }
 
         public void Save(Stream stream, bool formatting)

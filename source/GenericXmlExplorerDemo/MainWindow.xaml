@@ -8,16 +8,16 @@
         xmlns:ctrl="clr-namespace:XmlExplorerLib.Controls;assembly=XmlExplorerLib"
 
         mc:Ignorable="d"
-        Title="{Binding CurrentXmlFileName, StringFormat=XmlExplorer - {0}}"
+        Title="{Binding Demo.CurrentXmlFileName, StringFormat=XmlExplorer - {0}}"
         FontSize="16"
 
-        behav:DialogCloser.DialogResult="{Binding Demo.DialogCloseResult}" 
+        behav:DialogCloser.DialogResult="{Binding DialogCloseResult}" 
         >
     <Window.InputBindings>
-        <KeyBinding Key="F4" Modifiers="Alt" Command="{Binding Demo.ApplicationExitCommand}"/>
+        <KeyBinding Key="F4" Modifiers="Alt" Command="{Binding ApplicationExitCommand}"/>
         <KeyBinding Key="Plus" Modifiers="Ctrl" Command="{Binding Demo.ExpandAllNodesCommand}"/>
         <KeyBinding Key="Minus" Modifiers="Ctrl" Command="{Binding Demo.CollapseAllNodesCommand}"/>
-        <KeyBinding Key="O" Modifiers="Ctrl" Command="{Binding Demo.LoadXMLFileCommand}"/>
+        <KeyBinding Key="O" Modifiers="Ctrl" Command="{Binding LoadXMLFileCommand}"/>
     </Window.InputBindings>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -43,12 +43,12 @@
 
             <MenuItem Header="View">
                 <MenuItem Header="Collapse all nodes"
-                          Command="{Binding CollapseAllNodesCommand}"
+                          Command="{Binding Demo.CollapseAllNodesCommand}"
                           InputGestureText="Ctrl + -"
                           />
 
                 <MenuItem Header="Expand all nodes"
-                          Command="{Binding ExpandAllNodesCommand}"
+                          Command="{Binding Demo.ExpandAllNodesCommand}"
                           InputGestureText="Ctrl + +"
                           />
                 <Separator/>
@@ -65,7 +65,7 @@
             </Grid.ColumnDefinitions>
 
             <ctrl:XPathTreeView x:Name="XPathTreeView" Grid.Column="0" Margin="3"
-                ItemsSource="{Binding XmlTree.XPathRoot}"
+                ItemsSource="{Binding Demo.XmlTree.XPathRoot}"
             />
         </Grid>
 
@@ -76,7 +76,7 @@
 
         <ListBox
             Grid.Row="3" Margin="3"
-            ItemsSource="{Binding XmlTree.Errors}"
+            ItemsSource="{Binding Demo.XmlTree.Errors}"
             >
             <ListBox.ItemTemplate>
                 <DataTemplate>

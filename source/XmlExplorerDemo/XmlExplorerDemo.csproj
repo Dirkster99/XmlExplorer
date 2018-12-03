@@ -55,6 +55,9 @@
     <Reference Include="MLib, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Dirkster.MLib.1.0.6\lib\net4\MLib.dll</HintPath>
     </Reference>
+    <Reference Include="MRULib, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dirkster.MRULib.1.0.2\lib\net451\MRULib.dll</HintPath>
+    </Reference>
     <Reference Include="MWindowInterfacesLib, Version=1.0.4.2, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Dirkster.MWindowLib.1.0.4.2\lib\net452\MWindowInterfacesLib.dll</HintPath>
     </Reference>
@@ -76,6 +79,9 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="UnitComboLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dirkster.UnitComboLib.1.0.1\lib\net4\UnitComboLib.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -95,8 +101,13 @@
     <Compile Include="ViewModels\Base\RelayCommand.cs" />
     <Compile Include="Interfaces\IThemesManagerViewModel.cs" />
     <Compile Include="Interfaces\IAppViewModel.cs" />
+    <Compile Include="ViewModels\MRUViewModel.cs" />
     <Compile Include="ViewModels\Themes\ThemeDefinitionViewModel.cs" />
     <Compile Include="ViewModels\Themes\ThemesManagerViewModel.cs" />
+    <Page Include="BindToMLib\UnitComboLib_DarkLightBrushs.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="BindToMLib\XmlExplorerLib_DarkLightBrushs.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -39,5 +39,8 @@
     <!-- GlyphBrushs -->
     <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.GlyphBrushKey}" Color="#444" />
     <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.GlyphDisabledBrushKey}" Color="Gray" />
-    
+
+    <!-- Standard Color Keys -->
+    <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ControlTextBrushKey}" Color="Black"/>
+
 </ResourceDictionary>

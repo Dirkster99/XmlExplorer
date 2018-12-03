@@ -4,6 +4,8 @@
     using Castle.MicroKernel.SubSystems.Configuration;
     using Castle.Windsor;
     using Castle.Windsor.Installer;
+    using GenericXmlExplorerDemo.Interfaces;
+    using GenericXmlExplorerDemo.ViewModels;
     using System;
 
     /// <summary>
@@ -36,6 +38,11 @@
 
                 // register components in this DLL and make them available here
                 container.Install(FromAssembly.Named(System.IO.Path.Combine(dir, "XmlExplorerVMLib.dll")));
+
+                // Register application viewmodel to help castle satisfy dependencies on it
+                container
+                    .Register(Component.For<IGenericAppViewModel>()
+                    .ImplementedBy<GenericAppViewModel>().LifestyleSingleton());
             }
             catch (Exception exp)
             {

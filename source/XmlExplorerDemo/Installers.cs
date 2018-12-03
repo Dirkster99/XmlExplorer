@@ -62,7 +62,7 @@
                 .Register(Component.For<IThemesManagerViewModel>()
                 .ImplementedBy<ThemesManagerViewModel>().LifestyleSingleton());
 
-            // Register settings service component to help castle satisfy dependencies on it
+            // Register application viewmodel to help castle satisfy dependencies on it
             container
                 .Register(Component.For<IAppViewModel>()
                 .ImplementedBy<AppViewModel>().LifestyleSingleton());

@@ -19,20 +19,14 @@
     /// Implements a viewmodel that keeps and manages all core states relevant to
     /// the appliaction. This viewmodel is typically bound to the MainWindow.
     /// </summary>
-    internal class DemoAppViewModel : Base.BaseViewModel, IDemoAppViewModel
+    internal class DocumentViewModel : Base.BaseViewModel, IDocumentViewModel
     {
         #region fields
         readonly XPathNavigatorTreeViewModel _xmlTree = null;
         private string _currentXmlFile = null;
 
-        private ICommand _LoadXMLFileCommand;
         private ICommand _ExpandAllNodesCommand;
-        private ICommand _SaveAsXmlFileCommand;
         private ICommand _CollapseAllNodesCommand;
-        private ICommand _ApplicationExitCommand;
-
-        private bool? _DialogCloseResult = null;
-        private bool _ShutDownInProgress = false;
 
         private XPathNavigatorViewModel _SelectedObject;
         private ICommand _SelectedItemChangedCommand;
@@ -47,16 +41,11 @@
         /// <summary>
         /// Class constructor
         /// </summary>
-        public DemoAppViewModel()
+        public DocumentViewModel()
         {
             _xmlTree = new XPathNavigatorTreeViewModel();
         }
         #endregion ctors
-
-        /// <summary>
-        /// Raised when this workspace should be removed from the UI.
-        /// </summary>
-        public event EventHandler RequestClose;
 
         #region properties
         /// <summary>
@@ -70,6 +59,10 @@
             }
         }
 
+        /// <summary>
+        /// Gets a command to process a change in the selected item in the Xml tree.
+        /// The new selected item is expected as a parameter of this command.
+        /// </summary>
         public ICommand SelectedItemChangedCommand
         {
             get
@@ -89,6 +82,9 @@
             }
         }
 
+        /// <summary>
+        /// Gets the currently selected item (or null) in this viewmodel.
+        /// </summary>
         public XPathNavigatorViewModel SelectedObject
         {
             set
@@ -111,7 +107,12 @@
         /// </summary>
         public string CurrentXmlFile
         {
-            set
+            get
+            {
+                return _currentXmlFile;
+            }
+
+            protected set
             {
                 if (_currentXmlFile != value)
                 {
@@ -119,11 +120,6 @@
                     NotifyPropertyChanged(() => CurrentXmlFile);
                     NotifyPropertyChanged(() => CurrentXmlFileName);
                 }
-            }
-
-            get
-            {
-                return _currentXmlFile;
             }
         }
 
@@ -144,122 +140,6 @@
                 }
 
                 return string.Empty;
-            }
-        }
-
-        /// <summary>
-        /// Gets a command to load an XML file.
-        /// </summary>
-        public ICommand LoadXMLFileCommand
-        {
-            get
-            {
-                if (_LoadXMLFileCommand == null)
-                {
-                    _LoadXMLFileCommand = new RelayCommand<object>((p) =>
-                    {
-                        var file = _currentXmlFile;
-                        if (file == null)
-                        {
-                            // Gets the assembly entry location
-                            var appDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-                            file = appDir + @"/00_DataSamples/XmlDataSampleDemo.xml";
-                        }
-
-                        CurrentXmlFile = OpenfileWithDialog(file, _currentXmlFile);
-                    });
-                }
-
-                return _LoadXMLFileCommand;
-            }
-        }
-
-        /// <summary>
-        /// Gets a command to save an XML file with formatting in a different location.
-        /// </summary>
-        public ICommand SaveAsXmlFileCommand
-        {
-            get
-            {
-                if (_SaveAsXmlFileCommand == null)
-                {
-                    _SaveAsXmlFileCommand = new RelayCommand<object>((p) =>
-                    {
-                        var dlg = new SaveFileDialog();
-                        dlg.Filter = "XML Files (*.xml)|*.xml|All Files (*.*)|*.*";
-
-
-                        dlg.FileName = _currentXmlFile;
-
-                        if (dlg.ShowDialog() != true)
-                            return;
-
-                        if (_xmlTree == null)
-                            return;
-
-                        if (_xmlTree.IsLoading == true)
-                            return;
-
-                        try
-                        {
-                            _xmlTree.Save(true, dlg.FileName);
-                            _currentXmlFile = dlg.FileName;
-                        }
-                        catch (Exception exp)
-                        {
-                            MessageBox.Show(exp.Message, "An unexpected error occurred");
-                        }
-
-                    }, (p) =>
-                    {
-                        if (_xmlTree != null)
-                            return true;
-
-                        if (_xmlTree.IsLoading == true)
-                            return false;
-
-                        return false;
-                    });
-                }
-
-                return _SaveAsXmlFileCommand;
-            }
-        }
-
-        /// <summary>
-        /// Gets a command that will collapse all currently visible XML nodes (if any).
-        /// </summary>
-        public ICommand ApplicationExitCommand
-        {
-            get
-            {
-                if (_ApplicationExitCommand == null)
-                {
-                    _ApplicationExitCommand = new RelayCommand<object>(
-                        (p) => AppExit_CommandExecuted(),
-                        (p) => Closing_CanExecute());
-                }
-
-                return _ApplicationExitCommand;
-            }
-        }
-
-        /// <summary>
-        /// This can be used to close the attached view via ViewModel
-        /// 
-        /// Source: http://stackoverflow.com/questions/501886/wpf-mvvm-newbie-how-should-the-viewmodel-close-the-form
-        /// </summary>
-        public bool? DialogCloseResult
-        {
-            get { return _DialogCloseResult; }
-
-            private set
-            {
-                if (_DialogCloseResult == value)
-                    return;
-
-                _DialogCloseResult = value;
-                NotifyPropertyChanged(() => DialogCloseResult);
             }
         }
 
@@ -561,100 +441,64 @@
 
         #region methods
         /// <summary>
-        /// Method to be executed when user (or program) tries to close the application
+        /// Method opens an XML file and attempts to load the XML
+        /// into the internal viewmodel representation.
         /// </summary>
-        public void OnRequestClose()
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public bool FileOpenXml(string file)
         {
             try
             {
-                if (_ShutDownInProgress)
-                    return;
-
-                if (DialogCloseResult == null)
-                    DialogCloseResult = true;      // Execute Close event via attached property
-
-                ////if (_ShutDownInProgressCancel)
-                ////{
-                ////    _ShutDownInProgress = false;
-                ////    _ShutDownInProgressCancel = false;
-                ////    DialogCloseResult = null;
-                ////}
-                ////else
-                {
-                    _ShutDownInProgress = true;
-
-                    CommandManager.InvalidateRequerySuggested();
-                    RequestClose?.Invoke(this, EventArgs.Empty);
-                }
+                _xmlTree.FileOpen(file, OnDocumentLoaded, null);
+                CurrentXmlFile = file;
+                return true;
             }
-            catch{ }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.Message, "An unexpected error occured");
+            }
+
+            return false;
         }
 
         /// <summary>
-        /// Save session data on closing
+        /// Determines whether a Save Xml command can currently performed or not.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void OnClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        /// <returns></returns>
+        public bool SaveXml_CanExecut()
         {
-            try
-            {
-                ////if (Exit_CheckConditions(sender))      // Close all open files and check whether application is ready to close
-                ////{
-                ////    OnRequestClose();                  // (other than exception and error handling)
-                ////
-                e.Cancel = false;
-                ////    //if (wsVM != null)
-                ////    //  wsVM.SaveConfigOnAppClosed(); // Save application layout
-                ////}
-                ////else
-                ////    e.Cancel = ShutDownInProgressCancel = true;
-            }
-            catch
-            {
-            }
+            if (_xmlTree == null)
+                return false;
+
+            if (_xmlTree.IsLoading == true)
+                return false;
+
+            if (_xmlTree.XPathRoot.Count() == 0)
+                return false;
+
+            return true;
         }
 
         /// <summary>
-        /// Execute closing function and persist session data to be reloaded on next restart
+        /// Method saves the current Xml content into an XML formated text file.
         /// </summary>
-        /// <param name="win"></param>
-        public void OnClosed(Window win)
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public bool SaveXml(string file)
         {
             try
             {
-                ////EnableMainWindowActivated(false);
-
-                // Persist window position, width and height from this session
-                ////_SettingsManager.SessionData.MainWindowPosSz =
-                ////    SettingsFactory.GetViewPosition(win.Left, win.Top, win.Width, win.Height,
-                ////                                    (win.WindowState == WindowState.Maximized));
-                ////
-                ////_SettingsManager.SessionData.IsWorkspaceAreaOptimized = IsWorkspaceAreaOptimized;
-                ////
-                ////// Save/initialize program options that determine global programm behaviour
-                ////SaveConfigOnAppClosed();
-                ////
-                ////DisposeResources();
+                _xmlTree.Save(true, file);
+                CurrentXmlFile = file;
+                return true;
             }
-            catch
+            catch (Exception exp)
             {
+                MessageBox.Show(exp.Message, "An unexpected error occurred");
             }
-        }
 
-        private void AppExit_CommandExecuted()
-        {
-            try
-            {
-                if (Closing_CanExecute() == false)
-                    return;
-
-                ////_ShutDownInProgressCancel = false;
-                OnRequestClose();
-            }
-            catch
-            {
-            }
+            return false;
         }
 
         /// <summary>
@@ -663,7 +507,7 @@
         /// <returns>
         /// True if application is ready to close otherwise, false.
         /// </returns>
-        private bool Closing_CanExecute()
+        public bool Closing_CanExecute()
         {
             if (_xmlTree == null)
                 return true;
@@ -697,47 +541,6 @@
             {
                 /// App.HandleException(ex);
             }
-        }
-
-        private string OpenfileWithDialog(string file, string currentfile)
-        {
-            var dlg = new OpenFileDialog();
-            dlg.FileName = file;
-            dlg.Filter = "Extensible Markup Language (*.xml)|*.xml"
-                       + "|Extensible Application Markup Language (*.xaml)|*.xaml"
-                       + "|All files (*.*)|*.*";
-            dlg.Multiselect = false;
-
-            try
-            {
-                if (string.IsNullOrEmpty(file) == false)
-                {
-                    dlg.InitialDirectory = Path.GetDirectoryName(file);
-                    dlg.FileName = Path.GetFileName(file);
-                }
-                else
-                    dlg.InitialDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            }
-            catch (Exception)
-            {
-                dlg.InitialDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            }
-
-            if (dlg.ShowDialog().GetValueOrDefault() != true)
-                return currentfile;
-
-            file = dlg.FileName;
-
-            try
-            {
-                _xmlTree.FileOpen(file, OnDocumentLoaded, null);
-            }
-            catch (Exception exp)
-            {
-                MessageBox.Show(exp.Message, "An unexpected error occured");
-            }
-
-            return file;
         }
 
         private string GetXPathNavigatorFormattedOuterXml(XPathNavigator navigator)

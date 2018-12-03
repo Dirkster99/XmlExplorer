@@ -1,5 +1,6 @@
 ﻿namespace XmlExplorerDemo.Interfaces
 {
+    using System;
     using System.Windows;
     using System.Windows.Input;
     using MLib.Interfaces;
@@ -9,6 +10,11 @@
 
     internal interface IAppViewModel
     {
+        /// <summary>
+        /// Raised when this workspace should be removed from the UI.
+        /// </summary>
+        event EventHandler RequestClose;
+
         #region properties
         /// <summary>
         /// Gets an object that Implements application life cycle relevant properties
@@ -36,7 +42,7 @@
         /// <summary>
         /// Gets the demo viewmodel and all its properties and commands
         /// </summary>
-        IDemoAppViewModel Demo { get; }
+        IDocumentViewModel Demo { get; }
         #endregion properties
 
         #region methods

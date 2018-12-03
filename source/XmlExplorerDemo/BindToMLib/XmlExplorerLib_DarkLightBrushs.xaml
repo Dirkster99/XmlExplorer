@@ -10,5 +10,5 @@
 
     <SolidColorBrush x:Key="{x:Static reskeys:ResourceKeys.ItemSelectedBackgroundBrushKey}"
                      Color="{DynamicResource {x:Static MLib_reskeys:ResourceKeys.ControlAccentColorKey}}" options:Freeze="true"/>
-
+    
 </ResourceDictionary>

@@ -1,15 +1,10 @@
-﻿namespace XmlExplorerVMLib.Interfaces
+﻿namespace GenericXmlExplorerDemo.Interfaces
 {
     using System;
     using System.Windows;
     using System.Windows.Input;
 
-    /// <summary>
-    /// Defines an interface to a viewmodel object that keeps and manages all
-    /// core states relevant to appliaction. This viewmodel is typically bound
-    /// to the MainWindow.
-    /// </summary>
-    public interface IDemoAppViewModel
+    public interface IGenericAppViewModel
     {
         /// <summary>
         /// Raised when this workspace should be removed from the UI.
@@ -18,29 +13,9 @@
 
         #region properties
         /// <summary>
-        /// Gets an object tree that represents the nodes of an XML tree.
+        /// Gets the demo viewmodel and all its properties and commands
         /// </summary>
-        object XmlTree { get; }
-
-        /// <summary>
-        /// Gets a command to load an XML file.
-        /// </summary>
-        ICommand LoadXMLFileCommand { get; }
-
-        /// <summary>
-        /// Gets a command to save an XML file with formatting in a different location.
-        /// </summary>
-        ICommand SaveAsXmlFileCommand { get; }
-
-        /// <summary>
-        /// Gets a command that will expand all currently visible XML nodes (if any).
-        /// </summary>
-        ICommand ExpandAllNodesCommand { get; }
-
-        /// <summary>
-        /// Gets a command that will collapse all currently visible XML nodes (if any).
-        /// </summary>
-        ICommand CollapseAllNodesCommand { get; }
+        XmlExplorerVMLib.Interfaces.IDocumentViewModel Demo { get; }
 
         /// <summary>
         /// Gets a command that will collapse all currently visible XML nodes (if any).

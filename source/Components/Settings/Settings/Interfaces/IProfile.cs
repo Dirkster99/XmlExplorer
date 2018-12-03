@@ -8,10 +8,6 @@
     {
         #region properties
         string GetLastActivePath();
-        string LastActiveSolution { get; set; }
-
-
-        string LastActiveTargetFile { get; set; }
 
         List<FileReference> LastActiveSourceFiles { get; set; }
 
@@ -26,6 +22,8 @@
         /// Gets a collection of window position and size items.
         /// </summary>
         SerializableDictionary<string, ViewPosSizeModel> WindowPosSz { get; }
+
+        int FontSizeScreenPoints { get; set; }
         #endregion properties
 
         #region methods

@@ -82,6 +82,12 @@
         /// </summary>
         [XmlAttribute(AttributeName = "LastActiveTargetFile")]
         public string LastActiveTargetFile { get; set; }
+
+        /// <summary>
+        /// Gets/sets the size of the font used in the last/next app session.
+        /// </summary>
+        [XmlElement(ElementName = "FontSzScreenPoints")]
+        public int FontSizeScreenPoints { get; set; }
         #endregion properties
 
         #region methods

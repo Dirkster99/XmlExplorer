@@ -97,7 +97,7 @@
 
             // When the ViewModel asks to be closed, close the window.
             // Source: http://msdn.microsoft.com/en-us/magazine/dd419663.aspx
-            appVM.Demo.RequestClose += delegate
+            appVM.RequestClose += delegate
             {
                 // Save session data and close application
                 appVM.OnClosed(window);
