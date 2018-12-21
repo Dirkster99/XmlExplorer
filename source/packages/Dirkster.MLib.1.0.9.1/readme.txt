@@ -1,5 +1,4 @@
-MLib
-----
+# MLib
 
 MLib is a set of WPF theming libraries based on MahApps.Metro, MUI,
 and Infragistics Themes For Microsoft Controls.
@@ -22,8 +21,7 @@ but does not implement this function in the core theming library.
    MWindowDialogLib (Includes MWindowLib and ContentDialog support)
 
 
-Features
---------
+## Features
 
 All styles are available with a Light and Dark theme.
 
@@ -31,8 +29,7 @@ The framework supports a dialog service that supports ContentDialogs and
 Modal Dialogs using one seemless API:
 https://www.codeproject.com/Articles/1170500/A-ContentDialog-in-a-WPF-Desktop-Application
 
-Supported OS
-------------
+## Supported OS
 
 This framework is designed with Windows 10 UI guidelines in mind but it should
 also work for Windows 7 or 8.

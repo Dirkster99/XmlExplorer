@@ -1978,6 +1978,15 @@
             Gets the normal background Brush key of a ToolBarTray.
             </summary>
         </member>
+        <member name="F:MLib.Themes.ResourceKeys.ProgressStyleKey">
+            <summary>
+            MLib has 2 ways of enabling Metro ProgressBars (Infinit ProgressBar with 4 dots sliding through)
+            A MetroProgressBar control lives in <see cref="T:MLib.Controls.Metro.MetroProgressBar"/>
+            and the other one is activated by default.
+            
+            A non-metro progress bar with a moving rectangle only can be activated with this style key.
+            </summary>
+        </member>
         <member name="T:MLib.Themes.ThemeDefinition">
             <summary>
             Defines a theme by its name and a list of sources
